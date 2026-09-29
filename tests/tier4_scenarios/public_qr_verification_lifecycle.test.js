@@ -71,6 +71,7 @@ describe('Tier 4: Workload Scenario 3 - End-to-End Public QR Scan Verification L
       verificationInterval: res.body.instrument.verificationInterval,
       overallResult: res.body.overallResult,
       readingsDigest: res.body.readingsDigest,
+      identityDigest: res.body.identityDigest,
     }, res.body.sealSignature);
 
     expect(isAuthentic).toBe(true);

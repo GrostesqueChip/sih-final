@@ -56,6 +56,7 @@ describe('Tier 3: Cross-Feature - Public Verification, Cryptographic Seal & Erro
       verificationInterval: res.body.instrument.verificationInterval,
       overallResult: res.body.overallResult,
       readingsDigest: res.body.readingsDigest,
+      identityDigest: res.body.identityDigest,
     }, res.body.sealSignature);
 
     expect(isValidSignature).toBe(true);

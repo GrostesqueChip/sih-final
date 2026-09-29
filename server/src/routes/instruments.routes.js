@@ -53,7 +53,7 @@ router.get('/', verifyToken, async (req, res, next) => {
             select: { testSessions: true },
           },
           testSessions: {
-            select: { id: true, certificateNo: true, status: true, overallResult: true, completedAt: true, sealedAt: true },
+            select: { id: true, certificateNo: true, status: true, overallResult: true, completedAt: true, sealedAt: true, verificationType: true },
           },
         },
       }),
@@ -245,6 +245,29 @@ router.put(
       const EDITABLE = ['name', 'type', 'manufacturer', 'model', 'serialNumber', 'accuracyClass', 'maxCapacity', 'minCapacity',
         'verificationInterval', 'actualInterval', 'unit', 'location', 'district', 'ownerName', 'isActive', 'ranges'];
       const updateData = Object.fromEntries(Object.entries(req.body).filter(([k]) => EDITABLE.includes(k)));
+
+      // Metrological particulars are sealed into every issued certificate/report.
+      // Once the instrument has a sealed session they are locked: a changed
+      // class, serial, capacity or interval means a different instrument, which
+      // must be registered afresh. (Owner, location and name stay editable.)
+      const SEALED_PARTICULARS = ['manufacturer', 'model', 'serialNumber', 'accuracyClass', 'maxCapacity', 'minCapacity',
+        'verificationInterval', 'actualInterval', 'unit', 'ranges'];
+      const changedSealed = SEALED_PARTICULARS.filter(
+        (k) => updateData[k] !== undefined && JSON.stringify(updateData[k]) !== JSON.stringify(oldInstrument[k]) &&
+          !(typeof oldInstrument[k] === 'number' && Number(updateData[k]) === oldInstrument[k])
+      );
+      if (changedSealed.length) {
+        const sealedCount = await prisma.testSession
+          .count({ where: { instrumentId: id, status: { in: ['COMPLETED', 'FAILED'] } } })
+          .catch(() => 0);
+        if (sealedCount > 0) {
+          return res.status(409).json({
+            success: false,
+            message: `Cannot change ${changedSealed.join(', ')}: these particulars are sealed into ${sealedCount} issued certificate(s)/report(s). Register the instrument afresh instead.`,
+            lockedFields: changedSealed,
+          });
+        }
+      }
       if (updateData.maxCapacity !== undefined) updateData.maxCapacity = parseFloat(updateData.maxCapacity);
       if (updateData.minCapacity !== undefined) updateData.minCapacity = parseFloat(updateData.minCapacity);
       if (updateData.verificationInterval !== undefined) updateData.verificationInterval = parseFloat(updateData.verificationInterval);

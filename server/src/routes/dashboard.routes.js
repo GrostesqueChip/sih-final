@@ -55,7 +55,7 @@ router.get('/stats', verifyToken, async (req, res, next) => {
         where: { isActive: true },
         include: {
           testSessions: {
-            select: { id: true, certificateNo: true, status: true, overallResult: true, completedAt: true, sealedAt: true },
+            select: { id: true, certificateNo: true, status: true, overallResult: true, completedAt: true, sealedAt: true, verificationType: true },
           },
         },
       }),

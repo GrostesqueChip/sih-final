@@ -57,7 +57,8 @@ async function getCertificatePdf(req, res, next) {
     }
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="Certificate_${session.certificateNo}.pdf"`);
+    const docName = session.verificationType === 'TYPE_EVALUATION' ? 'TypeEvaluationReport' : 'Certificate';
+    res.setHeader('Content-Disposition', `inline; filename="${docName}_${session.certificateNo}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     return res.send(pdfBuffer);
   } catch (error) {
@@ -180,7 +181,9 @@ async function verifyCertificate(req, res, next) {
     const expDateObj = new Date(vDateObj);
     expDateObj.setFullYear(vDateObj.getFullYear() + 1);
     const expiryDate = expDateObj.toISOString();
-    const isExpired = Date.now() > expDateObj.getTime();
+    // A type evaluation test report has no trade-validity window.
+    const isTypeEvalReport = session.verificationType === 'TYPE_EVALUATION';
+    const isExpired = !isTypeEvalReport && Date.now() > expDateObj.getTime();
 
     // --- Three ORTHOGONAL axes, never conflated into one boolean (audit B-P0-1) ---
 
@@ -245,7 +248,8 @@ async function verifyCertificate(req, res, next) {
 
     // Legacy "valid" = safe for commercial/trade use right now (authentic PASS,
     // in validity). An authentically-sealed FAIL is authentic:true but valid:false.
-    const isOfficiallyValid = authentic && verdict === 'PASS' && withinValidity;
+    // A type evaluation report is never an approval for trade.
+    const isOfficiallyValid = !isTypeEvalReport && authentic && verdict === 'PASS' && withinValidity;
 
     // Officer identity is NEVER fabricated. Absent officer -> null (UI shows "—").
     const officerName = session.conductedBy?.name || null;
@@ -286,8 +290,9 @@ async function verifyCertificate(req, res, next) {
         ranges: inst.ranges || inst.multiIntervalRanges || null,
       },
       verificationDate,
-      expiryDate: verdict === 'PASS' ? expiryDate : null,
+      expiryDate: verdict === 'PASS' && !isTypeEvalReport ? expiryDate : null,
       verificationType: session.verificationType || null,
+      reportType: isTypeEvalReport ? 'TYPE_EVALUATION_REPORT' : 'VERIFICATION_CERTIFICATE',
       status: finalStatus,
       overallResult: verdict,
       verificationOfficer: officerName
@@ -303,6 +308,7 @@ async function verifyCertificate(req, res, next) {
       // SHA-256 of the sealed readings, so anyone holding the data sheet can
       // recompute the seal input without access to the database.
       readingsDigest: sealInput.readingsDigest,
+      identityDigest: sealInput.identityDigest,
       sealedAt: session.sealedAt || session.completedAt || null,
       sealVerified,
       errorCurveData,

@@ -15,6 +15,9 @@ function addMonths(date, months) {
 
 function latestFinalized(sessions = []) {
   return sessions
+    // Type evaluation test reports (model approval) do not verify or stamp an
+    // instrument for trade, so they never set its verification status.
+    .filter((s) => s.verificationType !== 'TYPE_EVALUATION')
     .filter((s) => (s.status === 'COMPLETED' || s.status === 'FAILED') && (s.completedAt || s.sealedAt))
     .sort((a, b) => new Date(b.completedAt || b.sealedAt) - new Date(a.completedAt || a.sealedAt))[0];
 }

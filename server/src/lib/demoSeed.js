@@ -1,8 +1,10 @@
 /**
  * Deterministic demonstration dataset for the in-memory database.
  *
- * Everything here is generated, not hand-typed: each finalized session carries
- * all six OIML R-76 test modules, and every verdict is computed by the same
+ * Everything here is generated, not hand-typed: each finalized verification
+ * session carries the three verification tests (weighing, repeatability,
+ * eccentricity) and each type evaluation session all six implemented OIML R 76
+ * test modules; every verdict is computed by the same
  * `evaluateTestResult` engine the live API uses. The dashboard, the session
  * pages, the PDFs and the public verification portal therefore always agree
  * with one another, and the timeline is anchored to "today" so the demo never
@@ -10,6 +12,7 @@
  */
 const bcrypt = require('bcryptjs');
 const { evaluateTestResult } = require('../services/mpeCalculator');
+const { requiredTestTypesFor, isInServiceSession } = require('./sessionTypes');
 
 const DAY = 86400000;
 
@@ -252,6 +255,21 @@ const INSTRUMENTS = [
     location: 'Secondary Standards Section, State Metrology Laboratory, Chandigarh', district: 'Chandigarh (UT)', ownerName: 'Department of Legal Metrology, Punjab',
     officer: 'usr-lab-01', registeredDaysAgo: 375,
   },
+  // ---- Type evaluation (model approval) test samples — demo applicants ----
+  {
+    id: 'inst-te-01', name: 'Type evaluation sample — PW-30C counter scale', type: 'ELECTRONIC_SCALE',
+    manufacturer: 'Punjab Precision Weighing Systems (demo applicant)', model: 'PW-30C', serialNumber: 'TE-2026-PW30C-S1',
+    accuracyClass: 'CLASS_III', maxCapacity: 30, minCapacity: 0.1, verificationInterval: 0.005, actualInterval: 0.005, unit: 'kg',
+    location: 'Type evaluation test bench, State Metrology Laboratory, Chandigarh', district: 'Chandigarh (UT)', ownerName: 'Punjab Precision Weighing Systems (applicant)',
+    officer: 'usr-lab-01', registeredDaysAgo: 60,
+  },
+  {
+    id: 'inst-te-02', name: 'Type evaluation sample — NL-620 precision balance', type: 'LABORATORY_BALANCE',
+    manufacturer: 'Northline Instruments (demo applicant)', model: 'NL-620', serialNumber: 'TE-2026-NL620-S1',
+    accuracyClass: 'CLASS_II', maxCapacity: 620, minCapacity: 0.5, verificationInterval: 0.01, actualInterval: 0.001, unit: 'g',
+    location: 'Type evaluation test bench, State Metrology Laboratory, Chandigarh', district: 'Chandigarh (UT)', ownerName: 'Northline Instruments (applicant)',
+    officer: 'usr-lab-01', registeredDaysAgo: 45,
+  },
 ];
 
 const STANDARD_WEIGHTS = {
@@ -259,6 +277,11 @@ const STANDARD_WEIGHTS = {
   PLATFORM_SCALE: 'M1 standard weights set SW-PB-M1-11 (1 kg – 20 kg); RRSL Faridabad cert. RRSL/F/2025/3982',
   ELECTRONIC_SCALE: 'F2 standard weights set SW-PB-F2-06 (1 g – 10 kg); RRSL Faridabad cert. RRSL/F/2025/3875',
   LABORATORY_BALANCE: 'E2 reference weights set SW-PB-E2-01 (1 mg – 200 g); NPL New Delhi cert. NPL/MASS/2025/0219',
+};
+
+// Test samples whose range is outside the default set for their category.
+const STANDARD_WEIGHTS_BY_INSTRUMENT = {
+  'inst-te-02': 'E2 reference weights set SW-PB-E2-03 (1 mg – 500 g); NPL New Delhi cert. NPL/MASS/2025/0231',
 };
 
 const FEES = { WEIGHBRIDGE: 3000, PLATFORM_SCALE: 400, ELECTRONIC_SCALE: 200, LABORATORY_BALANCE: 600 };
@@ -299,14 +322,18 @@ const PLAN = [
   { inst: 'inst-lb-01', days: 46, type: 'PERIODIC', profile: 'healthy' },
   { inst: 'inst-wb-01', days: 38, type: 'PERIODIC', profile: 'healthy' },
   { inst: 'inst-lb-02', days: 30, type: 'PERIODIC', profile: 'healthy' },
-  { inst: 'inst-wb-02', days: 24, type: 'PERIODIC', profile: 'creep' },      // creep beyond limit
+  { inst: 'inst-wb-02', days: 24, type: 'PERIODIC', profile: 'healthy' },
+  // ---- type evaluation (model approval) at the laboratory ----
+  { inst: 'inst-te-01', days: 36, type: 'TYPE_EVALUATION', profile: 'healthy' },  // all implemented tests passed
+  { inst: 'inst-te-02', days: 20, type: 'TYPE_EVALUATION', profile: 'creep' },    // creep beyond 0.2e — test failed
   { inst: 'inst-es-01', days: 17, type: 'PERIODIC', profile: 'healthy' },
   { inst: 'inst-cs-01', days: 11, type: 'PERIODIC', profile: 'healthy' },
   { inst: 'inst-ps-01', days: 6, type: 'PERIODIC', profile: 'span' },        // FCI scale over-reads — REJECTED
   // ---- open work for the evaluator ----
   // Assigned to the demo Inspector login so an evaluator can finish them.
-  { inst: 'inst-ps-02', days: 2, type: 'PERIODIC', profile: 'healthy', progress: 5, officer: 'usr-officer-01' },  // 5 of 6 modules done
-  { inst: 'inst-cs-02', days: 1, type: 'PERIODIC', profile: 'healthy', progress: 2, officer: 'usr-officer-01' },  // 2 of 6 modules done
+  { inst: 'inst-ps-02', days: 2, type: 'PERIODIC', profile: 'healthy', progress: 2, officer: 'usr-officer-01' },  // 2 of 3 modules done
+  { inst: 'inst-cs-02', days: 1, type: 'PERIODIC', profile: 'healthy', progress: 1, officer: 'usr-officer-01' },  // 1 of 3 modules done
+  { inst: 'inst-te-01', days: 3, type: 'TYPE_EVALUATION', profile: 'healthy', progress: 5, officer: 'usr-officer-01' }, // 5 of 6 modules done
   { inst: 'inst-wb-04', days: 0, type: 'INITIAL', profile: 'healthy', progress: 0, officer: 'usr-officer-01' },   // freshly opened
 ];
 
@@ -370,7 +397,7 @@ function makeModuleData(testType, inst, profile, rnd) {
     }
     case 'TEMPERATURE': {
       return {
-        temperaturePoints: [20, 40, 10].map((t) => ({
+        temperaturePoints: [20, 40, -10, 5].map((t) => ({
           temperature: t,
           zeroIndication: t === 20 ? 0 : quant(fine ? (t - 20) * 0.02 * e : 0, d),
           spanLoad: max,
@@ -379,12 +406,13 @@ function makeModuleData(testType, inst, profile, rnd) {
       };
     }
     case 'STABILITY': {
+      // Warm-up time (R 76-1 A.5.2): E0 and EL at 0, 5, 15 and 30 min after switch-on.
       const base = quant(max + spanErr(max), d);
       return {
-        timePoints: [0, 0.5, 1, 2, 4, 8].map((h, i) => ({
-          timestampMinutes: h * 60,
-          zeroReading: 0,
-          loadReading: quant(base + (fine && i > 2 ? d : 0), d),
+        timePoints: [0, 5, 15, 30].map((m, i) => ({
+          timestampMinutes: m,
+          zeroReading: quant(fine && i === 0 ? d : 0, d),
+          loadReading: quant(base + (fine && i === 0 ? d : 0), d),
           appliedLoad: max,
         })),
       };
@@ -407,14 +435,15 @@ function makeModuleData(testType, inst, profile, rnd) {
 
 const REMARKS = {
   healthy: {
-    INITIAL: 'Initial verification prior to commercial use. All six OIML R-76 tests conform to the declared accuracy class. Instrument stamped and approved for trade.',
+    INITIAL: 'Initial verification prior to commercial use. Weighing, repeatability and eccentricity tests conform to the declared accuracy class. Instrument stamped and approved for trade.',
+    TYPE_EVALUATION: 'Type evaluation of the test sample for model approval. All tests recorded in this report meet OIML R 76; the remaining R 76-2 tests are listed as not covered.',
     PERIODIC: 'Annual periodic re-verification under Rule 27, Legal Metrology (General) Rules, 2011. Errors within MPE at all load points. Verification stamp renewed.',
     INSPECTION: 'Surprise field inspection under Section 15 of the Legal Metrology Act, 2009. Instrument found within permissible limits; no irregularity observed.',
   },
   span: 'REJECTED — instrument over-reads progressively with load (span error beyond MPE from 60 % of Max upward), systematically over-charging sellers. Trader directed to withdraw the instrument from commercial use pending repair by a licensed repairer and re-verification.',
   ecc: 'REJECTED — off-centre loading at position 4 (back-right) exceeds MPE, indicating a defective corner load cell. Notice issued under Section 25; instrument sealed against use until repaired.',
   rep: 'REJECTED — repeated weighings of the same load differ by more than the MPE. Unstable indication observed at the PDS counter; beneficiaries at risk of short-weighment. Scale withdrawn pending repair.',
-  creep: 'REJECTED — indication drifts under sustained load (creep beyond 0.2 MPE between 15 and 30 minutes) and does not return to zero after unloading. Load-cell replacement advised.',
+  creep: 'Creep test failed — indication drifts under sustained load (beyond 0.2e between 15 and 30 minutes) and does not return to within 0.5e after unloading. Applicant advised to revise the load-cell design before re-submission.',
 };
 
 const TEMPS = [22.5, 24.0, 26.5, 21.0, 28.5, 31.0, 19.5, 25.5, 27.0, 23.5];
@@ -485,15 +514,18 @@ function buildDemoData(now = Date.now()) {
       const officerId = plan.officer || officerFor[plan.inst];
       const start = anchor(plan.days, 10 + (idx % 4), (idx * 13) % 60);
       const year = start.getFullYear();
-      yearCounters[year] = (yearCounters[year] || (year === 2025 ? 812 : 100)) + 1;
-      const certificateNo = `NAWI-${year}-${String(yearCounters[year]).padStart(6, '0')}`;
+      const isTE = plan.type === 'TYPE_EVALUATION';
+      const counterKey = isTE ? `TER-${year}` : year;
+      yearCounters[counterKey] = (yearCounters[counterKey] || (isTE ? 40 : year === 2025 ? 812 : 100)) + 1;
+      const certificateNo = `${isTE ? 'TER' : 'NAWI'}-${year}-${String(yearCounters[counterKey]).padStart(6, '0')}`;
       const id = `sess-${String(idx + 1).padStart(3, '0')}`;
       const isOpen = plan.progress !== undefined;
-      const moduleCount = isOpen ? plan.progress : 6;
-      const isInService = plan.type === 'INSPECTION';
+      const moduleTypes = TYPE_ORDER.filter((t) => requiredTestTypesFor(plan.type).includes(t));
+      const moduleCount = isOpen ? plan.progress : moduleTypes.length;
+      const isInService = isInServiceSession(plan.type);
 
       let allPass = true;
-      TYPE_ORDER.slice(0, moduleCount).forEach((testType, m) => {
+      moduleTypes.slice(0, moduleCount).forEach((testType, m) => {
         const data = makeModuleData(testType, inst, plan.profile, rnd);
         const evaluation = evaluateTestResult(testType, data, inst, isInService);
         if (evaluation.result !== 'PASS') allPass = false;
@@ -520,7 +552,7 @@ function buildDemoData(now = Date.now()) {
       const remarks = isOpen
         ? plan.progress === 0
           ? 'Initial verification of newly installed weighbridge. Site inspection done; load testing to commence.'
-          : `${plan.type === 'INITIAL' ? 'Initial verification' : 'Annual re-verification'} in progress — ${plan.progress} of 6 test modules recorded.`
+          : `${isTE ? 'Type evaluation' : plan.type === 'INITIAL' ? 'Initial verification' : 'Annual re-verification'} in progress — ${plan.progress} of ${moduleTypes.length} test modules recorded.`
         : profileKey && !allPass
           ? REMARKS[profileKey]
           : REMARKS.healthy[plan.type];
@@ -536,7 +568,7 @@ function buildDemoData(now = Date.now()) {
         temperature: TEMPS[idx % TEMPS.length],
         humidity: 42 + ((idx * 7) % 26),
         atmosphericPressure: Number((1008 + ((idx * 3) % 9) + 0.25).toFixed(2)),
-        standardWeightsUsed: STANDARD_WEIGHTS[inst.type],
+        standardWeightsUsed: STANDARD_WEIGHTS_BY_INSTRUMENT[inst.id] || STANDARD_WEIGHTS[inst.type],
         feeAmount: FEES[inst.type],
         remarks,
         verificationSeal: null,
@@ -548,13 +580,13 @@ function buildDemoData(now = Date.now()) {
       });
 
       log(start, officerId, 'CREATE_TEST_SESSION', 'TestSession', id,
-        `Opened ${plan.type === 'INITIAL' ? 'initial verification' : plan.type === 'INSPECTION' ? 'field inspection' : 'periodic re-verification'} ${certificateNo} for ${inst.name} (S/N ${inst.serialNumber}).`);
+        `Opened ${isTE ? 'type evaluation' : plan.type === 'INITIAL' ? 'initial verification' : plan.type === 'INSPECTION' ? 'field inspection' : 'periodic re-verification'} ${certificateNo} for ${inst.name} (S/N ${inst.serialNumber}).`);
       if (!isOpen) {
         log(completedAt, officerId, 'FINALIZE_TEST_SESSION', 'TestSession', id,
           `Finalized and sealed ${certificateNo}. Overall outcome: ${overallResult}.`);
         if (idx % 3 === 0) {
           log(new Date(completedAt.getTime() + 20 * 60000), officerId, 'GENERATE_CERTIFICATE_PDF', 'TestSession', id,
-            `Generated official certificate PDF for ${certificateNo}.`);
+            `Generated official ${isTE ? 'type evaluation test report' : 'certificate'} PDF for ${certificateNo}.`);
         }
       }
     });

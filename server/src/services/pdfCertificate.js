@@ -8,8 +8,8 @@
  */
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
-const { computeExpandedUncertainty } = require('./uncertaintyCalculator');
 const T = require('./pdfTheme');
+const { requiredTestTypesFor, isTypeEvaluation } = require('../lib/sessionTypes');
 
 const { C } = T;
 
@@ -19,7 +19,7 @@ function keyFinding(testType, result, fmt, unit, lim = fmt) {
   if (!c) return 'Not evaluated';
   switch (testType) {
     case 'WEIGHING_PERFORMANCE':
-      return `Max |Ec| ${fmt(c.maxCorrectedError)} ${unit}; max MPE ${lim(c.maxMpeAllowed)}; hysteresis ${fmt(c.hysteresisAnalysis?.maxHysteresis)}`;
+      return `Max |Ec| ${fmt(c.maxCorrectedError)} ${unit} (increasing & decreasing); max MPE ${lim(c.maxMpeAllowed)}`;
     case 'REPEATABILITY': {
       const worst = (c.series || []).reduce((a, s) => (s.range > (a?.range ?? -1) ? s : a), null);
       return worst ? `Max range ${fmt(worst.range)} ${unit} at ${fmt(worst.load)} ${unit} (MPE ${lim(worst.mpeMass)})` : '—';
@@ -27,13 +27,19 @@ function keyFinding(testType, result, fmt, unit, lim = fmt) {
     case 'ECCENTRICITY':
       return `Max error ${fmt(c.maxError)} ${unit} (MPE ${lim(c.mpe)}); max diff. from centre ${fmt(c.maxDifferenceFromCenter)}`;
     case 'TEMPERATURE':
-      return `Zero drift ${fmt(c.zeroDriftPer5C)} ${unit}/5 °C (limit 1e); max span error ${fmt(c.maxSpanError)}`;
+    {
+      const basis = c.zeroBasisC || 5;
+      const drift = c.maxZeroDriftPerBasis ?? c.zeroDriftPer5C;
+      return `Zero change ${fmt(drift)} ${unit}/${basis} °C (limit 1e per ${basis} °C); max span error ${fmt(c.maxSpanError)}`;
+    }
     case 'STABILITY':
-      return `Max span drift ${fmt(c.maxSpanDrift)} ${unit} over 8 h (limit ${lim(c.mpeMass)})`;
+      return c.maxCorrectedLoadError != null
+        ? `Max |EL - E0| ${fmt(c.maxCorrectedLoadError)} ${unit} over 0–30 min after switch-on (limit ${lim(c.mpeMass)})`
+        : `Max span drift ${fmt(c.maxSpanDrift)} ${unit} (limit ${lim(c.mpeMass)})`;
     case 'TIME_DEPENDENCE': {
       const cr = c.creepAnalysis || {};
       const zr = c.zeroReturnAnalysis || {};
-      return `Creep 15–30 min ${fmt(cr.delta30to15)} ${unit} (limit ${lim(cr.allowedDelta15to30)}); zero return ${fmt(zr.zeroReturnError)}`;
+      return `Creep 0–30 min ${fmt(cr.delta30to0)} (limit ${lim(cr.allowedDelta30)}), 15–30 min ${fmt(cr.delta30to15)} (limit ${lim(cr.allowedDelta15to30)}) ${unit}; zero return ${fmt(zr.zeroReturnError)} (limit ${lim(zr.allowedZeroReturn)})`;
     }
     default:
       return '—';
@@ -42,6 +48,12 @@ function keyFinding(testType, result, fmt, unit, lim = fmt) {
 
 async function generateCertificate(sessionData) {
   const session = sessionData || {};
+  // Type evaluation (model approval) sessions produce a test report, not a
+  // verification certificate.
+  if (isTypeEvaluation(session)) {
+    // Lazy require avoids a circular import (the report reuses keyFinding).
+    return require('./pdfTypeEvaluationReport').generateTypeEvaluationReport(session);
+  }
   const inst = session.instrument || {};
   const officer = session.conductedBy || {};
   const results = Object.fromEntries((session.testResults || []).map((r) => [r.testType, r]));
@@ -53,13 +65,6 @@ async function generateCertificate(sessionData) {
   const pass = verdict === 'PASS';
   const verifiedAt = session.completedAt || session.sealedAt;
   const validUntil = pass && verifiedAt ? T.addMonths(verifiedAt, 12) : null;
-
-  const rep = results.REPEATABILITY?.calculations;
-  const ecc = results.ECCENTRICITY?.calculations;
-  const budget = computeExpandedUncertainty(rep?.maxStdDev || 0, Number(inst.actualInterval || inst.verificationInterval || 0.001), Number(inst.maxCapacity || 0), inst.accuracyClass, {
-    eccError: ecc?.maxDifferenceFromCenter || 0,
-    ranges: inst.ranges,
-  });
 
   const verifyUrl = T.verifyUrlFor(session);
   const qr = await T.qrPng(verifyUrl, 260);
@@ -174,7 +179,9 @@ async function generateCertificate(sessionData) {
 
       // ---- 2. Tests ----
       y = T.sectionBar(doc, X, y, CW, '2. Metrological tests performed (OIML R 76)', `${session.verificationType === 'INSPECTION' ? 'In-service MPE (2×)' : 'Verification MPE (1×)'}`, 'परीक्षण परिणाम');
-      const rows = T.TESTS.map((t, i) => {
+      // A verification certificate lists only the verification tests.
+      const applicable = requiredTestTypesFor(session);
+      const rows = T.TESTS.filter((t) => applicable.includes(t.type)).map((t, i) => {
         const r = results[t.type];
         const v = r?.result || 'N/A';
         return [
@@ -195,12 +202,12 @@ async function generateCertificate(sessionData) {
       y += 8;
 
       // ---- 3. Conditions & uncertainty ----
-      y = T.sectionBar(doc, X, y, CW, '3. Test conditions & measurement uncertainty', 'ISO/IEC GUM · EURAMET cg-18', 'परीक्षण परिस्थितियाँ');
+      y = T.sectionBar(doc, X, y, CW, '3. Test conditions & decision rule', 'OIML R 76-1 3.7.1', 'परीक्षण परिस्थितियाँ');
       y = T.keyValueGrid(doc, X, y, CW, [
         ['Ambient temperature', session.temperature != null ? `${session.temperature} °C` : 'Not recorded'],
         ['Relative humidity', session.humidity != null ? `${session.humidity} % RH` : 'Not recorded'],
         ['Barometric pressure', session.atmosphericPressure != null ? `${session.atmosphericPressure} hPa` : 'Not recorded'],
-        ['Expanded uncertainty', `U = ±${fmt(budget.expandedUncertainty, false)} ${unit} at Max (k = 2, ~95 %)`, { bold: true }],
+        ['Decision rule', 'Pass if |Ec| <= MPE at every load', { bold: true }],
       ]);
       doc.rect(X, y, CW, 14.5).fill('#FFFFFF').lineWidth(0.6).strokeColor(C.LINE).stroke();
       doc.fillColor(C.MUTED).font('Helvetica-Bold').fontSize(6.6).text('Standards used', X + 5, y + 4.3);

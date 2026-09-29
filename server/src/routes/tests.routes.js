@@ -7,9 +7,26 @@ const { verifyToken, requireRole } = require('../middleware/auth');
 const { createAuditLog, getClientIp } = require('../middleware/auditLog');
 const { evaluateTestResult } = require('../services/mpeCalculator');
 const { generateVerificationSeal, buildSealInput } = require('../services/cryptoSeal');
-const { ALL_REQUIRED_TEST_TYPES, generateCertificateNumber } = require('../lib/verificationRegister');
+const {
+  ALL_REQUIRED_TEST_TYPES,
+  SESSION_TYPES,
+  requiredTestTypesFor,
+  isInServiceSession,
+  isTypeEvaluation,
+  generateCertificateNumber,
+} = require('../lib/verificationRegister');
 
-const VERIFICATION_TYPES = ['INITIAL', 'PERIODIC', 'INSPECTION'];
+const VERIFICATION_TYPES = SESSION_TYPES;
+
+/** 400 response when a module does not belong to the session's report type. */
+function moduleNotApplicable(res, session, testType) {
+  return res.status(400).json({
+    success: false,
+    message: isTypeEvaluation(session)
+      ? `${testType} is not part of the type evaluation test set.`
+      : `${testType} is a type-evaluation test (OIML R 76-1 A.5 / A.4.11). It is recorded in a Type Evaluation Test Report, not in a verification session.`,
+  });
+}
 
 /**
  * GET /api/tests
@@ -132,7 +149,7 @@ router.post(
         return res.status(404).json({ success: false, message: 'Instrument not found' });
       }
 
-      const certificateNo = await generateCertificateNumber();
+      const certificateNo = await generateCertificateNumber(req.body.verificationType || 'PERIODIC');
 
       const newSession = await prisma.testSession.create({
         data: {
@@ -312,10 +329,15 @@ router.post(
         });
       }
 
+      if (!requiredTestTypesFor(session).includes(testType)) {
+        return moduleNotApplicable(res, session, testType);
+      }
+
       // Surprise inspections of instruments in service are judged against 2x MPE
-      // (OIML R-76 3.5.2); verification and re-verification against 1x MPE.
-      const isInService =
-        req.body.isInService !== undefined ? Boolean(req.body.isInService) : session.verificationType === 'INSPECTION';
+      // (OIML R-76 3.5.2); verification, re-verification and type evaluation
+      // against 1x MPE. Always derived from the session type on the server —
+      // any client-supplied isInService flag is ignored.
+      const isInService = isInServiceSession(session);
 
       const evaluation = isPartial
         ? { result: null, calculations: null }
@@ -388,7 +410,7 @@ router.put(
   async (req, res, next) => {
     try {
       const { sessionId, testType } = req.params;
-      const { data, remarks, isInService = false } = req.body;
+      const { data, remarks } = req.body;
 
       if (!ALL_REQUIRED_TEST_TYPES.includes(testType)) {
         return res.status(400).json({ success: false, message: `Invalid testType: ${testType}` });
@@ -419,7 +441,12 @@ router.put(
         });
       }
 
-      const evaluation = evaluateTestResult(testType, data, session.instrument, Boolean(isInService));
+      if (!requiredTestTypesFor(session).includes(testType)) {
+        return moduleNotApplicable(res, session, testType);
+      }
+
+      // In-service (2x MPE) derived from the session type, never from the client.
+      const evaluation = evaluateTestResult(testType, data, session.instrument, isInServiceSession(session));
 
       const updated = await prisma.testResult.upsert({
         where: {
@@ -505,11 +532,14 @@ router.post('/:sessionId/finalize', verifyToken, requireRole('ADMIN', 'INSPECTOR
       });
     }
 
-    const testResults = session.testResults || [];
+    // Only the modules that belong to this report type count: verification
+    // sessions need the three verification tests, type evaluation needs all six.
+    const requiredTypes = requiredTestTypesFor(session);
+    const testResults = (session.testResults || []).filter((r) => requiredTypes.includes(r.testType));
     const completedTypes = new Set(testResults.filter((r) => r.status === 'COMPLETED').map((r) => r.testType));
 
-    // All six OIML R-76 modules must be completed (not merely started)
-    const missingTests = ALL_REQUIRED_TEST_TYPES.filter((t) => !completedTypes.has(t));
+    // Every required module must be completed (not merely started)
+    const missingTests = requiredTypes.filter((t) => !completedTypes.has(t));
     if (missingTests.length > 0) {
       return res.status(400).json({
         success: false,
@@ -532,6 +562,7 @@ router.post('/:sessionId/finalize', verifyToken, requireRole('ADMIN', 'INSPECTOR
     const sealSignature = generateVerificationSeal(
       buildSealInput({
         ...session,
+        testResults,
         status: finalStatus,
         overallResult,
         completedAt: finalizedAt,

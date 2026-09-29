@@ -31,18 +31,19 @@ const C = {
 };
 
 const TESTS = [
-  { type: 'WEIGHING_PERFORMANCE', en: 'Weighing performance (accuracy & hysteresis)', hi: 'तौल निष्पादन', clause: 'R 76-1 A.4.4' },
+  { type: 'WEIGHING_PERFORMANCE', en: 'Weighing test (increasing & decreasing loads)', hi: 'तौल निष्पादन', clause: 'R 76-1 A.4.4' },
   { type: 'REPEATABILITY', en: 'Repeatability', hi: 'पुनरावृत्ति', clause: 'R 76-1 A.4.10' },
   { type: 'ECCENTRICITY', en: 'Eccentricity (off-centre loading)', hi: 'विकेंद्रता', clause: 'R 76-1 A.4.7' },
-  { type: 'TEMPERATURE', en: 'Temperature effect on zero & span', hi: 'तापमान प्रभाव', clause: 'R 76-1 A.5.3' },
-  { type: 'STABILITY', en: 'Stability & warm-up', hi: 'स्थिरता', clause: 'R 76-1 A.4.11' },
-  { type: 'TIME_DEPENDENCE', en: 'Time dependence (creep & zero return)', hi: 'समय निर्भरता', clause: 'R 76-1 A.4.8' },
+  { type: 'TEMPERATURE', en: 'Static temperatures & effect on no-load indication', hi: 'तापमान प्रभाव', clause: 'R 76-1 A.5.3' },
+  { type: 'STABILITY', en: 'Warm-up time', hi: 'वार्म-अप समय', clause: 'R 76-1 A.5.2' },
+  { type: 'TIME_DEPENDENCE', en: 'Zero return & creep', hi: 'शून्य वापसी एवं क्रीप', clause: 'R 76-1 A.4.11' },
 ];
 
 const VERIFICATION_TYPE_LABEL = {
   INITIAL: 'Initial Verification',
   PERIODIC: 'Periodic Re-verification',
   INSPECTION: 'In-service Inspection',
+  TYPE_EVALUATION: 'Type Evaluation (Model Approval)',
 };
 
 const TYPE_LABEL = {
@@ -246,6 +247,7 @@ async function qrPng(text, size = 220) {
 function publicSiteUrl() {
   if (process.env.PUBLIC_VERIFY_URL) return process.env.PUBLIC_VERIFY_URL;
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return 'http://localhost:3000';
 }
 

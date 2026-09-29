@@ -1,7 +1,7 @@
 /**
  * OIML R-76 Metrological Calculation Engine
  * Reference: OIML R 76-1:2006 (Non-automatic weighing instruments - Part 1: Metrological and technical requirements)
- * Table 3: Maximum permissible errors on initial verification
+ * Table 6: Maximum permissible errors on initial verification
  * Clause 3.4: Multi-interval and multiple-range instruments
  * Clause 3.5.3: Tare devices (Subtractive and Additive tare MPE rules)
  * Clause 3.6.1: Hysteresis error limits
@@ -146,14 +146,14 @@ function normalizeRanges(rangesInput, defaultE = 0.001) {
 }
 
 /**
- * Calculate Multi-Interval and Multi-Range MPE per OIML R-76 clause 3.4 & Table 3
+ * Calculate Multi-Interval and Multi-Range MPE per OIML R-76 clause 3.4 & Table 6
  * 
  * On a multi-interval instrument with ranges [Max1, Max2, ... Maxr] and intervals [e1, e2, ... er]:
  * - For load L (or gross load L + T when tare is active per clause 3.5.3.4):
  *   Identify the active partial weighing range i where Maxi-1 < L <= Maxi.
  *   Verification interval ei is applied.
  *   Load in verification intervals is m = L / ei.
- *   MPE is determined from Table 3 for class and scaled by ei: MPE = getMPE(class, m) * ei.
+ *   MPE is determined from Table 6 for class and scaled by ei: MPE = getMPE(class, m) * ei.
  * 
  * @param {number} load - Applied net or gross load
  * @param {string} accuracyClass - 'CLASS_I' | 'CLASS_II' | 'CLASS_III' | 'CLASS_IIII'
@@ -559,11 +559,11 @@ function calculateWeighingPerformance(data, instrument, isInService = false, tar
   // Hysteresis analysis
   const incPoints = evaluatedPoints.filter(p => p.isIncreasing);
   const decPoints = evaluatedPoints.filter(p => !p.isIncreasing);
+  // Hysteresis (|P_dec - P_inc|) is reported for information only. OIML R 76
+  // does not set a separate hysteresis limit for NAWI: the requirement is that
+  // every increasing AND every decreasing error is within MPE (checked above).
   const hysteresisAnalysis = validateHysteresis(incPoints, decPoints, instrument, isInService, ranges, tareData);
-
-  if (!hysteresisAnalysis.overallPass) {
-    overallPass = false;
-  }
+  hysteresisAnalysis.informationalOnly = true;
 
   const tareAnalysis = calculateTareCapacities(instrument?.maxCapacity || 0, tareData);
 
@@ -576,8 +576,8 @@ function calculateWeighingPerformance(data, instrument, isInService = false, tar
     tareAnalysis,
     overallPass,
     summary: overallPass
-      ? 'All measurement points and hysteresis within OIML R-76 Maximum Permissible Error tolerances.'
-      : 'One or more measurement points or hysteresis exceeded Maximum Permissible Error tolerances.',
+      ? 'All increasing and decreasing load errors within OIML R 76 Maximum Permissible Error (R 76-1 A.4.4).'
+      : 'One or more load errors exceeded the Maximum Permissible Error (R 76-1 A.4.4).',
   };
 }
 
@@ -797,7 +797,10 @@ function calculateEccentricity(data, instrument, isInService = false) {
 /**
  * 4. Temperature Effect Test Calculation
  * Evaluates zero drift and span error over temperature range (-10°C to +40°C or declared).
- * Requirement: Zero drift <= 1e per 5°C temperature difference. Span error <= MPE.
+ * Requirements (OIML R 76-1 3.9.2 / R 76-2 test forms A.5.3.1 & A.5.3.2):
+ *  - Span (static temperatures): corrected error at load <= MPE.
+ *  - Temperature effect on no-load indication: zero change <= 1e per 1 °C for
+ *    class I, and <= 1e per 5 °C for classes II, III and IIII.
  * 
  * @param {Object|Array} data - { temperaturePoints: [{ temperature, zeroIndication, spanLoad, spanIndication, deltaL }] }
  * @param {Object} instrument
@@ -822,6 +825,8 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
   let overallPass = true;
   let maxSpanError = 0;
   let maxDriftPer5C = 0;
+  // Zero-change reference interval: 1 °C for class I, 5 °C for other classes.
+  const zeroBasisC = accuracyClass === 'CLASS_I' ? 1 : 5;
 
   // Sort points by temperature
   const sortedPoints = [...points].sort((a, b) => Number(a.temperature) - Number(b.temperature));
@@ -875,11 +880,13 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
     
     if (deltaT > 0) {
       const deltaE0 = Math.abs(p2.zeroError - p1.zeroError);
-      // Normalized to 5 deg C: (deltaE0 / deltaT) * 5
+      // Zero change normalised to 5 °C (kept for reports) and to the class basis.
       const driftPer5C = Number(((deltaE0 / deltaT) * 5).toFixed(8));
-      const allowedDrift = Number((1.0 * defaultE).toFixed(8)); // 1e per 5 deg C
+      const driftPerBasis = Number(((deltaE0 / deltaT) * zeroBasisC).toFixed(8));
+      // Limit: 1e per basis interval (1 °C class I, 5 °C others).
+      const allowedDrift = Number((1.0 * defaultE).toFixed(8));
 
-      const driftPassed = driftPer5C <= allowedDrift + 1e-9;
+      const driftPassed = driftPerBasis <= allowedDrift + 1e-9;
       if (!driftPassed) {
         overallPass = false;
       }
@@ -893,6 +900,8 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
         deltaT,
         deltaE0,
         driftPer5C,
+        driftPerBasis,
+        basisC: zeroBasisC,
         allowedDrift,
         driftPassed,
       });
@@ -903,18 +912,23 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
     temperaturePoints: evaluatedPoints,
     zeroDriftEvaluations: zeroDrifts,
     zeroDriftPer5C: Number(maxDriftPer5C.toFixed(8)),
+    zeroBasisC,
+    maxZeroDriftPerBasis: Number(Math.max(0, ...zeroDrifts.map((z) => z.driftPerBasis)).toFixed(8)),
     maxSpanError: Number(maxSpanError.toFixed(8)),
     overallPass,
     summary: overallPass
-      ? `Temperature test compliant. Max zero drift (${maxDriftPer5C} / 5°C) <= 1e (${defaultE}).`
-      : 'Temperature test failed. Zero drift or span error exceeded OIML R-76 limit.',
+      ? `Temperature test compliant. Zero change within 1e per ${zeroBasisC} °C and span errors within MPE (R 76-1 A.5.3).`
+      : `Temperature test failed. Zero change exceeded 1e per ${zeroBasisC} °C or a span error exceeded MPE (R 76-1 A.5.3).`,
   };
 }
 
 /**
- * 5. Stability / Warm-Up Test Calculation
- * Evaluates zero and span drift over time after power-on.
- * 
+ * 5. Warm-up time test (OIML R 76-1 A.5.2; R 76-2 test form "Warm-up time").
+ * After switch-on the zero error E0 and the error at a test load EL are
+ * determined at 0, 5, 15 and 30 minutes. Check: |EL - E0| <= |mpe| at every
+ * time point. (Long-term span stability is a separate test, R 76-1 B.4, and is
+ * not evaluated here.)
+ *
  * @param {Object|Array} data - { timePoints: [{ timestampMinutes, zeroReading, loadReading, appliedLoad }] }
  * @param {Object} instrument
  * @param {boolean} [isInService=false]
@@ -931,7 +945,7 @@ function calculateStability(data, instrument, isInService = false) {
       maxZeroDrift: 0,
       maxSpanDrift: 0,
       overallPass: false,
-      summary: 'No stability time-series points provided.',
+      summary: 'No warm-up time points provided.',
     };
   }
 
@@ -942,37 +956,43 @@ function calculateStability(data, instrument, isInService = false) {
 
   const mpeInfo = calculateMultiIntervalMPE(appliedLoad, accuracyClass, ranges, isInService);
   const mpeMass = mpeInfo.mpe;
-  const allowedZeroDrift = Number((1.0 * defaultE).toFixed(8)); // 1.0e
 
   let maxZeroDrift = 0;
   let maxSpanDrift = 0;
+  let maxCorrectedLoadError = 0;
 
   const evaluatedPoints = points.map((p, idx) => {
     const tMin = Number(p.timestampMinutes ?? (p.timeHrs != null ? p.timeHrs * 60 : idx * 15));
     const zeroReading = Number(p.zeroReading) || 0;
-    const loadReading = Number(p.loadReading ?? p.reading ?? appliedLoad);
+    const load = Number(p.appliedLoad ?? appliedLoad);
+    const loadReading = Number(p.loadReading ?? p.reading ?? load);
 
+    const zeroError = Number(zeroReading.toFixed(8)); // E0 at this time (indication at no load)
+    const loadError = Number((loadReading - load).toFixed(8)); // EL at this time
+    const correctedLoadError = Number((loadError - zeroError).toFixed(8)); // EL - E0
+
+    // Drift relative to the first reading — reported for information.
     const zeroDrift = Number(Math.abs(zeroReading - initialZero).toFixed(8));
     const spanDrift = Number(Math.abs(loadReading - initialLoadReading).toFixed(8));
-
     if (zeroDrift > maxZeroDrift) maxZeroDrift = zeroDrift;
     if (spanDrift > maxSpanDrift) maxSpanDrift = spanDrift;
+    if (Math.abs(correctedLoadError) > maxCorrectedLoadError) maxCorrectedLoadError = Math.abs(correctedLoadError);
 
-    const zeroPassed = zeroDrift <= allowedZeroDrift + 1e-9;
-    const spanPassed = spanDrift <= mpeMass + 1e-9;
-
-    if (!zeroPassed || !spanPassed) {
-      overallPass = false;
-    }
+    const passed = Math.abs(correctedLoadError) <= mpeMass + 1e-9;
+    if (!passed) overallPass = false;
 
     return {
       timestampMinutes: tMin,
       zeroReading,
       loadReading,
+      zeroError,
+      loadError,
+      correctedLoadError,
       zeroDrift,
       spanDrift,
-      zeroPassed,
-      spanPassed,
+      zeroPassed: true,
+      spanPassed: passed,
+      passed,
     };
   });
 
@@ -980,22 +1000,23 @@ function calculateStability(data, instrument, isInService = false) {
     timePoints: evaluatedPoints,
     maxZeroDrift: Number(maxZeroDrift.toFixed(8)),
     maxSpanDrift: Number(maxSpanDrift.toFixed(8)),
-    allowedZeroDrift,
+    maxCorrectedLoadError: Number(maxCorrectedLoadError.toFixed(8)),
     mpeMass,
     overallPass,
     summary: overallPass
-      ? `Stability test passed. Max zero drift (${maxZeroDrift}) <= 1e, span drift (${maxSpanDrift}) <= MPE.`
-      : 'Stability test failed. Drift exceeded permissible limits.',
+      ? `Warm-up time test passed: |EL - E0| <= MPE at every time point (max ${Number(maxCorrectedLoadError.toFixed(8))}; R 76-1 A.5.2).`
+      : 'Warm-up time test failed: |EL - E0| exceeded MPE at one or more time points (R 76-1 A.5.2).',
   };
 }
 
 /**
- * 6. Time-Dependence (Creep & Zero Return) Test Calculation
+ * 6. Time-Dependence (Creep & Zero Return) Test Calculation — OIML R 76-1 A.4.11
  * Creep under load (0, 5, 15, 30 min) and zero return after complete unloading.
- * Limits (OIML R-76 3.9.4):
- * - Delta (30m - 0m) <= 0.5 * |MPE| (or 1.0 MPE)
- * - Delta (30m - 15m) <= 0.2 * |MPE|
- * - Zero return after 30m unload <= 0.5e
+ * Limits (R 76-1 3.9.4.1 / R 76-2 creep and zero-return forms):
+ * - Condition a): |P30 - P0| <= 0.5 e and |P30 - P15| <= 0.2 e
+ * - Condition b) (only if a) is not met): |P240 - P0| <= |mpe| over 4 hours,
+ *   evaluated when a 240-minute reading is supplied
+ * - Zero return after unloading <= 0.5 e
  * 
  * @param {Object} data - { creepReadings: [{ minute, indication }], zeroReturn: { appliedLoad, indicationAfterUnload } }
  * @param {Object} instrument
@@ -1029,11 +1050,18 @@ function calculateTimeDependence(data, instrument, isInService = false) {
   const delta30to0 = Number(Math.abs(read30 - read0).toFixed(8));
   const delta30to15 = Number(Math.abs(read30 - read15).toFixed(8));
 
-  const allowedDelta30 = Number((0.5 * mpeMass).toFixed(8)); // 0.5 MPE
-  const allowedDelta15to30 = Number((0.2 * mpeMass).toFixed(8)); // 0.2 MPE
+  const allowedDelta30 = Number((0.5 * defaultE).toFixed(8)); // 0.5 e
+  const allowedDelta15to30 = Number((0.2 * defaultE).toFixed(8)); // 0.2 e
 
   const creep30Passed = delta30to0 <= allowedDelta30 + 1e-9;
   const creep15Passed = delta30to15 <= allowedDelta15to30 + 1e-9;
+  const conditionA = creep30Passed && creep15Passed;
+
+  // Condition b): 4-hour creep within |mpe| (only when a 240-min reading exists).
+  const r240 = creepReadings.find((r) => Number(r.minute ?? r.min) === 240);
+  const delta240to0 = r240 ? Number(Math.abs(Number(r240.indication ?? r240.reading) - read0).toFixed(8)) : null;
+  const conditionB = delta240to0 !== null ? delta240to0 <= mpeMass + 1e-9 : null;
+  const creepPassed = conditionA || conditionB === true;
 
   // Zero return analysis
   const zeroIndicationAfter = Number(zeroReturn.indicationAfterUnload ?? zeroReturn.readingAfterUnload ?? 0);
@@ -1042,7 +1070,7 @@ function calculateTimeDependence(data, instrument, isInService = false) {
 
   const zeroReturnPassed = zeroReturnError <= allowedZeroReturn + 1e-9;
 
-  const overallPass = creep30Passed && creep15Passed && zeroReturnPassed;
+  const overallPass = creepPassed && zeroReturnPassed;
 
   return {
     creepAnalysis: {
@@ -1055,6 +1083,10 @@ function calculateTimeDependence(data, instrument, isInService = false) {
       delta30to15,
       allowedDelta15to30,
       creep15Passed,
+      conditionA,
+      delta240to0,
+      conditionB,
+      creepPassed,
       mpeMass,
     },
     zeroReturnAnalysis: {
@@ -1065,8 +1097,8 @@ function calculateTimeDependence(data, instrument, isInService = false) {
     },
     overallPass,
     summary: overallPass
-      ? 'Time dependence test compliant. Creep and zero return errors within OIML R-76 limits.'
-      : 'Time dependence test failed. Creep or zero return exceeded permissible thresholds.',
+      ? 'Creep and zero return within OIML R 76 limits (creep <= 0.5e at 30 min and <= 0.2e between 15 and 30 min; zero return <= 0.5e; R 76-1 A.4.11).'
+      : 'Creep or zero return exceeded OIML R 76 limits (creep 0.5e / 0.2e, zero return 0.5e; R 76-1 A.4.11).',
   };
 }
 

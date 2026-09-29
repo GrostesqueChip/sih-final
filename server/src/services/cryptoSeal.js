@@ -3,6 +3,7 @@
 require('../lib/bootstrapEnv').bootstrapEnv({ silent: true });
 
 const crypto = require('crypto');
+const { requiredTestTypesFor } = require('../lib/sessionTypes');
 const { getMPE, calculateIndicationAndError, calculateMultiIntervalMPE } = require('./mpeCalculator');
 
 const DEFAULT_SECRET = process.env.HMAC_SECRET;
@@ -46,7 +47,11 @@ function canonicalizePayload(data) {
   // so callers sealing a bare identity payload keep their existing format.
   const result = data.overallResult ? String(data.overallResult).trim().toUpperCase() : '';
   const readings = data.readingsDigest ? String(data.readingsDigest).trim() : '';
-  return result || readings ? `${base}|RESULT:${result}|READINGS:${readings}` : base;
+  const sealed = result || readings ? `${base}|RESULT:${result}|READINGS:${readings}` : base;
+  // Digest of the legally material instrument and session particulars printed
+  // on the report (class, serial, Min, d, report type, test conditions, ...).
+  const identity = data.identityDigest ? String(data.identityDigest).trim() : '';
+  return identity ? `${sealed}|IDENTITY:${identity}` : sealed;
 }
 
 /**
@@ -128,7 +133,7 @@ function verifySealSignature(data, signature, secretKey = DEFAULT_SECRET) {
 }
 
 /**
- * Create a complete tamper-proof verification seal package
+ * Create a complete tamper-evident verification seal package
  * @param {Object} session - Test session data
  * @param {string} [secretKey]
  * @returns {Object} { sealSignature, canonicalPayload, timestamp, algorithm: 'HMAC-SHA256' }
@@ -148,7 +153,7 @@ function createTamperProofSeal(session, secretKey = DEFAULT_SECRET) {
 
 /**
  * Pre-computes error envelope curve points for public API consumers and charting
- * Conforming to OIML R-76-1 Table 3 & Clause 3.4
+ * Conforming to OIML R 76-1 Table 6 & clause 3.4
  * 
  * @param {Array<Object>} testPoints - Raw or calculated test points
  * @param {Object} instrument - Instrument specifications { accuracyClass, verificationInterval, maxCapacity, ranges }
@@ -243,8 +248,38 @@ function computeErrorCurvePoints(testPoints = [], instrument = {}, isInService =
  * @param {Object} session - Session with instrument, testResults and conductedBy(optional) included
  * @returns {Object} Canonical field bag for generateVerificationSeal()
  */
+/**
+ * SHA-256 over the instrument and session particulars printed on the report, so
+ * editing the accuracy class, serial number, Min, d, the report type
+ * (which decides 1x vs 2x MPE) or the recorded test conditions after sealing
+ * breaks the seal.
+ */
+function computeIdentityDigest(session = {}) {
+  const inst = session.instrument || {};
+  const particulars = {
+    accuracyClass: inst.accuracyClass ?? null,
+    serialNumber: inst.serialNumber ?? null,
+    manufacturer: inst.manufacturer ?? null,
+    model: inst.model ?? null,
+    minCapacity: inst.minCapacity ?? null,
+    actualInterval: inst.actualInterval ?? null,
+    unit: inst.unit ?? null,
+    verificationType: session.verificationType ?? null,
+    temperature: session.temperature ?? null,
+    humidity: session.humidity ?? null,
+    atmosphericPressure: session.atmosphericPressure ?? null,
+    standardWeightsUsed: session.standardWeightsUsed ?? null,
+  };
+  return crypto.createHash('sha256').update(stableStringify(particulars), 'utf8').digest('hex');
+}
+
 function buildSealInput(session = {}) {
   const inst = session.instrument || {};
+  // Only the modules that belong to this report type are sealed.
+  const required = requiredTestTypesFor(session);
+  const results = Array.isArray(session.testResults)
+    ? session.testResults.filter((r) => required.includes(r.testType))
+    : session.testResults;
   const rawDate = session.completedAt || session.sealedAt || session.createdAt || new Date();
   const verificationDate =
     rawDate instanceof Date ? rawDate.toISOString() : new Date(rawDate).toISOString();
@@ -258,13 +293,15 @@ function buildSealInput(session = {}) {
     maxCapacity: inst.maxCapacity,
     verificationInterval: inst.verificationInterval,
     overallResult: String(session.overallResult || 'UNKNOWN').toUpperCase(),
-    readingsDigest: computeReadingsDigest(session.testResults) || 'NONE',
+    readingsDigest: computeReadingsDigest(results) || 'NONE',
+    identityDigest: computeIdentityDigest(session),
   };
 }
 
 module.exports = {
   canonicalizePayload,
   computeReadingsDigest,
+  computeIdentityDigest,
   generateVerificationSeal,
   verifySealSignature,
   createTamperProofSeal,

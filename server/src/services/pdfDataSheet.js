@@ -8,6 +8,7 @@
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const { computeExpandedUncertainty } = require('./uncertaintyCalculator');
+const { isTypeEvaluation } = require('../lib/sessionTypes');
 const { calculateMultiIntervalMPE } = require('./mpeCalculator');
 const { keyFinding } = require('./pdfCertificate');
 const T = require('./pdfTheme');
@@ -31,6 +32,7 @@ async function generateDataSheet(sessionData) {
   const lim = T.limitFmt(inst);
   const e = Number(inst.verificationInterval || 1);
   const inService = session.verificationType === 'INSPECTION';
+  const typeEval = isTypeEvaluation(session);
   const mpeAt = (load) => calculateMultiIntervalMPE(load, inst.accuracyClass, [{ max: Infinity, e }], inService).mpe;
   const verifyUrl = T.verifyUrlFor(session);
   const qr = await T.qrPng(verifyUrl, 200);
@@ -64,7 +66,7 @@ async function generateDataSheet(sessionData) {
         T.tricolor(doc, 0, 0, W, 2.4);
         if (fs.existsSync(T.EMBLEM)) doc.image(T.EMBLEM, X, 14, { height: 30 });
         doc.fillColor(C.NAVY).font('Helvetica-Bold').fontSize(8.2).text('DEPARTMENT OF LEGAL METROLOGY', X + 26, 18);
-        doc.fillColor(C.MUTED).font('Helvetica').fontSize(6.6).text('Technical Data Sheet — OIML R 76 verification record', X + 26, 29);
+        doc.fillColor(C.MUTED).font('Helvetica').fontSize(6.6).text(`Technical Data Sheet — OIML R 76 ${typeEval ? 'type evaluation' : 'verification'} record`, X + 26, 29);
         doc.fillColor(C.NAVY).font('Courier-Bold').fontSize(8.5).text(session.certificateNo || '', X, 18, { width: CW, align: 'right' });
         doc.fillColor(C.MUTED).font('Helvetica').fontSize(6.6).text(inst.name || '', X, 29, { width: CW, align: 'right' });
         doc.moveTo(X, 48).lineTo(X + CW, 48).lineWidth(0.5).strokeColor(C.LINE).stroke();
@@ -151,6 +153,7 @@ async function generateDataSheet(sessionData) {
       const budget = computeExpandedUncertainty(rep?.maxStdDev || 0, Number(inst.actualInterval || e), Number(inst.maxCapacity || 0), inst.accuracyClass, {
         eccError: ecc?.maxDifferenceFromCenter || 0,
         ranges: inst.ranges,
+        e,
       });
       ensure(120);
       y = T.sectionBar(doc, X, y, CW, 'D. Measurement uncertainty budget at Max', 'ISO/IEC GUM · EURAMET cg-18', 'अनिश्चितता');
@@ -203,7 +206,8 @@ async function generateDataSheet(sessionData) {
             const inc = pts.find((p) => p.appliedLoad === L && p.isIncreasing);
             const dec = pts.find((p) => p.appliedLoad === L && !p.isIncreasing);
             const h = hyst.find((x) => Math.abs(x.appliedLoad - L) < 1e-9);
-            const ok = (inc?.passed ?? true) && (dec?.passed ?? true) && (h?.passed ?? true);
+            // Hysteresis is informational; the verdict is |Ec| <= MPE on both series.
+            const ok = (inc?.passed ?? true) && (dec?.passed ?? true);
             return [
               { text: fmt(L), bold: true },
               `${Math.round((L / inst.maxCapacity) * 100)} %`,
@@ -225,7 +229,7 @@ async function generateDataSheet(sessionData) {
             { label: 'Ec ▲', width: cw, align: 'right' },
             { label: 'IND. ▼', width: cw * 1.1, align: 'right' },
             { label: 'Ec ▼', width: cw, align: 'right' },
-            { label: 'HYSTERESIS', width: cw, align: 'right' },
+            { label: 'HYST. (INFO)', width: cw, align: 'right' },
             { label: 'MPE', width: cw, align: 'right' },
             { label: 'RESULT', width: cw * 0.95, align: 'center' },
           ].map((c) => ({ ...c, label: c.label.replace('▲', '(up)').replace('▼', '(down)') })), rows, { fontSize: 7 });
@@ -353,10 +357,14 @@ async function generateDataSheet(sessionData) {
         summaryLine(r?.calculations?.summary || 'Not recorded', r?.result);
       }
 
+      // 4–6. Type-evaluation tests: only in a Type Evaluation Test Report.
+      // A verification data sheet records the verification tests only.
+      if (typeEval) {
       // 4. Temperature
       {
         const r = results.TEMPERATURE;
-        moduleHeader(4, 'Temperature effect on zero and span', 'R 76-1 A.5.3 · zero drift ≤ 1e / 5 °C', 'तापमान प्रभाव', r?.result);
+        const basisC = r?.calculations?.zeroBasisC || (inst.accuracyClass === 'CLASS_I' ? 1 : 5);
+        moduleHeader(4, 'Static temperatures & effect on no-load indication', `R 76-1 A.5.3 · zero change <= 1e per ${basisC} °C`, 'तापमान प्रभाव', r?.result);
         const tp = r?.calculations?.temperaturePoints || [];
         if (!tp.length) notRecorded();
         else {
@@ -383,10 +391,10 @@ async function generateDataSheet(sessionData) {
             y = T.table(doc, X, y, [
               { label: 'ZERO DRIFT BETWEEN', width: CW * 0.3 },
               { label: 'CHANGE IN E0', width: CW * 0.2, align: 'right' },
-              { label: 'DRIFT PER 5 °C', width: CW * 0.2, align: 'right' },
+              { label: `CHANGE PER ${basisC} °C`, width: CW * 0.2, align: 'right' },
               { label: 'LIMIT (1e)', width: CW * 0.17, align: 'right' },
               { label: 'RESULT', width: CW * 0.13, align: 'center' },
-            ], drifts.map((dz) => [`${dz.fromTemp} °C → ${dz.toTemp} °C`.replace('→', 'to'), fmt(dz.deltaE0), fmt2(dz.driftPer5C), fmt(dz.allowedDrift), verdictCell(dz.driftPassed)]), { fontSize: 7 });
+            ], drifts.map((dz) => [`${dz.fromTemp} °C → ${dz.toTemp} °C`.replace('→', 'to'), fmt(dz.deltaE0), fmt2(dz.driftPerBasis ?? dz.driftPer5C), fmt(dz.allowedDrift), verdictCell(dz.driftPassed)]), { fontSize: 7 });
           }
           y += 6;
         }
@@ -396,25 +404,29 @@ async function generateDataSheet(sessionData) {
       // 5. Stability
       {
         const r = results.STABILITY;
-        moduleHeader(5, 'Stability and warm-up', 'R 76-1 A.4.11', 'स्थिरता', r?.result);
+        moduleHeader(5, 'Warm-up time', 'R 76-1 A.5.2 · |EL - E0| <= MPE', 'वार्म-अप समय', r?.result);
         const tp = r?.calculations?.timePoints || [];
         if (!tp.length) notRecorded();
         else {
           y = T.table(doc, X, y, [
-            { label: 'ELAPSED', width: CW * 0.16 },
-            { label: 'ZERO READING', width: CW * 0.17, align: 'right' },
+            { label: 'AFTER SWITCH-ON', width: CW * 0.16 },
+            { label: 'ZERO IND. (E0)', width: CW * 0.17, align: 'right' },
             { label: 'LOAD READING', width: CW * 0.18, align: 'right' },
-            { label: 'ZERO DRIFT', width: CW * 0.15, align: 'right' },
-            { label: 'SPAN DRIFT', width: CW * 0.16, align: 'right' },
+            { label: 'EL - E0', width: CW * 0.15, align: 'right' },
+            { label: 'MPE', width: CW * 0.16, align: 'right' },
             { label: 'RESULT', width: CW * 0.18, align: 'center' },
-          ], tp.map((p) => [
-            { text: p.timestampMinutes >= 60 ? `${p.timestampMinutes / 60} h` : `${p.timestampMinutes} min`, bold: true },
-            fmt(p.zeroReading),
-            fmt(p.loadReading),
-            fmt(p.zeroDrift),
-            { text: fmt(p.spanDrift), color: p.spanPassed ? C.TEXT : C.FAIL },
-            verdictCell(p.zeroPassed && p.spanPassed),
-          ]), { fontSize: 7 });
+          ], tp.map((p) => {
+            const corr = p.correctedLoadError ?? p.spanDrift;
+            const ok = p.passed ?? (p.zeroPassed && p.spanPassed);
+            return [
+              { text: p.timestampMinutes >= 60 ? `${p.timestampMinutes / 60} h` : `${p.timestampMinutes} min`, bold: true },
+              fmt(p.zeroReading),
+              fmt(p.loadReading),
+              { text: fmt(corr, true), color: ok ? C.TEXT : C.FAIL },
+              `± ${lim(r.calculations.mpeMass)}`,
+              verdictCell(ok),
+            ];
+          }), { fontSize: 7 });
           y += 6;
         }
         summaryLine(r?.calculations?.summary || 'Not recorded', r?.result);
@@ -423,7 +435,7 @@ async function generateDataSheet(sessionData) {
       // 6. Time dependence
       {
         const r = results.TIME_DEPENDENCE;
-        moduleHeader(6, 'Time dependence (creep & zero return)', 'R 76-1 A.4.8', 'समय निर्भरता', r?.result);
+        moduleHeader(6, 'Zero return & creep', 'R 76-1 A.4.11', 'शून्य वापसी एवं क्रीप', r?.result);
         const cr = r?.data?.creepReadings || [];
         const ca = r?.calculations?.creepAnalysis;
         const za = r?.calculations?.zeroReturnAnalysis;
@@ -439,8 +451,8 @@ async function generateDataSheet(sessionData) {
             { label: 'LIMIT', width: CW * 0.2, align: 'right' },
             { label: 'RESULT', width: CW * 0.15, align: 'center' },
           ], [
-            ['Creep between 0 and 30 min', fmt(ca.delta30to0), `${lim(ca.allowedDelta30)} (0.5 MPE)`, verdictCell(ca.creep30Passed)],
-            ['Creep between 15 and 30 min', fmt(ca.delta30to15), `${lim(ca.allowedDelta15to30)} (0.2 MPE)`, verdictCell(ca.creep15Passed)],
+            ['Creep between 0 and 30 min', fmt(ca.delta30to0), `${lim(ca.allowedDelta30)} (0.5e)`, verdictCell(ca.creep30Passed)],
+            ['Creep between 15 and 30 min', fmt(ca.delta30to15), `${lim(ca.allowedDelta15to30)} (0.2e)`, verdictCell(ca.creep15Passed)],
             ['Zero return after unloading', fmt(za?.zeroReturnError), `${fmt2(za?.allowedZeroReturn)} (0.5e)`, verdictCell(za?.zeroReturnPassed)],
           ], { fontSize: 7 });
           y += 6;
@@ -448,12 +460,14 @@ async function generateDataSheet(sessionData) {
         summaryLine(r?.calculations?.summary || 'Not recorded', r?.result);
       }
 
+      } // end type-evaluation tests
+
       // ================= Declaration =================
       ensure(150);
       y = T.sectionBar(doc, X, y, CW, 'E. Declaration and digital seal', null, 'घोषणा');
       y += 6;
       doc.fillColor(C.TEXT).font('Helvetica').fontSize(7.4).text(
-        'I certify that the tests recorded above were carried out by me on the instrument described, using the standards stated, in accordance with OIML R 76-1:2006 and the Legal Metrology (General) Rules, 2011. The results were computed by the NAWI-ReportPro rules engine from the readings as entered and are sealed with the HMAC-SHA256 signature below; any alteration invalidates the seal.',
+        `I certify that the tests recorded above were carried out by me on the instrument described, using the standards stated, in accordance with ${typeEval ? 'OIML R 76-1:2006 / R 76-2:2007 and the Legal Metrology (Approval of Models) Rules, 2011' : 'OIML R 76-1:2006 and the Legal Metrology (General) Rules, 2011'}. The results were computed by the NAWI-ReportPro rules engine from the readings as entered and are sealed with the HMAC-SHA256 signature below; any alteration invalidates the seal.`,
         X, y, { width: CW - 110 }
       );
       doc.image(qr, X + CW - 90, y - 2, { width: 88 });

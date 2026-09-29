@@ -5,22 +5,24 @@
  */
 const prisma = require('./prisma');
 
-const ALL_REQUIRED_TEST_TYPES = [
-  'WEIGHING_PERFORMANCE',
-  'REPEATABILITY',
-  'ECCENTRICITY',
-  'TEMPERATURE',
-  'STABILITY',
-  'TIME_DEPENDENCE',
-];
+const {
+  ALL_REQUIRED_TEST_TYPES,
+  VERIFICATION_TEST_TYPES,
+  TYPE_EVALUATION_TEST_TYPES,
+  SESSION_TYPES,
+  isTypeEvaluation,
+  requiredTestTypesFor,
+  isInServiceSession,
+} = require('./sessionTypes');
 
 /**
  * Next certificate number in the statutory register: NAWI-YYYY-NNNNNN.
  * Sequential within the calendar year so the register reads without gaps.
  */
-async function generateCertificateNumber() {
+async function generateCertificateNumber(sessionType) {
   const year = new Date().getFullYear();
-  const prefix = `NAWI-${year}-`;
+  // Type evaluation test reports have their own register (TER-YYYY-NNNNNN).
+  const prefix = `${isTypeEvaluation(sessionType) ? 'TER' : 'NAWI'}-${year}-`;
   let next = 101;
   try {
     const existing = await prisma.testSession.findMany({
@@ -43,4 +45,13 @@ async function generateCertificateNumber() {
   return candidate;
 }
 
-module.exports = { ALL_REQUIRED_TEST_TYPES, generateCertificateNumber };
+module.exports = {
+  ALL_REQUIRED_TEST_TYPES,
+  VERIFICATION_TEST_TYPES,
+  TYPE_EVALUATION_TEST_TYPES,
+  SESSION_TYPES,
+  isTypeEvaluation,
+  requiredTestTypesFor,
+  isInServiceSession,
+  generateCertificateNumber,
+};

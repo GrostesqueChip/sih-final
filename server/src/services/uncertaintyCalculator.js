@@ -219,6 +219,7 @@ function computeTemperatureUncertainty(appliedLoad, accuracyClass, tempVariation
  *   - coverageFactor: k (defaults to 2 for 95.45% confidence)
  *   - nReadings: number of repeated measurements (default 6)
  *   - ranges: multi-interval scale ranges
+ *   - e: verification scale interval (used for the standard-weights term; defaults to d)
  * @returns {Object} UncertaintyBudget matching PROJECT.md interface contract
  */
 function computeExpandedUncertainty(
@@ -246,7 +247,9 @@ function computeExpandedUncertainty(
   const stdRes = computeStandardWeightsUncertainty(L, normClass, {
     standardWeightMpe: options?.standardWeightMpe,
     standardWeightU: options?.standardWeightU,
-    e: d,
+    // Standard-weight MPE is set relative to the verification interval e
+    // (R 76-1 3.7.1), not the display resolution d; fall back to d if e is absent.
+    e: Number(options?.e) || d,
     ranges: options?.ranges,
   });
   const u_std = stdRes.u_std;

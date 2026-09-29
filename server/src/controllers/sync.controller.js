@@ -8,7 +8,12 @@ const prisma = require('../lib/prisma');
 const { evaluateTestResult } = require('../services/mpeCalculator');
 const { getClientIp } = require('../middleware/auditLog');
 const { generateVerificationSeal, buildSealInput } = require('../services/cryptoSeal');
-const { ALL_REQUIRED_TEST_TYPES, generateCertificateNumber } = require('../lib/verificationRegister');
+const {
+  SESSION_TYPES,
+  requiredTestTypesFor,
+  isInServiceSession,
+  generateCertificateNumber,
+} = require('../lib/verificationRegister');
 
 // In-memory idempotency cache for fast deduplication
 const idempotencyStore = new Map();
@@ -124,14 +129,19 @@ async function syncBatch(req, res, next) {
       // 3. Re-evaluate every module on the server. Verdicts sent by the device
       //    (passed / result / overallResult / overallStatus) are ignored: the
       //    verdict is always computed from the readings, as in online mode.
+      //    The session type decides which modules apply and whether in-service
+      //    (2x) MPE is used — both derived on the server, never from the device.
+      const verificationType = SESSION_TYPES.includes(sessionData.verificationType) ? sessionData.verificationType : 'PERIODIC';
+      const requiredTypes = requiredTestTypesFor(verificationType);
+      const isInService = isInServiceSession(verificationType);
       const evaluated = [];
       let invalidModule = null;
       for (const r of Array.isArray(sessionData.results) ? sessionData.results : []) {
-        if (!ALL_REQUIRED_TEST_TYPES.includes(r?.testType) || !r.data || typeof r.data !== 'object') {
+        if (!requiredTypes.includes(r?.testType) || !r.data || typeof r.data !== 'object') {
           invalidModule = r?.testType || 'unknown';
           break;
         }
-        const evaluation = evaluateTestResult(r.testType, r.data, instrument, Boolean(r.isInService));
+        const evaluation = evaluateTestResult(r.testType, r.data, instrument, isInService);
         evaluated.push({
           testType: r.testType,
           status: 'COMPLETED',
@@ -142,18 +152,23 @@ async function syncBatch(req, res, next) {
         });
       }
       if (invalidModule) {
-        reject(`Invalid test module '${invalidModule}': a known testType and its readings are required.`);
+        reject(`Invalid test module '${invalidModule}': a testType that applies to a ${verificationType} session and its readings are required.`);
         continue;
       }
 
-      // 4. Seal only when all six modules are present, exactly like finalize.
+      // 4. Seal only when every required module is present, exactly like finalize.
       //    Otherwise keep the readings as an unsealed in-progress session that
       //    the officer completes online, so no field work is lost.
       const completedTypes = new Set(evaluated.map((r) => r.testType));
-      const isComplete = ALL_REQUIRED_TEST_TYPES.every((t) => completedTypes.has(t));
-      const certificateNo = await generateCertificateNumber();
-      const testDate = sessionData.testDate ? new Date(sessionData.testDate) : new Date();
-      const recordedAt = Number.isNaN(testDate.getTime()) ? new Date() : testDate;
+      const isComplete = requiredTypes.every((t) => completedTypes.has(t));
+      const certificateNo = await generateCertificateNumber(verificationType);
+      // The device's test date is kept only as the (clamped) start time of the
+      // field work. The certificate date and validity always come from the
+      // server clock at sealing, so a device cannot back- or future-date a
+      // certificate.
+      const sealedAtServer = new Date();
+      const testDate = sessionData.testDate ? new Date(sessionData.testDate) : sealedAtServer;
+      const recordedAt = Number.isNaN(testDate.getTime()) || testDate > sealedAtServer ? sealedAtServer : testDate;
 
       try {
         const saved = await prisma.$transaction(async (tx) => {
@@ -163,6 +178,7 @@ async function syncBatch(req, res, next) {
               instrumentId: instrument.id,
               conductedById: officerId,
               status: 'IN_PROGRESS',
+              verificationType,
               remarks: sessionData.notes || sessionData.remarks || 'Synced from offline field queue',
               startedAt: recordedAt,
               testResults: evaluated.length ? { create: evaluated } : undefined,
@@ -178,7 +194,7 @@ async function syncBatch(req, res, next) {
                 ...created,
                 status: 'COMPLETED',
                 overallResult,
-                completedAt: recordedAt,
+                completedAt: sealedAtServer,
                 conductedById: officerId,
               })
             );
@@ -187,8 +203,8 @@ async function syncBatch(req, res, next) {
               data: {
                 status: 'COMPLETED',
                 overallResult,
-                completedAt: recordedAt,
-                sealedAt: recordedAt,
+                completedAt: sealedAtServer,
+                sealedAt: sealedAtServer,
                 verificationSeal,
               },
             });
