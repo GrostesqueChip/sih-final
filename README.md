@@ -10,9 +10,15 @@ Digital verification and certification of **non-automatic weighing instruments**
 
 *Smart India Hackathon 2026*
 
+**Live demo: [nawi-reportpro.vercel.app](https://nawi-reportpro.vercel.app)**
+
 </div>
 
 ---
+
+## Try it online
+
+Open **[nawi-reportpro.vercel.app](https://nawi-reportpro.vercel.app)** and sign in with one of the accounts in the table below. The hosted demo runs on the in-memory demo database, so the pre-loaded instruments, certificates and audit trail are identical on every visit. Records you create yourself are kept only while the serverless instance stays warm and may disappear afterwards.
 
 ## Run it in one minute
 
@@ -99,6 +105,26 @@ cp .env.example .env        # set DATABASE_URL, JWT_SECRET, HMAC_SECRET
 npm run setup:postgres      # migrate + seed the same demo data
 npm run dev
 ```
+
+### Deploying to Vercel
+
+The repository deploys to [Vercel](https://vercel.com) as it is. `vercel.json` builds the React client to `client/dist` and rewrites every `/api/*` request to `api/index.js`, which wraps the Express app as a single serverless function (with the PDF fonts and images from `server/assets` bundled in). Any other path falls back to `index.html`, so client-side routes work on refresh.
+
+1. Import the GitHub repository in Vercel. The build settings come from `vercel.json`, so keep the defaults.
+2. Add these environment variables for **Production**:
+
+   | Variable | Value |
+   |---|---|
+   | `JWT_SECRET` | a long random string (the API refuses to start in production without it) |
+   | `HMAC_SECRET` | a different long random string, used for the certificate seal |
+   | `PUBLIC_VERIFY_URL` | your deployed URL, e.g. `https://nawi-reportpro.vercel.app`; it is printed in the certificate QR codes |
+
+   Generate a secret with `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`.
+3. Deploy. Every later push to `main` redeploys production automatically, and other branches get a preview URL.
+
+Notes:
+- `api/index.js` forces `NAWI_DB_MODE=memory`, so no database is needed. For persistent storage, set `DATABASE_URL` to a hosted PostgreSQL instance and remove that line.
+- Serverless functions are time-limited (30 s here), so long-lived connections such as the live telemetry stream (SSE) may be cut off on Vercel. They run without that limit with `npm run demo` locally.
 
 ### Tests
 
