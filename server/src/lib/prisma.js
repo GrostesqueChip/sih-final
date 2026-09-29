@@ -45,6 +45,16 @@ if (globalThis.__PRISMA_SINGLETON__) {
   // regardless of what is installed on the machine. See `npm run demo`.
   const forcedMemoryMode = String(process.env.NAWI_DB_MODE || '').toLowerCase() === 'memory';
 
+  // In production the demo database is only ever used when asked for explicitly.
+  // A configured database that fails must surface as an error, never be replaced
+  // by demo data: the public portal would otherwise confirm demo certificates.
+  const strictDb = process.env.NODE_ENV === 'production' && !forcedMemoryMode;
+  if (strictDb && !process.env.DATABASE_URL) {
+    throw new Error(
+      'FATAL: DATABASE_URL is required in production. Set NAWI_DB_MODE=memory to run the demo database deliberately.'
+    );
+  }
+
   if (forcedMemoryMode) {
     realPrismaUnavailable = true;
     if (process.env.NODE_ENV !== 'test') {
@@ -60,6 +70,7 @@ if (globalThis.__PRISMA_SINGLETON__) {
       const { PrismaClient } = require('@prisma/client');
       realPrisma = new PrismaClient({ log: ['error'] });
     } catch (err) {
+      if (strictDb) throw err;
       realPrismaUnavailable = true;
       if (process.env.NODE_ENV !== 'test') {
         console.warn(
@@ -76,6 +87,7 @@ if (globalThis.__PRISMA_SINGLETON__) {
 
   /** True when calls should be served from mockDb without touching PostgreSQL. */
   function shouldUseFallback() {
+    if (strictDb) return false;
     if (realPrismaUnavailable) return true;
     return isDbOffline && Date.now() - lastCheckTime < RECHECK_INTERVAL_MS;
   }
@@ -143,7 +155,7 @@ if (globalThis.__PRISMA_SINGLETON__) {
               return fallbackFn.apply(mockModel, args);
             }
           } catch (dbErr) {
-            if (isConnectionError(dbErr)) {
+            if (!strictDb && isConnectionError(dbErr)) {
               isDbOffline = true;
               lastCheckTime = Date.now();
               noteFallback(dbErr.message?.split('\n')[0] || String(dbErr));
@@ -194,11 +206,12 @@ if (globalThis.__PRISMA_SINGLETON__) {
       isDbOffline = false;
       return res;
     } catch (err) {
-      if (isConnectionError(err)) {
-        isDbOffline = true;
-        lastCheckTime = Date.now();
-        noteFallback(err.message?.split('\n')[0] || String(err));
-      }
+      // Only an unreachable database may fall back; a failed write inside a
+      // reachable database is a real error and must not land in memory instead.
+      if (strictDb || !isConnectionError(err)) throw err;
+      isDbOffline = true;
+      lastCheckTime = Date.now();
+      noteFallback(err.message?.split('\n')[0] || String(err));
       return mockDb.$transaction(fnOrArray);
     }
   };
@@ -243,6 +256,10 @@ if (globalThis.__PRISMA_SINGLETON__) {
       }
       return true;
     } catch (err) {
+      if (strictDb) {
+        console.error(`PostgreSQL unreachable at startup: ${err.message?.split('\n')[0] || err}`);
+        return false;
+      }
       isDbOffline = true;
       lastCheckTime = Date.now();
       noteFallback(err.message?.split('\n')[0] || String(err));

@@ -54,6 +54,8 @@ describe('Tier 3: Cross-Feature - Public Verification, Cryptographic Seal & Erro
       officerId: MOCK_OFFICER.id,
       maxCapacity: res.body.instrument.maxCapacity,
       verificationInterval: res.body.instrument.verificationInterval,
+      overallResult: res.body.overallResult,
+      readingsDigest: res.body.readingsDigest,
     }, res.body.sealSignature);
 
     expect(isValidSignature).toBe(true);

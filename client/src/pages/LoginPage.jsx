@@ -252,7 +252,7 @@ export default function LoginPage() {
                   </div>
                   <p className="mt-3 text-[11px] text-slate-500 flex items-start gap-1.5">
                     <FiCheckCircle className="w-3.5 h-3.5 text-green-600 mt-px shrink-0" />
-                    {t('login.demoNote', 'Demo data: 16 instruments across 11 districts, 36 verification sessions. Data resets when the server restarts.')}
+                    {t('login.demoNote', 'Demo data: 16 instruments across 11 districts, 36 verification sessions.')}
                   </p>
                 </div>
               </div>

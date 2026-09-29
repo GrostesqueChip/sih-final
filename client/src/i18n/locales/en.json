@@ -315,7 +315,7 @@
   "instr.verify": "Verify",
   "instr.viewCert": "View latest certificate",
   "login.demo": "One-click demo access",
-  "login.demoNote": "Demo data: 16 instruments across 11 districts, 36 verification sessions. Data resets when the server restarts.",
+  "login.demoNote": "Demo data: 16 instruments across 11 districts, 36 verification sessions.",
   "login.email": "Official e-mail ID",
   "login.expired": "Your session expired. Please sign in again.",
   "login.f1": "OIML R 76 tests automated",

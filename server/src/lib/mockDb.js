@@ -35,7 +35,10 @@ function loadDemoData() {
   for (const session of testSessions) {
     if (session.status !== 'COMPLETED' && session.status !== 'FAILED') continue;
     const inst = instruments.find((i) => i.id === session.instrumentId);
-    session.verificationSeal = generateVerificationSeal(buildSealInput({ ...session, instrument: inst }));
+    const results = testResults.filter((r) => r.testSessionId === session.id);
+    session.verificationSeal = generateVerificationSeal(
+      buildSealInput({ ...session, instrument: inst, testResults: results })
+    );
   }
 }
 loadDemoData();

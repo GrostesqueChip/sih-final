@@ -198,7 +198,8 @@ async function verifyCertificate(req, res, next) {
     //    seal from the canonical input (the identical builder used at finalize
     //    time) and compare in constant time. An unsealed session is not authentic.
     const storedSeal = session.verificationSeal || null;
-    const computedSeal = generateVerificationSeal(buildSealInput(session));
+    const sealInput = buildSealInput(session);
+    const computedSeal = generateVerificationSeal(sealInput);
     let sealVerified = false;
     if (storedSeal) {
       try {
@@ -299,6 +300,9 @@ async function verifyCertificate(req, res, next) {
         : null,
       conductedBy: officerName,
       sealSignature: storedSeal,
+      // SHA-256 of the sealed readings, so anyone holding the data sheet can
+      // recompute the seal input without access to the database.
+      readingsDigest: sealInput.readingsDigest,
       sealedAt: session.sealedAt || session.completedAt || null,
       sealVerified,
       errorCurveData,

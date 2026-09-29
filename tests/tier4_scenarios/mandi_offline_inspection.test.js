@@ -12,7 +12,7 @@ import {
   deleteDraft,
 } from '../../client/src/services/offlineQueue';
 import { idempotencyStore } from '../../server/src/controllers/sync.controller';
-import { SAMPLE_INSTRUMENTS } from '../helpers/testUtils';
+import { SAMPLE_INSTRUMENTS, demoFieldReadings } from '../helpers/testUtils';
 
 describe('Tier 4: Workload Scenario 2 - Remote Agricultural Mandi Offline Inspection & Delayed Sync', () => {
   const mandiOfficer = 'LMO-PUNJAB-LUDHIANA-0042';
@@ -56,13 +56,13 @@ describe('Tier 4: Workload Scenario 2 - Remote Agricultural Mandi Offline Inspec
   });
 
   it('T4-S2-TC2: should bulk sync all 5 mandi inspections upon evening return to regional headquarters', async () => {
-    // 5 queued sessions
+    // 5 queued sessions with their recorded readings: 4 scales conform, 1 does not
     const inspectionRuns = [
-      { localId: 'mandi-shop-101', instrumentId: 'scale-wheat-01', overallStatus: 'VERIFIED_LEGAL' },
-      { localId: 'mandi-shop-102', instrumentId: 'scale-paddy-02', overallStatus: 'VERIFIED_LEGAL' },
-      { localId: 'mandi-shop-103', instrumentId: 'scale-cotton-03', overallStatus: 'VERIFIED_LEGAL' },
-      { localId: 'mandi-shop-104', instrumentId: 'scale-mustard-04', overallStatus: 'REJECTED' },
-      { localId: 'mandi-shop-105', instrumentId: 'scale-gram-05', overallStatus: 'VERIFIED_LEGAL' },
+      { localId: 'mandi-shop-101', ...demoFieldReadings('PASS', 0) },
+      { localId: 'mandi-shop-102', ...demoFieldReadings('PASS', 1) },
+      { localId: 'mandi-shop-103', ...demoFieldReadings('PASS', 2) },
+      { localId: 'mandi-shop-104', ...demoFieldReadings('FAIL', 0) },
+      { localId: 'mandi-shop-105', ...demoFieldReadings('PASS', 3) },
     ];
 
     for (const run of inspectionRuns) {
@@ -86,6 +86,7 @@ describe('Tier 4: Workload Scenario 2 - Remote Agricultural Mandi Offline Inspec
     expect(res.body.success).toBe(true);
     expect(res.body.syncedCount).toBe(5);
     expect(res.body.sessionIds).toHaveLength(5);
+    expect(res.body.results.map((r) => r.overallResult)).toEqual(['PASS', 'PASS', 'PASS', 'FAIL', 'PASS']);
 
     // Empty local queue on confirmation
     for (const item of pending) {
@@ -104,8 +105,7 @@ describe('Tier 4: Workload Scenario 2 - Remote Agricultural Mandi Offline Inspec
       sessions: [
         {
           localId: 'mandi-rejected-04',
-          instrumentId: 'scale-mustard-04',
-          overallStatus: 'REJECTED',
+          ...demoFieldReadings('FAIL'),
           notes: 'Corner load test failed with +45g error (exceeds 10g MPE)',
         },
       ],
@@ -114,5 +114,9 @@ describe('Tier 4: Workload Scenario 2 - Remote Agricultural Mandi Offline Inspec
     const res = await request(app).post('/api/sync/batch').send(syncPayload);
     expect(res.status).toBe(200);
     expect(res.body.syncedCount).toBe(1);
+    expect(res.body.results[0].overallResult).toBe('FAIL');
+
+    const detail = await request(app).get(`/api/reports/verify/${res.body.results[0].certificateNo}`);
+    expect(detail.body.status).toBe('REJECTED');
   });
 });

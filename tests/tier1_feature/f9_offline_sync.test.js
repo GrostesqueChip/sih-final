@@ -178,6 +178,7 @@ describe('Tier 1: Feature 9 - Resilient Offline Queue & Backend Idempotent Sync 
       const testSessionPayload = {
         localId: 'local-test-01',
         idempotencyKey: mockKey,
+        instrumentId: 'inst-01',
         testDate: new Date().toISOString(),
         overallStatus: 'COMPLETED',
         overallResult: 'PASS',

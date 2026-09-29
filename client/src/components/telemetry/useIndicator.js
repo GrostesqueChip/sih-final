@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import apiClient from '../../hooks/useApi';
 import { getSettings } from '../../utils/settings';
+import { BrowserIndicatorSimulator } from './browserSimulator';
 
 /**
- * Connection to a weighing indicator: the RS-232 simulator streamed over SSE
- * (default, auto-connected) or a physical indicator on a USB-serial port via
- * the Web Serial API. Exposes the live frame plus helpers to place a test load
- * and to wait for a stable, settled reading.
+ * Connection to a weighing indicator: the RS-232 indicator simulator running in
+ * this page (default, auto-connected) or a physical indicator on a USB-serial
+ * port via the Web Serial API. Exposes the live frame plus helpers to place a
+ * test load and to wait for a stable, settled reading.
  */
 export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const max = Number(instrument?.maxCapacity) || 0;
@@ -20,16 +20,12 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const [frame, setFrame] = useState({ weight: 0, isStable: false, isZero: true, isOverload: false, isNet: false, rawAscii: '', rawHex: '' });
   const [target, setTarget] = useState(0);
 
-  const esRef = useRef(null);
+  const simRef = useRef(null); // BrowserIndicatorSimulator, kept across reconnects so a placed load survives
   const frameRef = useRef(frame);
   const seqRef = useRef(0); // increments with every frame received
   const targetRef = useRef(0);
   const portRef = useRef(null);
   const readerRef = useRef(null);
-  // Generation counter: a connect that resolves after a newer connect (or after
-  // unmount) must not open a stream, or the connection leaks and exhausts the
-  // browser's per-host connection limit.
-  const genRef = useRef(0);
 
   const onFrame = useCallback((f) => {
     frameRef.current = f;
@@ -38,11 +34,7 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   }, []);
 
   const disconnect = useCallback(() => {
-    genRef.current += 1;
-    if (esRef.current) {
-      esRef.current.close();
-      esRef.current = null;
-    }
+    simRef.current?.stop();
     try {
       readerRef.current?.cancel();
       portRef.current?.close();
@@ -57,49 +49,21 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const connectSim = useCallback(
     async (proto = protocol, cond = condition) => {
       if (!max || !e) return;
-      genRef.current += 1;
-      const gen = genRef.current;
-      if (esRef.current) {
-        esRef.current.close();
-        esRef.current = null;
-      }
-      try {
-        await apiClient.post('/telemetry/config', {
-          protocol: proto,
-          unit,
-          maxCapacity: max,
-          verificationInterval_e: e,
-          actualInterval_d: d,
-          noiseLevel: 0.05,
-          condition: cond,
-          zeroTrackingEnabled: true,
-        });
-      } catch {
-        /* viewer role cannot configure; stream still works read-only */
-      }
-      // No targetWeight here: the stream may connect after a test load has been
-      // placed, and must never reset the load receptor back to zero.
-      if (gen !== genRef.current) return; // superseded or unmounted meanwhile
-      const qs = new URLSearchParams({ protocol: proto, unit, maxCapacity: max, e, d, noise: 0.05, condition: cond });
-      const es = new EventSource(`/api/telemetry/stream?${qs}`);
-      es.onmessage = (ev) => {
-        try {
-          const p = JSON.parse(ev.data);
-          if (p.weight === undefined) return;
-          onFrame({
-            weight: p.weight,
-            isStable: Boolean(p.isStable),
-            isZero: Boolean(p.isZero),
-            isOverload: Boolean(p.isOverload),
-            isNet: Boolean(p.isNet),
-            rawAscii: p.rawAscii || '',
-            rawHex: p.rawHex || '',
-          });
-        } catch {
-          /* heartbeat */
-        }
+      const config = {
+        protocol: proto,
+        unit,
+        maxCapacity: max,
+        verificationInterval_e: e,
+        actualInterval_d: d,
+        noiseLevel: 0.05,
+        condition: cond,
+        zeroTrackingEnabled: true,
       };
-      esRef.current = es;
+      // No targetWeight here: reconnecting (e.g. to change protocol) must never
+      // reset the load receptor back to zero.
+      if (simRef.current) simRef.current.configure(config);
+      else simRef.current = new BrowserIndicatorSimulator(config);
+      simRef.current.start(onFrame);
       setMode('SIM');
     },
     [max, e, d, unit, protocol, condition, onFrame]
@@ -110,8 +74,7 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
     try {
       const port = await navigator.serial.requestPort();
       await port.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
-      if (esRef.current) esRef.current.close();
-      esRef.current = null;
+      simRef.current?.stop();
       portRef.current = port;
       setMode('SERIAL');
       const decoder = new TextDecoderStream();
@@ -149,15 +112,9 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
       const v = Math.max(0, Number(load) || 0);
       targetRef.current = v;
       setTarget(v);
-      if (mode === 'SIM' || esRef.current) {
-        try {
-          await apiClient.post('/telemetry/set-weight', { weight: v });
-        } catch {
-          /* ignore */
-        }
-      }
+      simRef.current?.setTargetWeight(v);
     },
-    [mode]
+    []
   );
 
   /**
@@ -186,11 +143,7 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const setCondition = useCallback(
     async (c) => {
       setConditionState(c);
-      try {
-        await apiClient.post('/telemetry/config', { condition: c });
-      } catch {
-        /* ignore */
-      }
+      simRef.current?.configure({ condition: c });
     },
     []
   );
@@ -203,15 +156,13 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
     [mode, connectSim, condition]
   );
 
-  const zero = useCallback(() => apiClient.post('/telemetry/zero').catch(() => null), []);
-  const tare = useCallback(() => apiClient.post('/telemetry/tare').catch(() => null), []);
+  const zero = useCallback(async () => simRef.current?.zero(), []);
+  const tare = useCallback(async () => simRef.current?.tare(), []);
 
   useEffect(() => {
     if (autoConnect && getSettings().autoConnectIndicator && max && e) connectSim();
     return () => {
-      genRef.current += 1;
-      if (esRef.current) esRef.current.close();
-      esRef.current = null;
+      simRef.current?.stop();
       try {
         readerRef.current?.cancel();
         portRef.current?.close();

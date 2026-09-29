@@ -33,6 +33,13 @@ const syncRoutes = require('./routes/sync.routes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Behind Vercel's proxy the visitor's address is in X-Forwarded-For. Trusting that
+// one hop keeps the login and verification rate limits per visitor rather than
+// one bucket shared by everyone.
+if (process.env.VERCEL) {
+  app.set('trust proxy', 1);
+}
+
 // Security & Utility Middleware
 app.use(helmet());
 app.use(cors({

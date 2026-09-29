@@ -7,44 +7,7 @@ const { verifyToken, requireRole } = require('../middleware/auth');
 const { createAuditLog, getClientIp } = require('../middleware/auditLog');
 const { evaluateTestResult } = require('../services/mpeCalculator');
 const { generateVerificationSeal, buildSealInput } = require('../services/cryptoSeal');
-
-const ALL_REQUIRED_TEST_TYPES = [
-  'WEIGHING_PERFORMANCE',
-  'REPEATABILITY',
-  'ECCENTRICITY',
-  'TEMPERATURE',
-  'STABILITY',
-  'TIME_DEPENDENCE',
-];
-
-/**
- * Next certificate number in the statutory register: NAWI-YYYY-NNNNNN.
- * Sequential within the calendar year so the register reads without gaps.
- */
-async function generateCertificateNumber() {
-  const year = new Date().getFullYear();
-  const prefix = `NAWI-${year}-`;
-  let next = 101;
-  try {
-    const existing = await prisma.testSession.findMany({
-      where: { certificateNo: { startsWith: prefix } },
-      select: { certificateNo: true },
-    });
-    for (const row of existing) {
-      const n = Number(String(row.certificateNo).slice(prefix.length));
-      if (Number.isFinite(n) && n >= next) next = n + 1;
-    }
-  } catch (e) {
-    next = 100000 + (Date.now() % 100000);
-  }
-  let candidate = `${prefix}${String(next).padStart(6, '0')}`;
-  // Guard against a concurrent writer having taken the same number.
-  while (await prisma.testSession.findUnique({ where: { certificateNo: candidate } }).catch(() => null)) {
-    next += 1;
-    candidate = `${prefix}${String(next).padStart(6, '0')}`;
-  }
-  return candidate;
-}
+const { ALL_REQUIRED_TEST_TYPES, generateCertificateNumber } = require('../lib/verificationRegister');
 
 const VERIFICATION_TYPES = ['INITIAL', 'PERIODIC', 'INSPECTION'];
 
@@ -570,6 +533,7 @@ router.post('/:sessionId/finalize', verifyToken, requireRole('ADMIN', 'INSPECTOR
       buildSealInput({
         ...session,
         status: finalStatus,
+        overallResult,
         completedAt: finalizedAt,
         sealedAt: finalizedAt,
         conductedById: session.conductedById || session.conductedBy?.id,

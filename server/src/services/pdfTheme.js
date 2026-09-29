@@ -222,8 +222,18 @@ async function qrPng(text, size = 220) {
   return QRCode.toBuffer(text, { type: 'png', width: size, margin: 1, errorCorrectionLevel: 'M', color: { dark: '#0B2A4A', light: '#FFFFFF' } });
 }
 
+/**
+ * Public site that certificate QR codes point to: PUBLIC_VERIFY_URL when set,
+ * else the Vercel production domain, else the local dev server.
+ */
+function publicSiteUrl() {
+  if (process.env.PUBLIC_VERIFY_URL) return process.env.PUBLIC_VERIFY_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return 'http://localhost:3000';
+}
+
 function verifyUrlFor(session) {
-  const base = (process.env.PUBLIC_VERIFY_URL || 'http://localhost:3000').replace(/\/+$/, '');
+  const base = publicSiteUrl().replace(/\/+$/, '');
   const seal = session.verificationSeal ? `?seal=${session.verificationSeal}` : '';
   return `${base}/verify/${encodeURIComponent(session.certificateNo)}${seal}`;
 }

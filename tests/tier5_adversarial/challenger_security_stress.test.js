@@ -7,6 +7,7 @@ import prisma from '../../server/src/lib/prisma';
 import {
   generateVerificationSeal,
   verifySealSignature,
+  buildSealInput,
 } from '../../server/src/services/cryptoSeal';
 import {
   sanitizeFormulaInjection,
@@ -319,15 +320,12 @@ describe('Tier 5: Adversarial Challenger Stress Harness - Backend Security & Cry
     });
 
     it('CHAL-12: Public verification endpoint validates authentic seal and marks tampered seal as TAMPERED', async () => {
-      const genuineSeal = generateVerificationSeal(validData);
-
       const mockSession = {
         id: 'sess-verify-01',
         certificateNo: validData.certificateNo,
         status: validData.status,
         overallResult: 'PASS',
         completedAt: new Date(validData.verificationDate),
-        verificationSeal: genuineSeal,
         sealedAt: new Date(validData.verificationDate),
         instrument: {
           id: validData.instrumentId,
@@ -349,6 +347,7 @@ describe('Tier 5: Adversarial Challenger Stress Harness - Backend Security & Cry
         },
         testResults: [],
       };
+      mockSession.verificationSeal = generateVerificationSeal(buildSealInput(mockSession));
 
       const spyFind = vi.spyOn(prisma.testSession, 'findUnique').mockResolvedValue(mockSession);
 

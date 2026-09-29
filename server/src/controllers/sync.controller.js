@@ -4,31 +4,14 @@
  * Executes transactional batch insertion with strict idempotency key deduplication.
  */
 
-const crypto = require('crypto');
 const prisma = require('../lib/prisma');
 const { evaluateTestResult } = require('../services/mpeCalculator');
-const { createAuditLog, getClientIp } = require('../middleware/auditLog');
-const { generateVerificationSeal } = require('../services/cryptoSeal');
+const { getClientIp } = require('../middleware/auditLog');
+const { generateVerificationSeal, buildSealInput } = require('../services/cryptoSeal');
+const { ALL_REQUIRED_TEST_TYPES, generateCertificateNumber } = require('../lib/verificationRegister');
 
 // In-memory idempotency cache for fast deduplication
 const idempotencyStore = new Map();
-
-async function checkDbAvailable() {
-  return true;
-}
-
-/**
- * Generate unique certificate number with atomic sequencing (Task 7): NAWI-YYYY-XXXXXX
- */
-let syncCertSeq = 0;
-async function generateUniqueCertificateNumber() {
-  const currentYear = new Date().getFullYear();
-  syncCertSeq = (syncCertSeq + 1) % 1000000;
-  const seqPad = String(syncCertSeq).padStart(4, '0');
-  const timestamp = Date.now().toString().slice(-4);
-  const randomHex = crypto.randomBytes(2).toString('hex').toUpperCase();
-  return `NAWI-${currentYear}-${seqPad}${timestamp}${randomHex}`;
-}
 
 /**
  * POST /api/sync/batch
@@ -87,38 +70,31 @@ async function syncBatch(req, res, next) {
     let syncedCount = 0;
     let failedCount = 0;
 
-    const mapStatus = (rawStatus, overall) => {
-      const s = String(rawStatus || '').toUpperCase();
-      if (['PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED'].includes(s)) return s;
-      if (s === 'REJECTED' || s === 'REJECT' || overall === 'FAIL') return 'FAILED';
-      return 'COMPLETED';
-    };
-
-    const dbReady = await checkDbAvailable();
-
     for (const sessionData of sessions) {
       const itemKey = sessionData.idempotencyKey || sessionData.localId || `sync_${Date.now()}_${Math.random()}`;
       const localId = sessionData.localId || itemKey;
-      const isFail = sessionData.overallStatus === 'REJECTED' || sessionData.overallResult === 'FAIL';
-      const sessionStatus = mapStatus(sessionData.status || sessionData.overallStatus, sessionData.overallResult);
-      const overallResult = isFail ? 'FAIL' : 'PASS';
+      const reject = (message) => {
+        failedCount++;
+        syncResults.push({
+          localId,
+          idempotencyKey: itemKey,
+          sessionId: null,
+          certificateNo: null,
+          status: 'FAILED',
+          error: message,
+          syncedAt: new Date().toISOString(),
+        });
+      };
 
-      // 1. Check DB audit logs if available
+      // 1. Idempotency: a key already recorded in the audit trail is not written twice.
       let existingAudit = null;
-      if (dbReady) {
-        try {
-          if (prisma && prisma.auditLog) {
-            existingAudit = await prisma.auditLog.findFirst({
-              where: {
-                action: 'OFFLINE_SYNC_SESSION',
-                details: { contains: itemKey },
-              },
-              select: { entityId: true, createdAt: true },
-            });
-          }
-        } catch (err) {
-          existingAudit = null;
-        }
+      try {
+        existingAudit = await prisma.auditLog.findFirst({
+          where: { action: 'OFFLINE_SYNC_SESSION', details: { contains: itemKey } },
+          select: { entityId: true, createdAt: true },
+        });
+      } catch (err) {
+        existingAudit = null;
       }
 
       if (existingAudit && existingAudit.entityId) {
@@ -136,136 +112,120 @@ async function syncBatch(req, res, next) {
         continue;
       }
 
-      // Generate Certificate Number
-      const certificateNo =
-        sessionData.certificateNo && !sessionData.certificateNo.startsWith('DRAFT')
-          ? sessionData.certificateNo
-          : await generateUniqueCertificateNumber();
-
-      let savedId = localId;
-
-      if (dbReady) {
-        try {
-          if (prisma && prisma.$transaction) {
-            const txRes = await prisma.$transaction(async (tx) => {
-              let instrument = null;
-              if (sessionData.instrumentId && tx.instrument) {
-                instrument = await tx.instrument.findUnique({
-                  where: { id: sessionData.instrumentId },
-                });
-              }
-              if (!instrument && tx.instrument) {
-                instrument = await tx.instrument.findFirst();
-              }
-
-              const completedAt = sessionData.testDate ? new Date(sessionData.testDate) : new Date();
-              const verificationSeal = generateVerificationSeal({
-                certificateNo,
-                instrumentId: instrument ? instrument.id : sessionData.instrumentId,
-                status: sessionStatus,
-                verificationDate: completedAt.toISOString(),
-                officerId,
-                maxCapacity: instrument?.maxCapacity || 100000,
-                verificationInterval: instrument?.verificationInterval || 20,
-              });
-
-              const newSession = await tx.testSession.create({
-                data: {
-                  certificateNo,
-                  instrumentId: instrument ? instrument.id : sessionData.instrumentId,
-                  conductedById: officerId,
-                  status: sessionStatus,
-                  overallResult,
-                  remarks: sessionData.notes || sessionData.remarks || 'Synced from offline mobile queue',
-                  verificationSeal,
-                  sealedAt: completedAt,
-                  completedAt,
-                  testResults: sessionData.results ? {
-                    create: sessionData.results.map((r) => ({
-                      testType: r.testType || 'WEIGHING_PERFORMANCE',
-                      status: 'COMPLETED',
-                      result: r.passed === false || r.result === 'FAIL' ? 'FAIL' : 'PASS',
-                      data: r.data || {},
-                      calculations: r.calculations || {},
-                    })),
-                  } : undefined,
-                },
-              });
-
-              if (tx.auditLog) {
-                await tx.auditLog.create({
-                  data: {
-                    userId: officerId,
-                    action: 'OFFLINE_SYNC_SESSION',
-                    entityType: 'TestSession',
-                    entityId: newSession.id,
-                    details: `IdempotencyKey: ${itemKey} | LocalId: ${localId}`,
-                    ipAddress: getClientIp(req) || '127.0.0.1',
-                  },
-                });
-              }
-
-              return newSession;
-            });
-
-            savedId = txRes.id;
-          } else if (prisma && prisma.testSession) {
-            const completedAt = sessionData.testDate ? new Date(sessionData.testDate) : new Date();
-            const verificationSeal = generateVerificationSeal({
-              certificateNo,
-              instrumentId: sessionData.instrumentId,
-              status: sessionStatus,
-              verificationDate: completedAt.toISOString(),
-              officerId,
-              maxCapacity: 100000,
-              verificationInterval: 20,
-            });
-
-            const createdSession = await prisma.testSession.create({
-              data: {
-                certificateNo,
-                instrumentId: sessionData.instrumentId,
-                conductedById: officerId,
-                status: sessionStatus,
-                overallResult,
-                remarks: sessionData.notes || sessionData.remarks || 'Synced from offline mobile queue',
-                verificationSeal,
-                sealedAt: completedAt,
-                completedAt,
-              },
-            });
-            savedId = createdSession.id;
-          } else {
-            savedId = `synced-${localId}`;
-          }
-        } catch (dbErr) {
-          failedCount++;
-          syncResults.push({
-            localId,
-            idempotencyKey: itemKey,
-            sessionId: null,
-            certificateNo,
-            status: 'FAILED',
-            error: 'Database write failed during offline batch sync.',
-            syncedAt: new Date().toISOString(),
-          });
-          continue;
-        }
-      } else {
-        savedId = `synced-${localId}`;
+      // 2. The instrument must already be on the register.
+      const instrument = sessionData.instrumentId
+        ? await prisma.instrument.findUnique({ where: { id: sessionData.instrumentId } }).catch(() => null)
+        : null;
+      if (!instrument) {
+        reject(`Instrument '${sessionData.instrumentId || ''}' is not on the register.`);
+        continue;
       }
 
-      syncedCount++;
-      processedKeys.push(itemKey);
-      syncedSessionIds.push(savedId);
-      syncResults.push({
-        localId,
-        idempotencyKey: itemKey,
-        sessionId: savedId,
-        certificateNo,
-        status: 'SYNCED',
-        syncedAt: new Date().toISOString(),
-      });
+      // 3. Re-evaluate every module on the server. Verdicts sent by the device
+      //    (passed / result / overallResult / overallStatus) are ignored: the
+      //    verdict is always computed from the readings, as in online mode.
+      const evaluated = [];
+      let invalidModule = null;
+      for (const r of Array.isArray(sessionData.results) ? sessionData.results : []) {
+        if (!ALL_REQUIRED_TEST_TYPES.includes(r?.testType) || !r.data || typeof r.data !== 'object') {
+          invalidModule = r?.testType || 'unknown';
+          break;
+        }
+        const evaluation = evaluateTestResult(r.testType, r.data, instrument, Boolean(r.isInService));
+        evaluated.push({
+          testType: r.testType,
+          status: 'COMPLETED',
+          result: evaluation.result,
+          data: r.data,
+          calculations: evaluation.calculations,
+          remarks: evaluation.calculations?.summary || null,
+        });
+      }
+      if (invalidModule) {
+        reject(`Invalid test module '${invalidModule}': a known testType and its readings are required.`);
+        continue;
+      }
+
+      // 4. Seal only when all six modules are present, exactly like finalize.
+      //    Otherwise keep the readings as an unsealed in-progress session that
+      //    the officer completes online, so no field work is lost.
+      const completedTypes = new Set(evaluated.map((r) => r.testType));
+      const isComplete = ALL_REQUIRED_TEST_TYPES.every((t) => completedTypes.has(t));
+      const certificateNo = await generateCertificateNumber();
+      const testDate = sessionData.testDate ? new Date(sessionData.testDate) : new Date();
+      const recordedAt = Number.isNaN(testDate.getTime()) ? new Date() : testDate;
+
+      try {
+        const saved = await prisma.$transaction(async (tx) => {
+          const created = await tx.testSession.create({
+            data: {
+              certificateNo,
+              instrumentId: instrument.id,
+              conductedById: officerId,
+              status: 'IN_PROGRESS',
+              remarks: sessionData.notes || sessionData.remarks || 'Synced from offline field queue',
+              startedAt: recordedAt,
+              testResults: evaluated.length ? { create: evaluated } : undefined,
+            },
+            include: { instrument: true, testResults: true },
+          });
+
+          let session = created;
+          if (isComplete) {
+            const overallResult = created.testResults.every((r) => r.result === 'PASS') ? 'PASS' : 'FAIL';
+            const verificationSeal = generateVerificationSeal(
+              buildSealInput({
+                ...created,
+                status: 'COMPLETED',
+                overallResult,
+                completedAt: recordedAt,
+                conductedById: officerId,
+              })
+            );
+            session = await tx.testSession.update({
+              where: { id: created.id },
+              data: {
+                status: 'COMPLETED',
+                overallResult,
+                completedAt: recordedAt,
+                sealedAt: recordedAt,
+                verificationSeal,
+              },
+            });
+          }
+
+          await tx.auditLog.create({
+            data: {
+              userId: officerId,
+              action: 'OFFLINE_SYNC_SESSION',
+              entityType: 'TestSession',
+              entityId: session.id,
+              details: `IdempotencyKey: ${itemKey} | LocalId: ${localId} | ${certificateNo} | ${
+                isComplete ? `sealed, ${session.overallResult}` : 'in progress, not sealed'
+              }`,
+              ipAddress: getClientIp(req) || '127.0.0.1',
+            },
+          });
+
+          return session;
+        });
+
+        syncedCount++;
+        processedKeys.push(itemKey);
+        syncedSessionIds.push(saved.id);
+        syncResults.push({
+          localId,
+          idempotencyKey: itemKey,
+          sessionId: saved.id,
+          certificateNo,
+          status: 'SYNCED',
+          sessionStatus: saved.status,
+          overallResult: saved.overallResult || null,
+          syncedAt: new Date().toISOString(),
+        });
+      } catch (dbErr) {
+        reject('Database write failed during offline batch sync.');
+      }
     }
 
     if (batchKey) {
@@ -318,8 +278,7 @@ async function verifyKeys(req, res, next) {
     }
 
     const existingKeys = [];
-    const dbReady = await checkDbAvailable();
-    if (dbReady && prisma && prisma.auditLog) {
+    if (prisma && prisma.auditLog) {
       try {
         const auditLogs = await prisma.auditLog.findMany({
           where: {

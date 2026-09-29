@@ -1,3 +1,5 @@
+import { buildDemoData } from '../../server/src/lib/demoSeed';
+
 /**
  * Test Utilities & Metrological Fixtures for NAWI-ReportPro Test Suite
  */
@@ -82,3 +84,20 @@ export const MOCK_OFFICER = {
   jurisdiction: 'Northern Division, Ludhiana Zone',
   email: 'v.sharma@lm.gov.in',
 };
+
+/**
+ * Real six-module field readings from the demo register, as an offline device
+ * would sync them: a registered instrument plus raw readings only (no verdicts —
+ * the server computes those). outcome 'PASS' or 'FAIL' picks a session whose
+ * readings evaluate to that verdict.
+ */
+export function demoFieldReadings(outcome = 'PASS', nth = 0) {
+  const data = buildDemoData();
+  const session = data.testSessions.filter((s) => s.status === 'COMPLETED' && s.overallResult === outcome)[nth];
+  return {
+    instrumentId: session.instrumentId,
+    results: data.testResults
+      .filter((r) => r.testSessionId === session.id)
+      .map((r) => ({ testType: r.testType, data: r.data })),
+  };
+}

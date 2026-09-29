@@ -83,13 +83,13 @@ There are 36 verification sessions over 12 months, 7 officers and more than 300 
 ```
 client/   React 18 · Vite · Tailwind · TanStack Query · Recharts · pdf.js · i18next (EN/HI)
 server/   Node.js · Express · Prisma (PostgreSQL) with an in-memory fallback · PDFKit · QR · HMAC-SHA256
-tests/    Vitest + Supertest — 191 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
+tests/    Vitest + Supertest — 201 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
 ```
 
 - `server/src/services/mpeCalculator.js` is the OIML R 76 engine: stepped MPE, multi-interval ranges, tare, hysteresis and all six tests.
 - `server/src/services/uncertaintyCalculator.js` produces the GUM / EURAMET cg-18 expanded uncertainty.
 - `server/src/services/pdfCertificate.js` and `pdfDataSheet.js` generate the official PDFs, including the Devanagari fonts.
-- `server/src/services/telemetrySimulator.js` simulates the RS-232 indicator. It streams over SSE, and can simulate a healthy or a faulty load cell.
+- `client/src/components/telemetry/browserSimulator.js` simulates the RS-232 indicator in the officer's browser, with a healthy or a faulty load cell. `server/src/services/telemetrySimulator.js` offers the same indicator as an SSE stream for API clients; a parity test keeps the two identical.
 - `server/src/lib/demoSeed.js` holds the deterministic demo dataset, which is shared by the in-memory database and `prisma db seed`.
 
 ### Using PostgreSQL instead of the demo database
@@ -99,6 +99,17 @@ cp .env.example .env        # set DATABASE_URL, JWT_SECRET, HMAC_SECRET
 npm run setup:postgres      # migrate + seed the same demo data
 npm run dev
 ```
+
+### Deploying on Vercel (public demo)
+
+The repository deploys as one Vercel project: the React app as static files and the API as a serverless function (`api/index.js`, routed by `vercel.json`).
+
+1. Import the GitHub repository in Vercel. Keep the settings from `vercel.json` (no framework preset).
+2. In the project, open **Storage → Create database → Neon (Postgres)** and connect it. This sets `DATABASE_URL`.
+3. In **Settings → Environment Variables**, add `HMAC_SECRET` and `JWT_SECRET`: two different long random strings (for example `openssl rand -hex 32`). Certificates are sealed with `HMAC_SECRET`, so never change it after the first deploy.
+4. Deploy. The build (`scripts/vercel-build.sh`) applies the migrations and loads the demo register into the empty database; later deploys keep the data.
+
+Certificate QR codes point to the project's production domain automatically; set `PUBLIC_VERIFY_URL` to use a custom domain instead.
 
 ### Tests
 

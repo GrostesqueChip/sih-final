@@ -9,6 +9,7 @@ import {
   clearOfflineQueue,
 } from '../../client/src/services/offlineQueue';
 import { idempotencyStore } from '../../server/src/controllers/sync.controller';
+import { demoFieldReadings } from '../helpers/testUtils';
 
 describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Handshake', () => {
   beforeEach(async () => {
@@ -18,9 +19,9 @@ describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Hands
 
   it('T3-OS1: should enqueue 3 offline sessions locally, drain in single batch, and receive confirmation', async () => {
     // 1. Queue 3 sessions on client side
-    const s1 = await queueTestSession({ localId: 'local-mandi-1', instrumentId: 'inst-wb-60t', overallStatus: 'VERIFIED_LEGAL' });
-    const s2 = await queueTestSession({ localId: 'local-mandi-2', instrumentId: 'inst-wb-60t', overallStatus: 'VERIFIED_LEGAL' });
-    const s3 = await queueTestSession({ localId: 'local-mandi-3', instrumentId: 'inst-wb-60t', overallStatus: 'REJECTED' });
+    const s1 = await queueTestSession({ localId: 'local-mandi-1', ...demoFieldReadings('PASS', 0) });
+    const s2 = await queueTestSession({ localId: 'local-mandi-2', ...demoFieldReadings('PASS', 1) });
+    const s3 = await queueTestSession({ localId: 'local-mandi-3', ...demoFieldReadings('FAIL', 0) });
 
     const pending = await getPendingQueue();
     expect(pending.length).toBe(3);
@@ -57,7 +58,7 @@ describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Hands
       timestamp: new Date().toISOString(),
       offlineOfficerId: 'officer-v-sharma',
       sessions: [
-        { localId: 'local-mandi-retry-1', instrumentId: 'inst-wb-60t', overallStatus: 'VERIFIED_LEGAL' },
+        { localId: 'local-mandi-retry-1', ...demoFieldReadings('PASS') },
       ],
     };
 
@@ -80,12 +81,12 @@ describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Hands
 
     const resA = await request(app).post('/api/sync/batch').send({
       idempotencyKey: keyA,
-      sessions: [{ localId: 'session-A', instrumentId: 'inst-1' }],
+      sessions: [{ localId: 'session-A', ...demoFieldReadings('PASS', 0) }],
     });
 
     const resB = await request(app).post('/api/sync/batch').send({
       idempotencyKey: keyB,
-      sessions: [{ localId: 'session-B', instrumentId: 'inst-2' }],
+      sessions: [{ localId: 'session-B', ...demoFieldReadings('PASS', 1) }],
     });
 
     expect(resA.body.idempotentReplay).toBe(false);
@@ -101,9 +102,8 @@ describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Hands
       sessions: [
         {
           localId: 'local-session-seal',
-          instrumentId: 'inst-wb-60t',
           testDate: '2026-08-30T11:00:00.000Z',
-          overallStatus: 'VERIFIED_LEGAL',
+          ...demoFieldReadings('PASS'),
         },
       ],
     });
@@ -111,6 +111,10 @@ describe('Tier 3: Cross-Feature - Offline Sync Queue & Backend Idempotency Hands
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.sessionIds).toHaveLength(1);
+
+    const verify = await request(app).get(`/api/reports/verify/${res.body.results[0].certificateNo}`);
+    expect(verify.body.sealSignature).toMatch(/^[0-9a-f]{64}$/);
+    expect(verify.body.authentic).toBe(true);
   });
 
   it('T3-OS5: should maintain sync audit history on client and server sides', async () => {

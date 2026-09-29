@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import app from '../../server/src/index';
-import { generateVerificationSeal, verifySealSignature } from '../../server/src/services/cryptoSeal';
+import { generateVerificationSeal, verifySealSignature, buildSealInput } from '../../server/src/services/cryptoSeal';
 import { SAMPLE_INSTRUMENTS, MOCK_OFFICER } from '../helpers/testUtils';
 import prisma from '../../server/src/lib/prisma';
 
@@ -36,15 +36,9 @@ describe('Tier 4: Workload Scenario 3 - End-to-End Public QR Scan Verification L
     };
 
     // Step 2: Generate official cryptographic HMAC seal
-    const seal = generateVerificationSeal({
-      certificateNo,
-      instrumentId: wb.id || wb.serialNumber,
-      status: 'VERIFIED_LEGAL',
-      verificationDate: officialSession.completedAt.toISOString(),
-      officerId: MOCK_OFFICER.id || MOCK_OFFICER.name,
-      maxCapacity: wb.maxCapacity,
-      verificationInterval: wb.verificationInterval,
-    });
+    // Built from the same canonical helper the finalize endpoint uses: identity,
+    // verdict and a digest of every recorded reading.
+    const seal = generateVerificationSeal(buildSealInput(officialSession));
 
     expect(seal).toHaveLength(64);
 
@@ -75,6 +69,8 @@ describe('Tier 4: Workload Scenario 3 - End-to-End Public QR Scan Verification L
       officerId: MOCK_OFFICER.id,
       maxCapacity: res.body.instrument.maxCapacity,
       verificationInterval: res.body.instrument.verificationInterval,
+      overallResult: res.body.overallResult,
+      readingsDigest: res.body.readingsDigest,
     }, res.body.sealSignature);
 
     expect(isAuthentic).toBe(true);

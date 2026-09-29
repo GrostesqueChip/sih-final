@@ -5,7 +5,10 @@
  * (server/src/lib/demoSeed.js), so both deployment paths show identical
  * instruments, sessions, certificates and audit trail.
  *
- *   npx prisma migrate dev --name init && npx prisma db seed
+ *   npx prisma migrate deploy && npx prisma db seed
+ *
+ * `node prisma/seed.js --if-empty` seeds only an empty database; the Vercel
+ * build uses it so redeploying never wipes certificates issued since.
  */
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
@@ -33,10 +36,13 @@ async function main() {
   for (const s of testSessions) {
     const inst = instruments.find((i) => i.id === s.instrumentId);
     const sealed = s.status === 'COMPLETED';
+    const results = testResults.filter((r) => r.testSessionId === s.id);
     await prisma.testSession.create({
       data: {
         ...s,
-        verificationSeal: sealed ? generateVerificationSeal(buildSealInput({ ...s, instrument: inst })) : null,
+        verificationSeal: sealed
+          ? generateVerificationSeal(buildSealInput({ ...s, instrument: inst, testResults: results }))
+          : null,
       },
     });
   }
@@ -47,9 +53,22 @@ async function main() {
   console.log('Demo logins: admin@nawi.gov.in / Admin@123 · inspector@nawi.gov.in / Inspector@123 · viewer@nawi.gov.in / Viewer@123');
 }
 
-main()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+/** Seed only when the database has no officers yet (safe to run on every deploy). */
+async function seedIfEmpty() {
+  const officers = await prisma.user.count();
+  if (officers > 0) {
+    console.log(`Database already holds ${officers} officers — demo seed skipped.`);
+    return;
+  }
+  await main();
+}
+
+if (require.main === module) {
+  const run = process.argv.includes('--if-empty') ? seedIfEmpty : main;
+  run()
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    })
+    .finally(() => prisma.$disconnect());
+}

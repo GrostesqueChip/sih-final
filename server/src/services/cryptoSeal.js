@@ -40,7 +40,45 @@ function canonicalizePayload(data) {
   const maxCap = String(data.maxCapacity ?? data.instrument?.maxCapacity ?? '').trim();
   const eVal = String(data.verificationInterval ?? data.instrument?.verificationInterval ?? '').trim();
 
-  return `CERT:${certNo}|INST:${instId}|CAP:${maxCap}|E:${eVal}|STATUS:${status}|DATE:${date}|OFFICER:${officer}`;
+  const base = `CERT:${certNo}|INST:${instId}|CAP:${maxCap}|E:${eVal}|STATUS:${status}|DATE:${date}|OFFICER:${officer}`;
+
+  // Verdict and readings digest (see buildSealInput). Appended only when present
+  // so callers sealing a bare identity payload keep their existing format.
+  const result = data.overallResult ? String(data.overallResult).trim().toUpperCase() : '';
+  const readings = data.readingsDigest ? String(data.readingsDigest).trim() : '';
+  return result || readings ? `${base}|RESULT:${result}|READINGS:${readings}` : base;
+}
+
+/**
+ * JSON with object keys sorted recursively, so the same readings produce the
+ * same string whether they come from memory or from a PostgreSQL JSONB column
+ * (which does not preserve key order).
+ */
+function stableStringify(value) {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
+  if (value && typeof value === 'object' && !(value instanceof Date)) {
+    return `{${Object.keys(value)
+      .sort()
+      .filter((k) => value[k] !== undefined)
+      .map((k) => `${JSON.stringify(k)}:${stableStringify(value[k])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value instanceof Date ? value.toISOString() : value ?? null);
+}
+
+/**
+ * SHA-256 over every recorded test (type, verdict and raw readings), so editing
+ * any reading or any module verdict after sealing invalidates the certificate.
+ *
+ * @param {Array<Object>} testResults
+ * @returns {string} hex digest ('' when there are no results)
+ */
+function computeReadingsDigest(testResults = []) {
+  if (!Array.isArray(testResults) || testResults.length === 0) return '';
+  const canonical = testResults
+    .map((r) => ({ testType: r.testType, result: r.result, data: r.data ?? null }))
+    .sort((a, b) => String(a.testType).localeCompare(String(b.testType)));
+  return crypto.createHash('sha256').update(stableStringify(canonical), 'utf8').digest('hex');
 }
 
 /**
@@ -198,7 +236,11 @@ function computeErrorCurvePoints(testPoints = [], instrument = {}, isInService =
  * certificate — and so the seal computed at finalize time (where only the id is
  * reliably present) matches the seal recomputed at verify time.
  *
- * @param {Object} session - Session with instrument + conductedBy(optional) included
+ * The overall verdict and a digest of every test's readings are sealed too, so
+ * flipping FAIL to PASS or editing a reading in the database breaks the seal.
+ * Callers must therefore pass the session with its testResults included.
+ *
+ * @param {Object} session - Session with instrument, testResults and conductedBy(optional) included
  * @returns {Object} Canonical field bag for generateVerificationSeal()
  */
 function buildSealInput(session = {}) {
@@ -215,11 +257,14 @@ function buildSealInput(session = {}) {
     officerId: String(session.conductedById || session.conductedBy?.id || ''),
     maxCapacity: inst.maxCapacity,
     verificationInterval: inst.verificationInterval,
+    overallResult: String(session.overallResult || 'UNKNOWN').toUpperCase(),
+    readingsDigest: computeReadingsDigest(session.testResults) || 'NONE',
   };
 }
 
 module.exports = {
   canonicalizePayload,
+  computeReadingsDigest,
   generateVerificationSeal,
   verifySealSignature,
   createTamperProofSeal,
