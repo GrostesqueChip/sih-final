@@ -190,7 +190,9 @@ export function computeExpandedUncertainty(
   const stdRes = computeStandardWeightsUncertainty(L, normClass, {
     standardWeightMpe: options?.standardWeightMpe,
     standardWeightU: options?.standardWeightU,
-    e: d,
+    // Standard-weight MPE is set relative to the verification interval e
+    // (R 76-1 3.7.1), not the display resolution d; fall back to d if e is absent.
+    e: Number(options?.e) || d,
     ranges: options?.ranges,
   });
   const u_std = stdRes.u_std;

@@ -29,7 +29,7 @@ const POLICIES = {
   help: {
     en: 'Help',
     hi: 'सहायता',
-    body: 'Officers: start a verification from “Start Verification”, record the six OIML R 76 tests (readings can be captured from the connected indicator), then finalise to seal and issue the certificate. Citizens: scan the QR code on any certificate or enter its number on the public verification page.',
+    body: 'Officers: start a verification from “Start Verification”, record the OIML R 76 tests for the chosen session type — weighing, repeatability and eccentricity for verification, plus temperature, warm-up and creep for type evaluation (readings can be captured from the connected indicator), then finalise to seal and issue the certificate. Citizens: scan the QR code on any certificate or enter its number on the public verification page.',
   },
 };
 

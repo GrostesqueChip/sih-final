@@ -19,12 +19,12 @@ export default function Breadcrumb() {
     settings: t('nav.settings', 'Settings'),
     new: t('breadcrumb.new', 'New'),
     edit: t('common.edit', 'Edit'),
-    WEIGHING_PERFORMANCE: t('modules.weighing', 'Weighing Performance'),
+    WEIGHING_PERFORMANCE: t('modules.weighing', 'Weighing Test'),
     REPEATABILITY: t('modules.repeatability', 'Repeatability'),
     ECCENTRICITY: t('modules.eccentricity', 'Eccentricity (Off-centre)'),
     TEMPERATURE: t('modules.temperature', 'Temperature Effect'),
-    STABILITY: t('modules.stability', 'Stability & Warm-up'),
-    TIME_DEPENDENCE: t('modules.timeDependence', 'Time Dependence (Creep)'),
+    STABILITY: t('modules.warmUp', 'Warm-up Time'),
+    TIME_DEPENDENCE: t('modules.creep', 'Zero Return & Creep'),
   };
 
   if (pathnames.length === 0 || (pathnames.length === 1 && pathnames[0] === 'dashboard')) {

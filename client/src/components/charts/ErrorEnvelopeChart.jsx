@@ -428,7 +428,7 @@ export default function ErrorEnvelopeChart({
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            OIML R-76-1 Table 3 Stepped MPE Limits (±0.5e, ±1.0e, ±1.5e) • {accClass.replace('_', ' ')} • Max:{' '}
+            OIML R 76-1 Table 6 Stepped MPE Limits (±0.5e, ±1.0e, ±1.5e) • {accClass.replace('_', ' ')} • Max:{' '}
             {maxCapacity} {unit} (e = {e} {unit})
           </p>
         </div>

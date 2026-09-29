@@ -27,7 +27,7 @@ import LoadingSpinner from '../../components/shared/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
 import { TricolorBar } from '../../components/common/StateEmblem';
 import {
-  TEST_MODULES,
+  modulesFor,
   moduleTitle,
   classLabel,
   typeLabel,
@@ -40,12 +40,12 @@ import {
 } from '../../utils/format';
 
 const MODULE_DESC = {
-  WEIGHING_PERFORMANCE: 'Increasing & decreasing loads from zero to Max; error and hysteresis against the stepped MPE.',
-  REPEATABILITY: 'Six loadings at 50 % and 100 % of Max; spread must not exceed the MPE.',
+  WEIGHING_PERFORMANCE: 'Increasing & decreasing loads from zero to Max; every error (Ec) within the stepped MPE. Hysteresis shown for information.',
+  REPEATABILITY: 'Repeated loadings at about 50 % and 100 % of Max; spread must not exceed the MPE.',
   ECCENTRICITY: 'About ⅓ Max placed at the centre and four corners of the load receptor.',
-  TEMPERATURE: 'Zero and span indication at 20 °C, 40 °C and 10 °C; zero drift ≤ 1e per 5 °C.',
-  STABILITY: 'Indication under constant load over 8 hours after warm-up.',
-  TIME_DEPENDENCE: 'Creep under Max for 30 minutes and return to zero after unloading.',
+  TEMPERATURE: 'Zero and span at 20, 40, −10 and 5 °C; zero change ≤ 1e per 1 °C (class I) or per 5 °C (other classes).',
+  STABILITY: 'Warm-up time: zero (E0) and load (EL) at 0, 5, 15 and 30 min after switch-on; |EL − E0| ≤ MPE.',
+  TIME_DEPENDENCE: 'Creep under Max: ≤ 0.5e over 30 min and ≤ 0.2e between 15 and 30 min; zero return ≤ 0.5e.',
 };
 
 export function finding(type, calc, inst) {
@@ -63,11 +63,13 @@ export function finding(type, calc, inst) {
     case 'ECCENTRICITY':
       return `Max error ${f(calc.maxError)} ${u} · MPE ${fl(calc.mpe)} ${u}`;
     case 'TEMPERATURE':
-      return `Zero drift ${f(calc.zeroDriftPer5C)} ${u}/5 °C · span error ${f(calc.maxSpanError)} ${u}`;
+      return `Zero change ${f(calc.maxZeroDriftPerBasis ?? calc.zeroDriftPer5C)} ${u}/${calc.zeroBasisC || 5} °C · span error ${f(calc.maxSpanError)} ${u}`;
     case 'STABILITY':
-      return `Span drift ${f(calc.maxSpanDrift)} ${u} · limit ${fl(calc.mpeMass)} ${u}`;
+      return calc.maxCorrectedLoadError != null
+        ? `Max |EL − E0| ${f(calc.maxCorrectedLoadError)} ${u} · MPE ${fl(calc.mpeMass)} ${u}`
+        : `Span drift ${f(calc.maxSpanDrift)} ${u} · limit ${fl(calc.mpeMass)} ${u}`;
     case 'TIME_DEPENDENCE':
-      return `Creep ${f(calc.creepAnalysis?.delta30to15)} ${u} · zero return ${f(calc.zeroReturnAnalysis?.zeroReturnError)} ${u}`;
+      return `Creep 15–30 min ${f(calc.creepAnalysis?.delta30to15)} ${u} (≤ ${fl(calc.creepAnalysis?.allowedDelta15to30)}) · zero return ${f(calc.zeroReturnAnalysis?.zeroReturnError)} ${u}`;
     default:
       return null;
   }
@@ -92,7 +94,15 @@ export default function TestSessionDetailPage() {
     onSuccess: (res) => {
       queryClient.invalidateQueries();
       const v = res?.data?.overallResult;
-      toast.success(v === 'PASS' ? t('detail.sealedPass', 'Sealed — instrument APPROVED. Certificate issued.') : t('detail.sealedFail', 'Sealed — instrument REJECTED. Rejection certificate issued.'), { duration: 5000 });
+      const te = res?.data?.verificationType === 'TYPE_EVALUATION';
+      toast.success(
+        te
+          ? t('detail.sealedTE', 'Sealed — type evaluation test report issued.')
+          : v === 'PASS'
+            ? t('detail.sealedPass', 'Sealed — instrument APPROVED. Certificate issued.')
+            : t('detail.sealedFail', 'Sealed — instrument REJECTED. Rejection certificate issued.'),
+        { duration: 5000 }
+      );
       setConfirmOpen(false);
       navigate(`/reports/${id}`);
     },
@@ -114,16 +124,23 @@ export default function TestSessionDetailPage() {
   const inst = s.instrument || {};
   const sealed = s.status === 'COMPLETED' || s.status === 'FAILED';
   const byType = Object.fromEntries((s.testResults || []).map((r) => [r.testType, r]));
-  const doneCount = TEST_MODULES.filter((m) => byType[m.type]?.status === 'COMPLETED').length;
-  const predicted = TEST_MODULES.every((m) => byType[m.type]?.result === 'PASS') ? 'PASS' : 'FAIL';
+  const MODULES = modulesFor(s.verificationType);
+  const isTE = s.verificationType === 'TYPE_EVALUATION';
+  const total = MODULES.length;
+  const doneCount = MODULES.filter((m) => byType[m.type]?.status === 'COMPLETED').length;
+  const predicted = MODULES.every((m) => byType[m.type]?.result === 'PASS') ? 'PASS' : 'FAIL';
   const canEdit = isInspector && !sealed && (user?.role === 'ADMIN' || s.conductedById === user?.id);
-  const failing = TEST_MODULES.filter((m) => byType[m.type]?.result === 'FAIL');
+  const failing = MODULES.filter((m) => byType[m.type]?.result === 'FAIL');
 
   const openFinalize = () => {
     setFinalRemarks(
-      predicted === 'PASS'
-        ? `${verificationTypeLabel(s.verificationType)} completed. All six OIML R 76 tests conform to ${classLabel(inst.accuracyClass)} limits. Instrument stamped and approved for use in trade.`
-        : `REJECTED — ${failing.map((m) => moduleTitle(m.type)).join(', ')} outside the maximum permissible error. Instrument sealed against commercial use pending repair and re-verification.`
+      isTE
+        ? predicted === 'PASS'
+          ? `Type evaluation of the test sample completed. All ${total} recorded OIML R 76 test modules meet the ${classLabel(inst.accuracyClass)} limits; remaining R 76-2 tests are listed in the report as not covered.`
+          : `${failing.map((m) => moduleTitle(m.type)).join(', ')} failed the OIML R 76 limits. Applicant to be informed before re-submission of the model.`
+        : predicted === 'PASS'
+          ? `${verificationTypeLabel(s.verificationType)} completed. Weighing, repeatability and eccentricity tests conform to ${classLabel(inst.accuracyClass)} limits. Instrument stamped and approved for use in trade.`
+          : `REJECTED — ${failing.map((m) => moduleTitle(m.type)).join(', ')} outside the maximum permissible error. Instrument sealed against commercial use pending repair and re-verification.`
     );
     setConfirmOpen(true);
   };
@@ -149,12 +166,12 @@ export default function TestSessionDetailPage() {
             canEdit && (
               <button
                 type="button"
-                disabled={doneCount < 6}
+                disabled={doneCount < total}
                 onClick={openFinalize}
-                title={doneCount < 6 ? t('detail.finishFirst', 'Complete all six modules first') : ''}
+                title={doneCount < total ? t('detail.finishFirstN', 'Complete all {{n}} modules first', { n: total }) : ''}
                 className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-green-700 hover:bg-green-800 text-white text-sm font-bold disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed"
               >
-                <FiLock className="w-4 h-4" /> {t('detail.finalize', 'Finalise & seal')} {doneCount < 6 && `(${doneCount}/6)`}
+                <FiLock className="w-4 h-4" /> {t('detail.finalize', 'Finalise & seal')} {doneCount < total && `(${doneCount}/${total})`}
               </button>
             )
           )}
@@ -207,7 +224,13 @@ export default function TestSessionDetailPage() {
           </span>
           <div className="min-w-0 flex-1">
             <div className={`text-base font-extrabold ${s.overallResult === 'PASS' ? 'text-green-900' : 'text-red-900'}`}>
-              {s.overallResult === 'PASS' ? t('detail.passTitle', 'Approved — conforms to OIML R 76') : t('detail.failTitle', 'Rejected — not fit for use in trade')}
+              {isTE
+                ? s.overallResult === 'PASS'
+                  ? t('detail.passTitleTE', 'Test sample meets all recorded OIML R 76 tests')
+                  : t('detail.failTitleTE', 'Test sample failed one or more OIML R 76 tests')
+                : s.overallResult === 'PASS'
+                  ? t('detail.passTitle', 'Approved — conforms to OIML R 76')
+                  : t('detail.failTitle', 'Rejected — not fit for use in trade')}
             </div>
             <div className="text-xs text-slate-600 mt-0.5">
               {t('detail.sealedAt', 'Digitally sealed {{d}} · readings are locked', { d: formatDateTime(s.sealedAt || s.completedAt) })}
@@ -225,17 +248,19 @@ export default function TestSessionDetailPage() {
         <div className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-[15px] font-bold text-slate-900">{t('detail.modulesTitle', 'OIML R 76 test programme')}</h2>
-            <p className="text-xs text-slate-500">{t('detail.modulesSub', 'All six modules must be completed before the session can be sealed.')}</p>
+            <p className="text-xs text-slate-500">{isTE
+              ? t('detail.modulesSubTE', 'Type evaluation: all {{n}} modules must be completed before the report can be sealed.', { n: total })
+              : t('detail.modulesSubV', 'Verification: weighing, repeatability and eccentricity must be completed before sealing. Temperature, warm-up and creep are type-evaluation tests.')}</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-40 h-2 rounded-full bg-slate-100 overflow-hidden">
-              <div className={`h-full ${sealed ? 'bg-green-600' : 'bg-primary-600'}`} style={{ width: `${(doneCount / 6) * 100}%` }} />
+              <div className={`h-full ${sealed ? 'bg-green-600' : 'bg-primary-600'}`} style={{ width: `${(doneCount / total) * 100}%` }} />
             </div>
-            <span className="text-sm font-extrabold text-navy">{doneCount}/6</span>
+            <span className="text-sm font-extrabold text-navy">{doneCount}/{total}</span>
           </div>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-px bg-slate-200">
-          {TEST_MODULES.map((m, idx) => {
+          {MODULES.map((m, idx) => {
             const r = byType[m.type];
             const state = !r ? 'NOT_STARTED' : r.status !== 'COMPLETED' ? 'IN_PROGRESS' : r.result;
             const fnd = r?.status === 'COMPLETED' ? finding(m.type, r.calculations, inst) : null;
@@ -291,7 +316,7 @@ export default function TestSessionDetailPage() {
                 <button type="button" onClick={() => setConfirmOpen(false)} className="p-1 rounded hover:bg-slate-100 text-slate-500" aria-label="Close"><FiX className="w-5 h-5" /></button>
               </div>
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {TEST_MODULES.map((m) => (
+                {MODULES.map((m) => (
                   <div key={m.type} className="flex items-center justify-between gap-2 px-3 py-2 rounded-md bg-slate-50 border border-slate-200 text-xs">
                     <span className="font-semibold text-slate-700 truncate">{moduleTitle(m.type)}</span>
                     <StatusBadge status={byType[m.type]?.result} size="xs" icon={false} />
@@ -302,7 +327,11 @@ export default function TestSessionDetailPage() {
                 {predicted === 'PASS' ? <FiCheckCircle className="w-6 h-6 text-green-700" /> : <FiAlertTriangle className="w-6 h-6 text-red-700" />}
                 <div>
                   <div className={`font-extrabold ${predicted === 'PASS' ? 'text-green-900' : 'text-red-900'}`}>
-                    {predicted === 'PASS' ? t('detail.willPass', 'Outcome: APPROVED — certificate of verification') : t('detail.willFail', 'Outcome: REJECTED — certificate of rejection')}
+                    {isTE
+                      ? t('detail.willTE', 'Outcome: OIML R 76 type evaluation test report ({{v}})', { v: predicted })
+                      : predicted === 'PASS'
+                        ? t('detail.willPass', 'Outcome: APPROVED — certificate of verification')
+                        : t('detail.willFail', 'Outcome: REJECTED — certificate of rejection')}
                   </div>
                   <div className="text-xs text-slate-600">{t('detail.outcomeNote', 'Computed automatically from the recorded readings; it cannot be overridden.')}</div>
                 </div>

@@ -22,7 +22,7 @@ import StatusBadge from '../../components/shared/StatusBadge';
 import LoadingSpinner from '../../components/shared/LoadingSpinner';
 import ErrorEnvelopeChart from '../../components/charts/ErrorEnvelopeChart';
 import PdfPreview from '../../components/shared/PdfPreview';
-import { formatDate, formatDateTime, classLabel, verificationTypeLabel, TEST_MODULES, moduleTitle } from '../../utils/format';
+import { formatDate, formatDateTime, classLabel, verificationTypeLabel, modulesFor, moduleTitle } from '../../utils/format';
 import { finding } from '../tests/TestSessionDetailPage';
 
 function usePdf(sessionId, kind, enabled) {
@@ -81,17 +81,18 @@ export default function ReportPage() {
       <div className="bg-white border border-slate-200 rounded-xl p-10 text-center max-w-xl mx-auto">
         <FiLock className="w-8 h-8 text-slate-400 mx-auto" />
         <h2 className="mt-3 text-lg font-bold text-slate-900">{t('report.notSealed', 'Certificate not issued yet')}</h2>
-        <p className="text-sm text-slate-600 mt-1">{t('report.notSealedMsg', 'A certificate is generated only after all six tests are recorded and the session is finalised and sealed.')}</p>
+        <p className="text-sm text-slate-600 mt-1">{t('report.notSealedMsgN', 'A certificate or report is generated only after all required tests are recorded and the session is finalised and sealed.')}</p>
         <button type="button" onClick={() => navigate(`/tests/${s.id}`)} className="mt-5 h-10 px-4 rounded-md bg-navy text-white text-sm font-bold">{t('report.goSession', 'Go to session')}</button>
       </div>
     );
   }
 
   const pass = s.overallResult === 'PASS';
+  const isTE = s.verificationType === 'TYPE_EVALUATION';
   const inst = s.instrument || {};
   const validUntil = pass ? new Date(new Date(s.completedAt).setFullYear(new Date(s.completedAt).getFullYear() + 1)) : null;
   const active = tab === 'certificate' ? cert : sheet;
-  const fileName = `${tab === 'certificate' ? 'Certificate' : 'Datasheet'}_${s.certificateNo}.pdf`;
+  const fileName = `${tab === 'certificate' ? (isTE ? 'TypeEvaluationReport' : 'Certificate') : 'Datasheet'}_${s.certificateNo}.pdf`;
 
   const download = () => {
     if (!active.url) return;
@@ -132,7 +133,7 @@ export default function ReportPage() {
           <div className="flex items-center justify-between border-b border-slate-200 px-2">
             <div className="flex" role="tablist">
               {[
-                ['certificate', t('report.tabCert', 'Certificate (1 page)')],
+                ['certificate', isTE ? t('report.tabTE', 'Type evaluation report') : t('report.tabCert', 'Certificate (1 page)')],
                 ['datasheet', t('report.tabSheet', 'Technical data sheet')],
               ].map(([k, label]) => (
                 <button
@@ -173,8 +174,22 @@ export default function ReportPage() {
             <div className="flex items-center gap-3">
               {pass ? <FiCheckCircle className="w-8 h-8 text-green-700" /> : <FiXCircle className="w-8 h-8 text-red-700" />}
               <div>
-                <div className={`font-extrabold ${pass ? 'text-green-900' : 'text-red-900'}`}>{pass ? t('report.approved', 'Approved for use in trade') : t('report.rejected', 'Rejected — not fit for trade')}</div>
-                <div className="text-xs text-slate-600">{pass ? t('report.validTill', 'Valid until {{d}}', { d: formatDate(validUntil) }) : t('report.sealedAgainst', 'Sealed against commercial use')}</div>
+                <div className={`font-extrabold ${pass ? 'text-green-900' : 'text-red-900'}`}>
+                  {isTE
+                    ? pass
+                      ? t('report.tePass', 'Test sample met all recorded tests')
+                      : t('report.teFail', 'Test sample failed one or more tests')
+                    : pass
+                      ? t('report.approved', 'Approved for use in trade')
+                      : t('report.rejected', 'Rejected — not fit for trade')}
+                </div>
+                <div className="text-xs text-slate-600">
+                  {isTE
+                    ? t('report.teNote', 'Type evaluation test report — not an approval for trade')
+                    : pass
+                      ? t('report.validTill', 'Valid until {{d}}', { d: formatDate(validUntil) })
+                      : t('report.sealedAgainst', 'Sealed against commercial use')}
+                </div>
               </div>
             </div>
             <dl className="mt-4 grid grid-cols-2 gap-2 text-xs">
@@ -204,7 +219,7 @@ export default function ReportPage() {
           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-slate-100 text-sm font-bold text-slate-900">{t('report.results', 'Test results')}</div>
             <ul className="divide-y divide-slate-100">
-              {TEST_MODULES.map((m) => {
+              {modulesFor(s.verificationType).map((m) => {
                 const r = s.testResults?.find((x) => x.testType === m.type);
                 return (
                   <li key={m.type} className="px-5 py-2.5">

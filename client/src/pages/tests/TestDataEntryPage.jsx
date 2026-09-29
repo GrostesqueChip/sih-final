@@ -13,15 +13,17 @@ import DigitalIndicator from '../../components/telemetry/DigitalIndicator';
 import useIndicator from '../../components/telemetry/useIndicator';
 import { calculateMpe } from '../../utils/metrology';
 import { useAuth } from '../../contexts/AuthContext';
-import { TEST_MODULES, moduleTitle, classLabel, formatMass, formatLimit, decimalsFor } from '../../utils/format';
+import { modulesFor, moduleTitle, classLabel, formatMass, formatLimit, decimalsFor } from '../../utils/format';
 
 // ---------------------------------------------------------------------------
 // Slot model: every capturable reading has an id, a label and a test load.
 // ---------------------------------------------------------------------------
 const PCTS = [0, 20, 40, 60, 80, 100];
 const ECC_POS = ['Centre', 'Front-left', 'Front-right', 'Back-right', 'Back-left'];
-const TEMPS = [20, 40, 10];
-const HOURS = [0, 0.5, 1, 2, 4, 8];
+// Static temperature test points (R 76-1 A.5.3.1: reference 20 °C, then 40, −10, 5 °C).
+const TEMPS = [20, 40, -10, 5];
+// Warm-up time test (R 76-1 A.5.2): readings at 0, 5, 15 and 30 min after switch-on.
+const WARMUP_MIN = [0, 5, 15, 30];
 const MINUTES = [0, 5, 10, 15, 20, 25, 30];
 
 const r4 = (v) => Math.round(v * 10000) / 10000;
@@ -56,7 +58,10 @@ function buildSlots(type, inst) {
         { id: `ts-${i}`, label: `${tc} °C — span at Max`, load: max },
       ]);
     case 'STABILITY':
-      return HOURS.map((h, i) => ({ id: `st-${i}`, label: `Stability — after ${h} h`, load: max }));
+      return WARMUP_MIN.flatMap((m, i) => [
+        { id: `wz-${i}`, label: `Warm-up ${m} min — zero (no load)`, load: 0 },
+        { id: `wl-${i}`, label: `Warm-up ${m} min — load at Max`, load: max },
+      ]);
     case 'TIME_DEPENDENCE':
       return [
         ...MINUTES.map((m, i) => ({ id: `cr-${i}`, label: `Creep — ${m} min under Max`, load: max })),
@@ -97,7 +102,13 @@ function readingsFromData(type, data, inst) {
       put(`ts-${i}`, p?.spanIndication);
     });
   }
-  if (type === 'STABILITY' && Array.isArray(data.timePoints)) data.timePoints.forEach((p, i) => put(`st-${i}`, p.loadReading));
+  if (type === 'STABILITY' && Array.isArray(data.timePoints)) {
+    WARMUP_MIN.forEach((m, i) => {
+      const p = data.timePoints.find((x) => Number(x.timestampMinutes) === m);
+      put(`wz-${i}`, p?.zeroReading);
+      put(`wl-${i}`, p?.loadReading);
+    });
+  }
   if (type === 'TIME_DEPENDENCE') {
     (data.creepReadings || []).forEach((p, i) => put(`cr-${i}`, p.indication));
     put('zr', data.zeroReturn?.indicationAfterUnload);
@@ -137,7 +148,9 @@ function buildPayload(type, R, inst, slots) {
         temperaturePoints: TEMPS.map((tc, i) => ({ temperature: tc, zeroIndication: num(R[`tz-${i}`]), spanLoad: max, spanIndication: num(R[`ts-${i}`]) })),
       };
     case 'STABILITY':
-      return { timePoints: HOURS.map((h, i) => ({ timestampMinutes: h * 60, zeroReading: 0, loadReading: num(R[`st-${i}`]), appliedLoad: max })) };
+      return {
+        timePoints: WARMUP_MIN.map((m, i) => ({ timestampMinutes: m, zeroReading: num(R[`wz-${i}`]), loadReading: num(R[`wl-${i}`]), appliedLoad: max })),
+      };
     case 'TIME_DEPENDENCE':
       return {
         testLoad: max,
@@ -174,7 +187,8 @@ function evaluate(type, R, inst, inService, slots) {
       const ecD = D === null ? null : D - L - E0;
       const hy = I !== null && D !== null ? Math.abs(D - I) : null;
       mark(`inc-${i}`, ecI === null ? null : Math.abs(ecI) <= m + 1e-9);
-      mark(`dec-${i}`, ecD === null ? null : Math.abs(ecD) <= m + 1e-9 && (hy === null || hy <= m + 1e-9));
+      // Hysteresis is shown for information; the criterion is |Ec| <= MPE on both series.
+      mark(`dec-${i}`, ecD === null ? null : Math.abs(ecD) <= m + 1e-9);
       return { p, L, ecI, ecD, hy, m };
     });
   } else if (type === 'REPEATABILITY') {
@@ -211,28 +225,34 @@ function evaluate(type, R, inst, inService, slots) {
       return { tc, z, sp, corr, i };
     });
     const sorted = [...pts].sort((a, b) => a.tc - b.tc);
+    // Zero change limit: 1e per 1 °C (class I) or per 5 °C (other classes).
+    const basis = inst.accuracyClass === 'CLASS_I' ? 1 : 5;
+    res.basis = basis;
     res.drifts = [];
     for (let i = 0; i < sorted.length - 1; i += 1) {
       const a = sorted[i];
       const b = sorted[i + 1];
       if (a.z === null || b.z === null) continue;
-      const per5 = (Math.abs(b.z - a.z) / Math.abs(b.tc - a.tc)) * 5;
-      const ok = per5 <= e + 1e-9;
-      res.drifts.push({ from: a.tc, to: b.tc, per5, ok });
+      const perBasis = (Math.abs(b.z - a.z) / Math.abs(b.tc - a.tc)) * basis;
+      const ok = perBasis <= e + 1e-9;
+      res.drifts.push({ from: a.tc, to: b.tc, perBasis, ok });
       verdicts.push(ok);
     }
     pts.forEach((p) => (res.rows[`tz-${p.i}`] = p.z === null ? null : res.drifts.every((d) => d.ok)));
     res.table = pts;
     res.m = m;
   } else if (type === 'STABILITY') {
+    // Warm-up time (R 76-1 A.5.2): |EL − E0| <= MPE at each time point.
     const m = mpe(max);
-    const base = num(R['st-0']);
     res.m = m;
-    res.table = HOURS.map((h, i) => {
-      const v = num(R[`st-${i}`]);
-      const drift = v !== null && base !== null ? v - base : null;
-      mark(`st-${i}`, drift === null ? null : Math.abs(drift) <= m + 1e-9);
-      return { h, v, drift };
+    res.table = WARMUP_MIN.map((min, i) => {
+      const z = num(R[`wz-${i}`]);
+      const l = num(R[`wl-${i}`]);
+      const corr = z !== null && l !== null ? l - max - z : null;
+      const ok = corr === null ? null : Math.abs(corr) <= m + 1e-9;
+      res.rows[`wz-${i}`] = z === null ? null : ok;
+      mark(`wl-${i}`, l === null ? null : ok);
+      return { min, z, l, corr, i };
     });
   } else if (type === 'TIME_DEPENDENCE') {
     const m = mpe(max);
@@ -244,8 +264,9 @@ function evaluate(type, R, inst, inService, slots) {
       d30: c0 !== null && c30 !== null ? Math.abs(c30 - c0) : null,
       d15: c15 !== null && c30 !== null ? Math.abs(c30 - c15) : null,
       zr: zr === null ? null : Math.abs(zr),
-      l30: 0.5 * m,
-      l15: 0.2 * m,
+      // R 76-2 creep form: 0.5e after 30 min, 0.2e between 15 and 30 min; zero return 0.5e.
+      l30: 0.5 * e,
+      l15: 0.2 * e,
       lz: 0.5 * e,
     };
     const ok30 = res.c.d30 === null ? null : res.c.d30 <= res.c.l30 + 1e-9;
@@ -446,9 +467,9 @@ export default function TestDataEntryPage() {
       const verdict = res?.data?.result;
       const done = new Set((session.testResults || []).filter((r) => r.status === 'COMPLETED').map((r) => r.testType));
       done.add(type);
-      const next = TEST_MODULES.find((m) => !done.has(m.type));
+      const next = modulesFor(session.verificationType).find((m) => !done.has(m.type));
       toast.success(
-        `${moduleTitle(type)}: ${verdict}. ${next ? t('entry.next', 'Next: {{m}}', { m: moduleTitle(next.type) }) : t('entry.allDone', 'All six modules complete — ready to seal.')}`,
+        `${moduleTitle(type)}: ${verdict}. ${next ? t('entry.next', 'Next: {{m}}', { m: moduleTitle(next.type) }) : t('entry.allDoneN', 'All modules complete — ready to seal.')}`,
         { duration: 4000 }
       );
       navigate(next ? `/tests/${sessionId}/${next.type}` : `/tests/${sessionId}`);
@@ -514,7 +535,7 @@ export default function TestDataEntryPage() {
 
       {/* Module tabs */}
       <div className="bg-white border border-slate-200 rounded-xl p-1.5 flex gap-1 overflow-x-auto">
-        {TEST_MODULES.map((m, i) => {
+        {modulesFor(session.verificationType).map((m, i) => {
           const st = statusOf(m.type);
           const on = m.type === type;
           return (
@@ -594,7 +615,7 @@ export default function TestDataEntryPage() {
                     <th className={`${th} text-right`}>Ec ↑</th>
                     <th className={th}>{t('entry.indDown', 'Indication ↓')}</th>
                     <th className={`${th} text-right`}>Ec ↓</th>
-                    <th className={`${th} text-right`}>{t('entry.hyst', 'Hysteresis')}</th>
+                    <th className={`${th} text-right`} title={t('entry.hystInfo', 'For information — not a pass/fail criterion in OIML R 76')}>{t('entry.hystInfoShort', 'Hysteresis (info)')}</th>
                     <th className={`${th} text-right`}>MPE</th>
                     <th className={th}>{t('table.result', 'Result')}</th>
                   </tr>
@@ -730,8 +751,8 @@ export default function TestDataEntryPage() {
                 <div className="mt-4 grid sm:grid-cols-2 gap-3">
                   {evaln.drifts.map((d) => (
                     <div key={`${d.from}-${d.to}`} className={`rounded-lg border p-3 text-xs ${d.ok ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-                      <div className="font-bold text-slate-800">{t('entry.zeroDrift', 'Zero drift')} {d.from} → {d.to} °C</div>
-                      <div className="font-mono mt-0.5">{fm(d.per5)} {unit} / 5 °C · {t('entry.limitLower', 'limit')} {inst.verificationInterval} {unit} (1 e)</div>
+                      <div className="font-bold text-slate-800">{t('entry.zeroChange', 'Zero change')} {d.from} → {d.to} °C</div>
+                      <div className="font-mono mt-0.5">{fm(d.perBasis)} {unit} / {evaln.basis} °C · {t('entry.limitLower', 'limit')} {inst.verificationInterval} {unit} (1 e)</div>
                     </div>
                   ))}
                 </div>
@@ -742,21 +763,23 @@ export default function TestDataEntryPage() {
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className={th}>{t('entry.elapsed', 'Elapsed time')}</th>
-                    <th className={th}>{t('entry.indication', 'Indication')} ({unit})</th>
-                    <th className={`${th} text-right`}>{t('entry.drift', 'Drift from start')}</th>
-                    <th className={`${th} text-right`}>{t('entry.limit', 'Limit')}</th>
+                    <th className={th}>{t('entry.afterSwitchOn', 'After switch-on')}</th>
+                    <th className={th}>{t('entry.zeroIndE0', 'Zero indication (E0)')} ({unit})</th>
+                    <th className={th}>{t('entry.loadIndMax', 'Indication at Max')} ({unit})</th>
+                    <th className={`${th} text-right`}>EL − E0</th>
+                    <th className={`${th} text-right`}>MPE</th>
                     <th className={th}>{t('table.result', 'Result')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {evaln.table.map((row, i) => (
-                    <tr key={row.h}>
-                      <td className={`${td} font-bold text-slate-800`}>{row.h < 1 ? `${row.h * 60} min` : `${row.h} h`}</td>
-                      <td className={td}>{inp(`st-${i}`)}</td>
-                      <td className={`${td} text-right font-mono ${evaln.rows[`st-${i}`] === false ? 'text-red-700 font-bold' : ''}`}>{row.drift === null ? '—' : fm(row.drift, true)}</td>
+                  {evaln.table.map((row) => (
+                    <tr key={row.min}>
+                      <td className={`${td} font-bold text-slate-800`}>{row.min} min</td>
+                      <td className={td}>{inp(`wz-${row.i}`)}</td>
+                      <td className={td}>{inp(`wl-${row.i}`)}</td>
+                      <td className={`${td} text-right font-mono ${evaln.rows[`wl-${row.i}`] === false ? 'text-red-700 font-bold' : ''}`}>{row.corr === null ? '—' : fm(row.corr, true)}</td>
                       <td className={`${td} text-right font-mono text-slate-600`}>± {fl(evaln.m)}</td>
-                      <td className={td}><Verdict ok={evaln.rows[`st-${i}`]} /></td>
+                      <td className={td}><Verdict ok={evaln.rows[`wl-${row.i}`]} /></td>
                     </tr>
                   ))}
                 </tbody>

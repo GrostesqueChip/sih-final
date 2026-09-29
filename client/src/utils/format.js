@@ -135,6 +135,7 @@ export const VERIFICATION_TYPES = {
   INITIAL: 'Initial Verification',
   PERIODIC: 'Periodic Re-verification',
   INSPECTION: 'In-service Inspection',
+  TYPE_EVALUATION: 'Type Evaluation (Model Approval)',
 };
 
 export function verificationTypeLabel(v) {
@@ -142,13 +143,24 @@ export function verificationTypeLabel(v) {
 }
 
 export const TEST_MODULES = [
-  { type: 'WEIGHING_PERFORMANCE', key: 'weighing', title: 'Weighing Performance', clause: 'R 76-1 A.4.4', short: 'Weighing' },
+  { type: 'WEIGHING_PERFORMANCE', key: 'weighing', title: 'Weighing Test', clause: 'R 76-1 A.4.4', short: 'Weighing' },
   { type: 'REPEATABILITY', key: 'repeatability', title: 'Repeatability', clause: 'R 76-1 A.4.10', short: 'Repeatability' },
   { type: 'ECCENTRICITY', key: 'eccentricity', title: 'Eccentricity (Off-centre)', clause: 'R 76-1 A.4.7', short: 'Eccentricity' },
-  { type: 'TEMPERATURE', key: 'temperature', title: 'Temperature Effect', clause: 'R 76-1 A.5.3', short: 'Temperature' },
-  { type: 'STABILITY', key: 'stability', title: 'Stability & Warm-up', clause: 'R 76-1 A.4.11', short: 'Stability' },
-  { type: 'TIME_DEPENDENCE', key: 'timeDependence', title: 'Time Dependence (Creep)', clause: 'R 76-1 A.4.8', short: 'Creep' },
+  { type: 'TEMPERATURE', key: 'temperature', title: 'Temperature Effect', clause: 'R 76-1 A.5.3', short: 'Temperature', typeEvaluationOnly: true },
+  { type: 'STABILITY', key: 'warmUp', title: 'Warm-up Time', clause: 'R 76-1 A.5.2', short: 'Warm-up', typeEvaluationOnly: true },
+  { type: 'TIME_DEPENDENCE', key: 'creep', title: 'Zero Return & Creep', clause: 'R 76-1 A.4.11', short: 'Creep', typeEvaluationOnly: true },
 ];
+
+/**
+ * Modules that apply to a session type. Verification (initial, periodic,
+ * in-service) uses the verification tests only; temperature, warm-up and creep
+ * are type-evaluation tests recorded for model approval.
+ */
+export function modulesFor(verificationType) {
+  return verificationType === 'TYPE_EVALUATION' ? TEST_MODULES : TEST_MODULES.filter((m) => !m.typeEvaluationOnly);
+}
+
+export const isTypeEvaluation = (s) => (typeof s === 'string' ? s : s?.verificationType) === 'TYPE_EVALUATION';
 
 export function moduleTitle(type) {
   const m = TEST_MODULES.find((x) => x.type === type);

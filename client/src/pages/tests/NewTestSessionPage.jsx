@@ -22,6 +22,7 @@ const TYPES = [
   { k: 'INITIAL', title: 'Initial verification', desc: 'New or repaired instrument before first use in trade. MPE = 1 × Table 6.' },
   { k: 'PERIODIC', title: 'Periodic re-verification', desc: 'Annual re-verification of a stamped instrument (Rule 27). MPE = 1 × Table 6.' },
   { k: 'INSPECTION', title: 'In-service inspection', desc: 'Surprise check of an instrument in use (Section 15). MPE = 2 × Table 6.' },
+  { k: 'TYPE_EVALUATION', title: 'Type evaluation (model approval)', desc: 'Laboratory tests on a test sample of a new model (OIML R 76-2 report). All six test modules; MPE = 1 × Table 6.' },
 ];
 
 export default function NewTestSessionPage() {
@@ -75,7 +76,11 @@ export default function NewTestSessionPage() {
       });
       const s = res.data?.data;
       queryClient.invalidateQueries();
-      toast.success(t('newSess.created', 'Session {{n}} opened. Record the six OIML R 76 tests.', { n: s?.certificateNo }));
+      toast.success(
+        vType === 'TYPE_EVALUATION'
+          ? t('newSess.createdTE', 'Type evaluation {{n}} opened. Record the six OIML R 76 test modules.', { n: s?.certificateNo })
+          : t('newSess.created', 'Session {{n}} opened. Record the weighing, repeatability and eccentricity tests.', { n: s?.certificateNo })
+      );
       navigate(`/tests/${s.id}`);
     } catch (err) {
       toast.error(err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || t('newSess.fail', 'Could not open the session'));
@@ -137,7 +142,7 @@ export default function NewTestSessionPage() {
           {/* Step 2 */}
           <section className="bg-white border border-slate-200 rounded-xl p-5">
             <h2 className="text-sm font-extrabold text-navy mb-3">2. {t('newSess.step2', 'Type of verification')}</h2>
-            <div className="grid gap-3 md:grid-cols-3">
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {TYPES.map((ty) => (
                 <button
                   key={ty.k}

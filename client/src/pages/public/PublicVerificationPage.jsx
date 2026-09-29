@@ -24,7 +24,7 @@ import { getSampleCertificates } from '../../services/publicApi';
 import { GovStrip, DepartmentIdentity } from '../../components/layout/TopBar';
 import { TricolorBar } from '../../components/common/StateEmblem';
 import ErrorEnvelopeChart from '../../components/charts/ErrorEnvelopeChart';
-import { formatDate, formatDateTime, classLabel, typeLabel, verificationTypeLabel, moduleTitle, TEST_MODULES } from '../../utils/format';
+import { formatDate, formatDateTime, classLabel, typeLabel, verificationTypeLabel, moduleTitle, modulesFor } from '../../utils/format';
 
 const STATUS = {
   VERIFIED_LEGAL: {
@@ -54,6 +54,25 @@ const STATUS = {
     en: 'NOT AUTHENTIC — Seal does not match',
     hi: 'अप्रामाणिक — मुहर मेल नहीं खाती',
     sub: 'The digital seal does not match the departmental record. The document may have been altered.',
+  },
+};
+
+// A type evaluation test report (model approval) is authentic or not; it is
+// never an approval for use in trade, so it gets its own wording.
+const TE_STATUS = {
+  PASS: {
+    tone: 'green',
+    icon: FiCheckCircle,
+    en: 'AUTHENTIC — Type evaluation test report (sample met the recorded tests)',
+    hi: 'प्रामाणिक — प्रकार मूल्यांकन परीक्षण रिपोर्ट',
+    sub: 'Laboratory test report for model approval. It is not a verification certificate for use in trade.',
+  },
+  FAIL: {
+    tone: 'red',
+    icon: FiXCircle,
+    en: 'AUTHENTIC — Type evaluation test report (sample failed a test)',
+    hi: 'प्रामाणिक — प्रकार मूल्यांकन परीक्षण रिपोर्ट (परीक्षण में विफल)',
+    sub: 'Laboratory test report for model approval. It is not a verification certificate for use in trade.',
   },
 };
 
@@ -87,7 +106,12 @@ export default function PublicVerificationPage() {
     if (v) navigate(`/verify/${encodeURIComponent(v)}`);
   };
 
-  const meta = data ? STATUS[data.status] || STATUS.TAMPERED : null;
+  const isTE = data?.reportType === 'TYPE_EVALUATION_REPORT';
+  const meta = data
+    ? isTE && data.status !== 'TAMPERED'
+      ? TE_STATUS[data.overallResult === 'PASS' ? 'PASS' : 'FAIL']
+      : STATUS[data.status] || STATUS.TAMPERED
+    : null;
   const inst = data?.instrument || {};
   const weighing = data?.testResults?.find((r) => r.testType === 'WEIGHING_PERFORMANCE')?.data?.points || [];
 
@@ -214,8 +238,12 @@ export default function PublicVerificationPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div className="p-3 rounded-lg border border-slate-200"><dt className="text-xs text-slate-500 flex items-center gap-1"><FiCalendar className="w-3 h-3" /> {t('pub.verifiedOn', 'Verified on')}</dt><dd className="font-bold">{formatDate(data.verificationDate)}</dd></div>
-                    <div className="p-3 rounded-lg border border-slate-200"><dt className="text-xs text-slate-500">{t('pub.validUntil', 'Valid until')}</dt><dd className={`font-bold ${data.expiryDate ? '' : 'text-red-700'}`}>{data.expiryDate ? formatDate(data.expiryDate) : t('pub.notValid', 'Not valid')}</dd></div>
+                    <div className="p-3 rounded-lg border border-slate-200"><dt className="text-xs text-slate-500 flex items-center gap-1"><FiCalendar className="w-3 h-3" /> {isTE ? t('pub.testedOn', 'Report sealed on') : t('pub.verifiedOn', 'Verified on')}</dt><dd className="font-bold">{formatDate(data.verificationDate)}</dd></div>
+                    {isTE ? (
+                      <div className="p-3 rounded-lg border border-slate-200"><dt className="text-xs text-slate-500">{t('pub.docType', 'Document')}</dt><dd className="font-bold">{t('pub.teReport', 'Type evaluation test report')}</dd></div>
+                    ) : (
+                      <div className="p-3 rounded-lg border border-slate-200"><dt className="text-xs text-slate-500">{t('pub.validUntil', 'Valid until')}</dt><dd className={`font-bold ${data.expiryDate ? '' : 'text-red-700'}`}>{data.expiryDate ? formatDate(data.expiryDate) : t('pub.notValid', 'Not valid')}</dd></div>
+                    )}
                     <div className="p-3 rounded-lg border border-slate-200 col-span-2"><dt className="text-xs text-slate-500 flex items-center gap-1"><FiUser className="w-3 h-3" /> {t('pub.officer', 'Verifying officer')}</dt><dd className="font-bold">{data.verificationOfficer?.name || '—'}</dd><dd className="text-[13px] text-slate-600">{data.verificationOfficer?.designation} · {verificationTypeLabel(data.verificationType)}</dd></div>
                   </div>
                   <div className={`p-4 rounded-lg border ${data.authentic ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
@@ -232,7 +260,7 @@ export default function PublicVerificationPage() {
               <div className="px-6 pb-6">
                 <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-2">{t('pub.tests', 'OIML R 76 tests performed')}</div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {TEST_MODULES.map((m) => {
+                  {modulesFor(data.verificationType).map((m) => {
                     const r = data.testResults?.find((x) => x.testType === m.type);
                     const ok = r?.result === 'PASS';
                     return (

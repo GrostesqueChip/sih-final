@@ -21,7 +21,7 @@ import { TbScale, TbCurrencyRupee } from 'react-icons/tb';
 import apiClient from '../hooks/useApi';
 import { useAuth } from '../contexts/AuthContext';
 import StatusBadge from '../components/shared/StatusBadge';
-import { formatDate, formatINR, complianceLabel, typeLabel, verificationTypeLabel } from '../utils/format';
+import { formatDate, formatINR, complianceLabel, typeLabel, verificationTypeLabel, modulesFor } from '../utils/format';
 
 // Validated (dataviz validator, light surface): CVD-safe, labels always shown.
 const PASS_C = '#2a64ad';
@@ -255,13 +255,15 @@ export default function DashboardPage() {
         <Card>
           <CardHead
             title={t('dash.openTitle', 'Verifications in progress')}
-            subtitle={t('dash.openSub', 'Resume field sessions — modules recorded out of 6')}
+            subtitle={t('dash.openSubN', 'Resume open sessions — test modules recorded')}
             action={<Link to="/tests?status=IN_PROGRESS" className="text-xs font-bold text-primary-700 hover:underline whitespace-nowrap">{t('common.viewAll', 'View all')}</Link>}
           />
           <ul className="divide-y divide-slate-100">
             {open.length === 0 && <li className="p-6 text-sm text-center text-slate-500">{t('dash.noOpen', 'No open sessions. Start a new verification to begin.')}</li>}
             {open.map((s) => {
-              const done = (s.testResults || []).filter((r) => r.status === 'COMPLETED').length;
+              const mods = modulesFor(s.verificationType).map((m) => m.type);
+              const total = mods.length;
+              const done = (s.testResults || []).filter((r) => r.status === 'COMPLETED' && mods.includes(r.testType)).length;
               return (
                 <li key={s.id} className="px-5 py-3.5 flex items-center gap-4">
                   <div className="min-w-0 flex-1">
@@ -269,15 +271,15 @@ export default function DashboardPage() {
                     <div className="text-xs text-slate-500 mt-0.5 font-mono">{s.certificateNo} · {s.conductedBy?.name}</div>
                     <div className="mt-2 flex items-center gap-2">
                       <div className="flex gap-1">
-                        {Array.from({ length: 6 }, (_, i) => (
+                        {Array.from({ length: total }, (_, i) => (
                           <span key={i} className={`h-1.5 w-7 rounded-full ${i < done ? 'bg-primary-600' : 'bg-slate-200'}`} />
                         ))}
                       </div>
-                      <span className="text-[11px] font-bold text-slate-600">{done}/6</span>
+                      <span className="text-[11px] font-bold text-slate-600">{done}/{total}</span>
                     </div>
                   </div>
                   <button type="button" onClick={() => navigate(`/tests/${s.id}`)} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md bg-navy text-white text-xs font-bold hover:bg-navy-light shrink-0">
-                    {done === 6 ? t('dash.finalize', 'Finalise') : t('dash.resume', 'Resume')} <FiArrowRight className="w-3.5 h-3.5" />
+                    {done === total ? t('dash.finalize', 'Finalise') : t('dash.resume', 'Resume')} <FiArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </li>
               );
