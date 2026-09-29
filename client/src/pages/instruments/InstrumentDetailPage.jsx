@@ -16,6 +16,7 @@ import {
   formatDate,
   instrumentPhoto,
   formatMass,
+  formatLimit,
   verificationTypeLabel,
   complianceLabel,
 } from '../../utils/format';
@@ -242,8 +243,8 @@ export default function InstrumentDetailPage() {
                       <td className="px-4 py-2.5 font-mono text-[12.5px]">
                         {massFmt(tier.minLoad * e)} – {massFmt(hi * e)}
                       </td>
-                      <td className="px-4 py-2.5 text-right font-bold">± {tier.mpeInitial} e = ± {massFmt(tier.mpeInitial * e)} {unit}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-600">± {massFmt(tier.mpeInitial * 2 * e)} {unit}</td>
+                      <td className="px-4 py-2.5 text-right font-bold">± {tier.mpeInitial} e = ± {formatLimit(tier.mpeInitial * e, inst)} {unit}</td>
+                      <td className="px-4 py-2.5 text-right text-slate-600">± {formatLimit(tier.mpeInitial * 2 * e, inst)} {unit}</td>
                     </tr>
                   );
                 })}

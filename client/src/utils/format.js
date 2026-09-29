@@ -59,6 +59,19 @@ export function formatMass(value, instrument, { signed = false, extra = 0 } = {}
   return signed && n > 0 ? `+${s}` : s;
 }
 
+/**
+ * Format a limit (MPE, creep or drift limit). Limits are fractions of e, such as
+ * 1.5 e = 0.015 kg on a 10 g scale, so they get the extra decimals they need
+ * (up to three) instead of being rounded to the display resolution.
+ */
+export function formatLimit(value, instrument) {
+  if (value === null || value === undefined || value === '' || Number.isNaN(Number(value))) return '—';
+  const n = Number(value);
+  let extra = 0;
+  while (extra < 3 && Math.abs(Number(formatMass(n, instrument, { extra }).replace(/,/g, '')) - n) > 1e-9) extra += 1;
+  return formatMass(n, instrument, { extra });
+}
+
 export function formatNumber(value, opts = {}) {
   if (value === null || value === undefined || Number.isNaN(Number(value))) return '—';
   return Number(value).toLocaleString('en-IN', opts);

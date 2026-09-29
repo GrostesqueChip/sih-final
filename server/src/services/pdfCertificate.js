@@ -14,26 +14,26 @@ const T = require('./pdfTheme');
 const { C } = T;
 
 /** One-line quantitative finding for a module, taken from its stored calculations. */
-function keyFinding(testType, result, fmt, unit) {
+function keyFinding(testType, result, fmt, unit, lim = fmt) {
   const c = result?.calculations;
   if (!c) return 'Not evaluated';
   switch (testType) {
     case 'WEIGHING_PERFORMANCE':
-      return `Max |Ec| ${fmt(c.maxCorrectedError)} ${unit}; max MPE ${fmt(c.maxMpeAllowed)}; hysteresis ${fmt(c.hysteresisAnalysis?.maxHysteresis)}`;
+      return `Max |Ec| ${fmt(c.maxCorrectedError)} ${unit}; max MPE ${lim(c.maxMpeAllowed)}; hysteresis ${fmt(c.hysteresisAnalysis?.maxHysteresis)}`;
     case 'REPEATABILITY': {
       const worst = (c.series || []).reduce((a, s) => (s.range > (a?.range ?? -1) ? s : a), null);
-      return worst ? `Max range ${fmt(worst.range)} ${unit} at ${fmt(worst.load)} ${unit} (MPE ${fmt(worst.mpeMass)})` : '—';
+      return worst ? `Max range ${fmt(worst.range)} ${unit} at ${fmt(worst.load)} ${unit} (MPE ${lim(worst.mpeMass)})` : '—';
     }
     case 'ECCENTRICITY':
-      return `Max error ${fmt(c.maxError)} ${unit} (MPE ${fmt(c.mpe)}); max diff. from centre ${fmt(c.maxDifferenceFromCenter)}`;
+      return `Max error ${fmt(c.maxError)} ${unit} (MPE ${lim(c.mpe)}); max diff. from centre ${fmt(c.maxDifferenceFromCenter)}`;
     case 'TEMPERATURE':
       return `Zero drift ${fmt(c.zeroDriftPer5C)} ${unit}/5 °C (limit 1e); max span error ${fmt(c.maxSpanError)}`;
     case 'STABILITY':
-      return `Max span drift ${fmt(c.maxSpanDrift)} ${unit} over 8 h (limit ${fmt(c.mpeMass)})`;
+      return `Max span drift ${fmt(c.maxSpanDrift)} ${unit} over 8 h (limit ${lim(c.mpeMass)})`;
     case 'TIME_DEPENDENCE': {
       const cr = c.creepAnalysis || {};
       const zr = c.zeroReturnAnalysis || {};
-      return `Creep 15–30 min ${fmt(cr.delta30to15)} ${unit} (limit ${fmt(cr.allowedDelta15to30)}); zero return ${fmt(zr.zeroReturnError)}`;
+      return `Creep 15–30 min ${fmt(cr.delta30to15)} ${unit} (limit ${lim(cr.allowedDelta15to30)}); zero return ${fmt(zr.zeroReturnError)}`;
     }
     default:
       return '—';
@@ -47,6 +47,7 @@ async function generateCertificate(sessionData) {
   const results = Object.fromEntries((session.testResults || []).map((r) => [r.testType, r]));
   const unit = inst.unit || 'kg';
   const fmt = T.numFmt(inst);
+  const lim = T.limitFmt(inst);
 
   const verdict = session.overallResult === 'PASS' || session.overallResult === 'FAIL' ? session.overallResult : 'UNKNOWN';
   const pass = verdict === 'PASS';
@@ -180,7 +181,7 @@ async function generateCertificate(sessionData) {
           String(i + 1),
           { text: t.en, bold: true },
           t.clause,
-          keyFinding(t.type, r, fmt, unit),
+          keyFinding(t.type, r, fmt, unit, lim),
           { text: v, bold: true, color: v === 'PASS' ? C.PASS : v === 'FAIL' ? C.FAIL : C.FAINT, bg: v === 'PASS' ? C.PASS_BG : v === 'FAIL' ? C.FAIL_BG : null, align: 'center' },
         ];
       });

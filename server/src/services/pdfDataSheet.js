@@ -28,6 +28,7 @@ async function generateDataSheet(sessionData) {
   const unit = inst.unit || 'kg';
   const fmt = T.numFmt(inst);
   const fmt2 = T.numFmt(inst, 1);
+  const lim = T.limitFmt(inst);
   const e = Number(inst.verificationInterval || 1);
   const inService = session.verificationType === 'INSPECTION';
   const mpeAt = (load) => calculateMultiIntervalMPE(load, inst.accuracyClass, [{ max: Infinity, e }], inService).mpe;
@@ -139,7 +140,7 @@ async function generateDataSheet(sessionData) {
         String(i + 1),
         { text: t.en, bold: true },
         t.clause,
-        results[t.type] ? keyFinding(t.type, results[t.type], fmt, unit) : 'Not recorded',
+        results[t.type] ? keyFinding(t.type, results[t.type], fmt, unit, lim) : 'Not recorded',
         verdictCell(results[t.type]?.result),
       ]), { fontSize: 7, rowHeight: 14 });
       y += 10;
@@ -211,7 +212,7 @@ async function generateDataSheet(sessionData) {
               fmt(dec?.indicatedValue),
               { text: fmt(dec?.correctedError, true), color: dec && !dec.passed ? C.FAIL : C.TEXT },
               fmt(h?.hysteresis),
-              `± ${fmt(inc?.mpeMass ?? mpeAt(L))}`,
+              `± ${lim(inc?.mpeMass ?? mpeAt(L))}`,
               verdictCell(ok),
             ];
           });
@@ -314,7 +315,7 @@ async function generateDataSheet(sessionData) {
             ...Array.from({ length: n }, (_, i) => fmt(s.readings[i])),
             { text: fmt(s.range), color: s.passed ? C.TEXT : C.FAIL, bold: !s.passed },
             fmt2(s.stdDev),
-            `± ${fmt(s.mpeMass)}`,
+            `± ${lim(s.mpeMass)}`,
             verdictCell(s.passed),
           ]), { fontSize: 7 });
           y += 6;
@@ -344,7 +345,7 @@ async function generateDataSheet(sessionData) {
             fmt(p.indicatedValue),
             { text: fmt(p.error, true), color: p.passed ? C.TEXT : C.FAIL, bold: !p.passed },
             fmt(p.diffFromCenter),
-            `± ${fmt(p.mpeMass)}`,
+            `± ${lim(p.mpeMass)}`,
             verdictCell(p.passed),
           ]), { fontSize: 7 });
           y += 6;
@@ -373,7 +374,7 @@ async function generateDataSheet(sessionData) {
             fmt(p.spanLoad),
             fmt(p.spanIndication),
             { text: fmt(p.correctedSpanError, true), color: p.spanPassed ? C.TEXT : C.FAIL, bold: !p.spanPassed },
-            `± ${fmt(p.mpeMass)}`,
+            `± ${lim(p.mpeMass)}`,
             verdictCell(p.spanPassed),
           ]), { fontSize: 7 });
           const drifts = r.calculations.zeroDriftEvaluations || [];
@@ -438,8 +439,8 @@ async function generateDataSheet(sessionData) {
             { label: 'LIMIT', width: CW * 0.2, align: 'right' },
             { label: 'RESULT', width: CW * 0.15, align: 'center' },
           ], [
-            ['Creep between 0 and 30 min', fmt(ca.delta30to0), `${fmt2(ca.allowedDelta30)} (0.5 MPE)`, verdictCell(ca.creep30Passed)],
-            ['Creep between 15 and 30 min', fmt(ca.delta30to15), `${fmt2(ca.allowedDelta15to30)} (0.2 MPE)`, verdictCell(ca.creep15Passed)],
+            ['Creep between 0 and 30 min', fmt(ca.delta30to0), `${lim(ca.allowedDelta30)} (0.5 MPE)`, verdictCell(ca.creep30Passed)],
+            ['Creep between 15 and 30 min', fmt(ca.delta30to15), `${lim(ca.allowedDelta15to30)} (0.2 MPE)`, verdictCell(ca.creep15Passed)],
             ['Zero return after unloading', fmt(za?.zeroReturnError), `${fmt2(za?.allowedZeroReturn)} (0.5e)`, verdictCell(za?.zeroReturnPassed)],
           ], { fontSize: 7 });
           y += 6;

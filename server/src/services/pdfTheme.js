@@ -97,6 +97,23 @@ function numFmt(instrument, extra = 0) {
   };
 }
 
+/**
+ * Formatter for limits (MPE, creep and drift limits). These are fractions of e,
+ * such as 1.5 e = 0.015 kg on a 10 g scale, so they get as many extra decimals as
+ * they need (up to three) instead of being rounded to the display resolution.
+ */
+function limitFmt(instrument) {
+  const d = Number(instrument?.actualInterval || instrument?.verificationInterval || 0.01);
+  const base = Math.min(6, decimalsFor(d));
+  return (v) => {
+    if (v === null || v === undefined || Number.isNaN(Number(v))) return '—';
+    const n = Number(v);
+    let dp = base;
+    while (dp < base + 3 && Math.abs(Number(n.toFixed(dp)) - n) > 1e-9) dp += 1;
+    return n.toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  };
+}
+
 function classLabel(c) {
   return { CLASS_I: 'Class I (Special)', CLASS_II: 'Class II (High)', CLASS_III: 'Class III (Medium)', CLASS_IIII: 'Class IIII (Ordinary)' }[c] || c || '—';
 }
@@ -275,6 +292,7 @@ module.exports = {
   formatDate,
   addMonths,
   numFmt,
+  limitFmt,
   classLabel,
   tricolor,
   hindi,

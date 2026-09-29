@@ -34,6 +34,7 @@ import {
   formatDate,
   formatDateTime,
   formatMass,
+  formatLimit,
   instrumentPhoto,
   verificationTypeLabel,
 } from '../../utils/format';
@@ -50,20 +51,21 @@ const MODULE_DESC = {
 export function finding(type, calc, inst) {
   if (!calc) return null;
   const f = (v) => formatMass(v, inst);
+  const fl = (v) => formatLimit(v, inst);
   const u = inst?.unit || '';
   switch (type) {
     case 'WEIGHING_PERFORMANCE':
-      return `Max |Ec| ${f(calc.maxCorrectedError)} ${u} · MPE ${f(calc.maxMpeAllowed)} ${u}`;
+      return `Max |Ec| ${f(calc.maxCorrectedError)} ${u} · MPE ${fl(calc.maxMpeAllowed)} ${u}`;
     case 'REPEATABILITY': {
       const w = (calc.series || []).reduce((a, s) => (s.range > (a?.range ?? -1) ? s : a), null);
-      return w ? `Max spread ${f(w.range)} ${u} · MPE ${f(w.mpeMass)} ${u}` : null;
+      return w ? `Max spread ${f(w.range)} ${u} · MPE ${fl(w.mpeMass)} ${u}` : null;
     }
     case 'ECCENTRICITY':
-      return `Max error ${f(calc.maxError)} ${u} · MPE ${f(calc.mpe)} ${u}`;
+      return `Max error ${f(calc.maxError)} ${u} · MPE ${fl(calc.mpe)} ${u}`;
     case 'TEMPERATURE':
       return `Zero drift ${f(calc.zeroDriftPer5C)} ${u}/5 °C · span error ${f(calc.maxSpanError)} ${u}`;
     case 'STABILITY':
-      return `Span drift ${f(calc.maxSpanDrift)} ${u} · limit ${f(calc.mpeMass)} ${u}`;
+      return `Span drift ${f(calc.maxSpanDrift)} ${u} · limit ${fl(calc.mpeMass)} ${u}`;
     case 'TIME_DEPENDENCE':
       return `Creep ${f(calc.creepAnalysis?.delta30to15)} ${u} · zero return ${f(calc.zeroReturnAnalysis?.zeroReturnError)} ${u}`;
     default:

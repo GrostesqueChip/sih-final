@@ -13,7 +13,7 @@ import DigitalIndicator from '../../components/telemetry/DigitalIndicator';
 import useIndicator from '../../components/telemetry/useIndicator';
 import { calculateMpe } from '../../utils/metrology';
 import { useAuth } from '../../contexts/AuthContext';
-import { TEST_MODULES, moduleTitle, classLabel, formatMass, decimalsFor } from '../../utils/format';
+import { TEST_MODULES, moduleTitle, classLabel, formatMass, formatLimit, decimalsFor } from '../../utils/format';
 
 // ---------------------------------------------------------------------------
 // Slot model: every capturable reading has an id, a label and a test load.
@@ -467,6 +467,7 @@ export default function TestDataEntryPage() {
   }
 
   const fm = (v, signed) => formatMass(v, inst, { signed });
+  const fl = (v) => formatLimit(v, inst);
   const unit = inst.unit;
   const inp = (sid) => (
     <ReadingInput
@@ -608,7 +609,7 @@ export default function TestDataEntryPage() {
                       <td className={td}>{inp(`dec-${i}`)}</td>
                       <td className={`${td} text-right font-mono ${evaln.rows[`dec-${i}`] === false ? 'text-red-700 font-bold' : ''}`}>{row.ecD === null ? '—' : fm(row.ecD, true)}</td>
                       <td className={`${td} text-right font-mono`}>{row.hy === null ? '—' : fm(row.hy)}</td>
-                      <td className={`${td} text-right font-mono text-slate-600`}>± {fm(row.m)}</td>
+                      <td className={`${td} text-right font-mono text-slate-600`}>± {fl(row.m)}</td>
                       <td className={td}><Verdict ok={evaln.rows[`inc-${i}`] === null && evaln.rows[`dec-${i}`] === null ? null : evaln.rows[`inc-${i}`] !== false && evaln.rows[`dec-${i}`] !== false} /></td>
                     </tr>
                   ))}
@@ -625,7 +626,7 @@ export default function TestDataEntryPage() {
                         {s.k === 'half' ? '50 % Max' : '100 % Max'} — {fm(s.L)} {unit}
                       </div>
                       <div className="flex items-center gap-3 text-xs">
-                        <span className="text-slate-600">{t('entry.spread', 'Spread (max − min)')}: <b className="font-mono">{s.range === null ? '—' : fm(s.range)}</b> / ± {fm(s.m)}</span>
+                        <span className="text-slate-600">{t('entry.spread', 'Spread (max − min)')}: <b className="font-mono">{s.range === null ? '—' : fm(s.range)}</b> / ± {fl(s.m)}</span>
                         <Verdict ok={s.n === 6 ? s.ok : null} />
                       </div>
                     </div>
@@ -695,7 +696,7 @@ export default function TestDataEntryPage() {
                   </tbody>
                 </table>
                 <p className="md:col-span-2 text-xs text-slate-500">
-                  {t('entry.eccNote', 'Test load {{l}} {{u}} (≈ ⅓ Max) · MPE ± {{m}} {{u}}', { l: fm(slots[0]?.load), u: unit, m: fm(evaln.m) })}
+                  {t('entry.eccNote', 'Test load {{l}} {{u}} (≈ ⅓ Max) · MPE ± {{m}} {{u}}', { l: fm(slots[0]?.load), u: unit, m: fl(evaln.m) })}
                 </p>
               </div>
             )}
@@ -720,7 +721,7 @@ export default function TestDataEntryPage() {
                         <td className={td}>{inp(`tz-${row.i}`)}</td>
                         <td className={td}>{inp(`ts-${row.i}`)}</td>
                         <td className={`${td} text-right font-mono ${evaln.rows[`ts-${row.i}`] === false ? 'text-red-700 font-bold' : ''}`}>{row.corr === null ? '—' : fm(row.corr, true)}</td>
-                        <td className={`${td} text-right font-mono text-slate-600`}>± {fm(evaln.m)}</td>
+                        <td className={`${td} text-right font-mono text-slate-600`}>± {fl(evaln.m)}</td>
                         <td className={td}><Verdict ok={evaln.rows[`ts-${row.i}`]} /></td>
                       </tr>
                     ))}
@@ -754,7 +755,7 @@ export default function TestDataEntryPage() {
                       <td className={`${td} font-bold text-slate-800`}>{row.h < 1 ? `${row.h * 60} min` : `${row.h} h`}</td>
                       <td className={td}>{inp(`st-${i}`)}</td>
                       <td className={`${td} text-right font-mono ${evaln.rows[`st-${i}`] === false ? 'text-red-700 font-bold' : ''}`}>{row.drift === null ? '—' : fm(row.drift, true)}</td>
-                      <td className={`${td} text-right font-mono text-slate-600`}>± {fm(evaln.m)}</td>
+                      <td className={`${td} text-right font-mono text-slate-600`}>± {fl(evaln.m)}</td>
                       <td className={td}><Verdict ok={evaln.rows[`st-${i}`]} /></td>
                     </tr>
                   ))}
