@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Paper today</title></head>
+  <body>
+    <template>
+      <style>
+#root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; color: #f3efe6; font-family: Montserrat, sans-serif; }
+.wrap { position: absolute; inset: 0; }
+.bg { position: absolute; inset: 0; background: #0b1a33; }
+.glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(245,158,11,0.07) 38%, rgba(11,26,51,0) 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(243,239,230,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(243,239,230,0.05) 2px, transparent 2px); background-size: 96px 96px; }
+.ghost { position: absolute; font-family: Montserrat, sans-serif; font-weight: 900; font-size: 300px; letter-spacing: -0.04em; color: rgba(243,239,230,0.06); white-space: nowrap; line-height: 1; }
+.chapter { position: absolute; left: 40px; top: 22px; display: flex; align-items: center; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: #f59e0b; }
+.chapter .num { color: #0b1a33; background: #f59e0b; padding: 3px 10px; border-radius: 4px; }
+.chapter .rule { width: 120px; height: 3px; background: rgba(245,158,11,0.6); display: block; }
+.win { position: absolute; left: 40px; top: 72px; width: 1440px; height: 846px; border-radius: 14px; overflow: hidden; background: #0e1f3d; box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 3px rgba(243,239,230,0.12); }
+.win .bar { position: absolute; left: 0; top: 0; width: 1440px; height: 36px; background: #1b2c4a; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.win .dot { width: 13px; height: 13px; border-radius: 50%; background: #56627a; display: block; }
+.win .url { margin-left: 18px; height: 24px; width: 560px; border-radius: 12px; background: #0e1f3d; color: #a9b4c7; font-family: 'IBM Plex Mono', monospace; font-size: 15px; display: flex; align-items: center; padding: 0 14px; }
+.win .screen { position: absolute; left: 0; top: 36px; width: 1440px; height: 810px; overflow: hidden; }
+.win .screen img, .win .screen video { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; }
+.cam { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; }
+.rail { position: absolute; left: 1510px; top: 72px; width: 372px; height: 846px; display: flex; flex-direction: column; gap: 18px; }
+.rail h2 { font-weight: 900; font-size: 42px; line-height: 1.05; letter-spacing: -0.02em; color: #f3efe6; }
+.rail .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: #f59e0b; text-transform: uppercase; }
+.card { background: rgba(18,38,74,0.92); border: 3px solid rgba(243,239,230,0.14); border-radius: 12px; padding: 16px 20px; }
+.card .k { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; color: #a9b4c7; text-transform: uppercase; }
+.card .v { font-size: 28px; font-weight: 700; line-height: 1.2; color: #f3efe6; margin-top: 4px; }
+.card.hot { border-color: #f59e0b; }
+.card.pass { border-color: #2fb56a; }
+.card.fail { border-color: #e04848; }
+.tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.08em; }
+.tag.pass { background: #2fb56a; color: #06210f; }
+.tag.fail { background: #e04848; color: #2a0505; }
+.tag.prog { background: #f59e0b; color: #2a1a02; }
+.tag.built { background: #2fb56a; color: #06210f; }
+.tag.prop { background: #3d5a8c; color: #f3efe6; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.lcd { background: #050b16; border-radius: 18px; border: 4px solid #22324f; box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+.lcd .num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; letter-spacing: -0.02em; text-shadow: 0 0 24px rgba(255,176,32,0.45); line-height: 1; }
+.lcd .unit { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; opacity: 0.8; }
+.lcd .flags { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #3a4a66; }
+.lcd .flags .on { color: #2fe07a; }
+.photo { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+.shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(8,18,38,0.55) 0%, rgba(8,18,38,0.88) 75%); }
+.big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
+.strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
+</style>
+      <div id="root" data-composition-id="s03-paper" data-width="1920" data-height="1080" data-duration="25.383">
+        <div class="wrap" id="s03-paper-wrap">
+          <div class="bg"></div>
+          <div class="glow" id="s03-paper-glow" style="left:1000px; top:-300px;"></div>
+          <div class="grid"></div>
+          <div class="ghost" data-layout-ignore aria-hidden="true" id="s03-paper-ghost" style="left:300px; top:780px;">PAPER</div>
+          <div class="chapter" id="s03-paper-chap"><span class="num">01</span><span>The problem · today</span><span class="rule"></span></div>
+          <div id="s03-paper-law" style="position:absolute; left:110px; top:120px; width:1700px;">
+            <div class="mono" style="font-size:24px; font-weight:700; letter-spacing:0.14em; color:#f59e0b;">LEGAL METROLOGY ACT, 2009</div>
+            <div class="big" style="font-size:84px; margin-top:14px;">Every weighing instrument used in trade — verified. Every year.</div>
+          </div>
+          <div style="position:absolute; left:110px; top:430px; width:1700px; display:flex; gap:28px;">
+            <div class="card" id="s03-paper-p0" style="flex:1; height:300px; padding:30px; position:relative;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M4 17a3 3 0 0 1 3-3h11"/></svg>
+              <div class="mono" style="font-size:20px; font-weight:700; color:#a9b4c7; margin-top:26px;">01</div>
+              <div style="font-size:36px; font-weight:700; line-height:1.15; margin-top:8px; position:relative;">A paper register</div>
+            </div>
+            <div class="card" id="s03-paper-p1" style="flex:1; height:300px; padding:30px; position:relative;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>
+              <div class="mono" style="font-size:20px; font-weight:700; color:#a9b4c7; margin-top:26px;">02</div>
+              <div style="font-size:36px; font-weight:700; line-height:1.15; margin-top:8px; position:relative;">Readings copied by hand</div>
+            </div>
+            <div class="card" id="s03-paper-p2" style="flex:1; height:300px; padding:30px; position:relative;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2"/></svg>
+              <div class="mono" style="font-size:20px; font-weight:700; color:#a9b4c7; margin-top:26px;">03</div>
+              <div style="font-size:36px; font-weight:700; line-height:1.15; margin-top:8px; position:relative;">Error limits on a calculator</div>
+            </div>
+            <div class="card" id="s03-paper-p3" style="flex:1; height:300px; padding:30px; position:relative;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h5"/></svg>
+              <div class="mono" style="font-size:20px; font-weight:700; color:#a9b4c7; margin-top:26px;">04</div>
+              <div style="font-size:36px; font-weight:700; line-height:1.15; margin-top:8px; position:relative;">A certificate anyone can forge</div>
+            </div>
+          </div>
+          <div id="s03-paper-no" style="position:absolute; left:110px; top:790px; width:1700px; display:flex; align-items:center; gap:28px;">
+            <svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#e04848" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c5 0 9 4.5 10 7a13 13 0 0 1-3.2 4.2M6.2 6.3A13 13 0 0 0 2 12c1 2.5 5 7 10 7a9.9 9.9 0 0 0 5.8-1.8"/></svg>
+            <div class="big" style="font-size:66px;">And for the farmer — no way to check any of it.</div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const D = 25.383;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s03-paper-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+          tl.fromTo("#s03-paper-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+          tl.fromTo("#s03-paper-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+          tl.fromTo("#s03-paper-ghost", { x: 0 }, { x: -260, duration: D, ease: "none" }, 0);
+          tl.fromTo("#s03-paper-law", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.7);
+          tl.fromTo("#s03-paper-p0", { opacity: 0, y: 60, rotation: -2 }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.4)" }, 11.099);
+          tl.fromTo("#s03-paper-p1", { opacity: 0, y: 60, rotation: 2 }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.4)" }, 12.459);
+          tl.fromTo("#s03-paper-p2", { opacity: 0, y: 60, rotation: -2 }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.4)" }, 16.379);
+          tl.fromTo("#s03-paper-p3", { opacity: 0, y: 60, rotation: 2 }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.4)" }, 18.059);
+          tl.to(["#s03-paper-p0", "#s03-paper-p1", "#s03-paper-p2", "#s03-paper-p3"], { opacity: 0.4, duration: 0.6 }, 21.532);
+          tl.fromTo("#s03-paper-no", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, 21.632);
+          window.__timelines["s03-paper"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

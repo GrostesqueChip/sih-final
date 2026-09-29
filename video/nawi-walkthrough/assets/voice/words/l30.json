@@ -1,0 +1,128 @@
+[
+  {
+    "id": "w0",
+    "text": "A",
+    "start": 0,
+    "end": 0.24
+  },
+  {
+    "id": "w1",
+    "text": "failed",
+    "start": 0.24,
+    "end": 0.72
+  },
+  {
+    "id": "w2",
+    "text": "scale",
+    "start": 0.72,
+    "end": 1.28
+  },
+  {
+    "id": "w3",
+    "text": "receives",
+    "start": 1.28,
+    "end": 1.68
+  },
+  {
+    "id": "w4",
+    "text": "a",
+    "start": 1.68,
+    "end": 1.84
+  },
+  {
+    "id": "w5",
+    "text": "certificate",
+    "start": 1.84,
+    "end": 2.4
+  },
+  {
+    "id": "w6",
+    "text": "of",
+    "start": 2.4,
+    "end": 2.64
+  },
+  {
+    "id": "w7",
+    "text": "rejection.",
+    "start": 2.64,
+    "end": 3.6
+  },
+  {
+    "id": "w8",
+    "text": "It",
+    "start": 3.6,
+    "end": 3.84
+  },
+  {
+    "id": "w9",
+    "text": "cannot",
+    "start": 3.84,
+    "end": 4.24
+  },
+  {
+    "id": "w10",
+    "text": "be",
+    "start": 4.24,
+    "end": 4.4
+  },
+  {
+    "id": "w11",
+    "text": "used",
+    "start": 4.4,
+    "end": 4.72
+  },
+  {
+    "id": "w12",
+    "text": "in",
+    "start": 4.72,
+    "end": 4.96
+  },
+  {
+    "id": "w13",
+    "text": "trade",
+    "start": 4.96,
+    "end": 5.44
+  },
+  {
+    "id": "w14",
+    "text": "until",
+    "start": 5.44,
+    "end": 5.92
+  },
+  {
+    "id": "w15",
+    "text": "it",
+    "start": 5.92,
+    "end": 6.08
+  },
+  {
+    "id": "w16",
+    "text": "is",
+    "start": 6.08,
+    "end": 6.24
+  },
+  {
+    "id": "w17",
+    "text": "repaired",
+    "start": 6.24,
+    "end": 6.8
+  },
+  {
+    "id": "w18",
+    "text": "and",
+    "start": 6.8,
+    "end": 6.96
+  },
+  {
+    "id": "w19",
+    "text": "verified",
+    "start": 6.96,
+    "end": 7.6
+  },
+  {
+    "id": "w20",
+    "text": "again.",
+    "start": 7.6,
+    "end": 8.08
+  }
+]

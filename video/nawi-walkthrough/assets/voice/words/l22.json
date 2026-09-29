@@ -1,0 +1,56 @@
+[
+  {
+    "id": "w0",
+    "text": "All",
+    "start": 0,
+    "end": 0.32
+  },
+  {
+    "id": "w1",
+    "text": "six",
+    "start": 0.32,
+    "end": 0.72
+  },
+  {
+    "id": "w2",
+    "text": "tests",
+    "start": 0.72,
+    "end": 1.12
+  },
+  {
+    "id": "w3",
+    "text": "are",
+    "start": 1.12,
+    "end": 1.28
+  },
+  {
+    "id": "w4",
+    "text": "complete.",
+    "start": 1.28,
+    "end": 2.08
+  },
+  {
+    "id": "w5",
+    "text": "He",
+    "start": 2.08,
+    "end": 2.32
+  },
+  {
+    "id": "w6",
+    "text": "finalizes",
+    "start": 2.32,
+    "end": 2.96
+  },
+  {
+    "id": "w7",
+    "text": "the",
+    "start": 3.04,
+    "end": 3.2
+  },
+  {
+    "id": "w8",
+    "text": "session.",
+    "start": 3.2,
+    "end": 3.76
+  }
+]

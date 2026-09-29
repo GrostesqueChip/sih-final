@@ -1,0 +1,146 @@
+[
+  {
+    "id": "w0",
+    "text": "The",
+    "start": 0,
+    "end": 0.16
+  },
+  {
+    "id": "w1",
+    "text": "whole",
+    "start": 0.16,
+    "end": 0.4
+  },
+  {
+    "id": "w2",
+    "text": "interface",
+    "start": 0.4,
+    "end": 0.96
+  },
+  {
+    "id": "w3",
+    "text": "works",
+    "start": 0.96,
+    "end": 1.28
+  },
+  {
+    "id": "w4",
+    "text": "in",
+    "start": 1.28,
+    "end": 1.44
+  },
+  {
+    "id": "w5",
+    "text": "Hindi",
+    "start": 1.44,
+    "end": 2
+  },
+  {
+    "id": "w6",
+    "text": "and",
+    "start": 2,
+    "end": 2.24
+  },
+  {
+    "id": "w7",
+    "text": "English,",
+    "start": 2.24,
+    "end": 3.12
+  },
+  {
+    "id": "w8",
+    "text": "follows",
+    "start": 3.12,
+    "end": 3.6
+  },
+  {
+    "id": "w9",
+    "text": "government",
+    "start": 3.68,
+    "end": 4.24
+  },
+  {
+    "id": "w10",
+    "text": "accessibility",
+    "start": 4.24,
+    "end": 5.12
+  },
+  {
+    "id": "w11",
+    "text": "guidelines,",
+    "start": 5.12,
+    "end": 6
+  },
+  {
+    "id": "w12",
+    "text": "and",
+    "start": 6,
+    "end": 6.24
+  },
+  {
+    "id": "w13",
+    "text": "keeps",
+    "start": 6.24,
+    "end": 6.64
+  },
+  {
+    "id": "w14",
+    "text": "working",
+    "start": 6.64,
+    "end": 7.04
+  },
+  {
+    "id": "w15",
+    "text": "offline",
+    "start": 7.04,
+    "end": 7.6
+  },
+  {
+    "id": "w16",
+    "text": "in",
+    "start": 7.6,
+    "end": 7.76
+  },
+  {
+    "id": "w17",
+    "text": "the",
+    "start": 7.76,
+    "end": 7.92
+  },
+  {
+    "id": "w18",
+    "text": "field,",
+    "start": 7.92,
+    "end": 8.64
+  },
+  {
+    "id": "w19",
+    "text": "syncing",
+    "start": 8.64,
+    "end": 9.2
+  },
+  {
+    "id": "w20",
+    "text": "when",
+    "start": 9.2,
+    "end": 9.36
+  },
+  {
+    "id": "w21",
+    "text": "the",
+    "start": 9.36,
+    "end": 9.52
+  },
+  {
+    "id": "w22",
+    "text": "network",
+    "start": 9.52,
+    "end": 10
+  },
+  {
+    "id": "w23",
+    "text": "returns.",
+    "start": 10,
+    "end": 10.64
+  }
+]

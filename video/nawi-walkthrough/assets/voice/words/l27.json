@@ -1,0 +1,128 @@
+[
+  {
+    "id": "w0",
+    "text": "Behind",
+    "start": 0,
+    "end": 0.4
+  },
+  {
+    "id": "w1",
+    "text": "it,",
+    "start": 0.4,
+    "end": 0.72
+  },
+  {
+    "id": "w2",
+    "text": "a",
+    "start": 0.72,
+    "end": 0.96
+  },
+  {
+    "id": "w3",
+    "text": "three",
+    "start": 0.96,
+    "end": 1.28
+  },
+  {
+    "id": "w4",
+    "text": "page",
+    "start": 1.36,
+    "end": 1.76
+  },
+  {
+    "id": "w5",
+    "text": "technical",
+    "start": 1.76,
+    "end": 2.32
+  },
+  {
+    "id": "w6",
+    "text": "data",
+    "start": 2.32,
+    "end": 2.64
+  },
+  {
+    "id": "w7",
+    "text": "sheet",
+    "start": 2.64,
+    "end": 3.04
+  },
+  {
+    "id": "w8",
+    "text": "records",
+    "start": 3.04,
+    "end": 3.68
+  },
+  {
+    "id": "w9",
+    "text": "every",
+    "start": 3.68,
+    "end": 4
+  },
+  {
+    "id": "w10",
+    "text": "single",
+    "start": 4,
+    "end": 4.4
+  },
+  {
+    "id": "w11",
+    "text": "reading",
+    "start": 4.4,
+    "end": 4.96
+  },
+  {
+    "id": "w12",
+    "text": "and",
+    "start": 5.04,
+    "end": 5.28
+  },
+  {
+    "id": "w13",
+    "text": "plots",
+    "start": 5.28,
+    "end": 5.76
+  },
+  {
+    "id": "w14",
+    "text": "the",
+    "start": 5.76,
+    "end": 5.92
+  },
+  {
+    "id": "w15",
+    "text": "error",
+    "start": 5.92,
+    "end": 6.4
+  },
+  {
+    "id": "w16",
+    "text": "curve",
+    "start": 6.4,
+    "end": 6.72
+  },
+  {
+    "id": "w17",
+    "text": "against",
+    "start": 6.88,
+    "end": 7.2
+  },
+  {
+    "id": "w18",
+    "text": "the",
+    "start": 7.2,
+    "end": 7.28
+  },
+  {
+    "id": "w19",
+    "text": "legal",
+    "start": 7.28,
+    "end": 7.6
+  },
+  {
+    "id": "w20",
+    "text": "limits.",
+    "start": 7.6,
+    "end": 8.08
+  }
+]

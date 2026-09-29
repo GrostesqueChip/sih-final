@@ -1,0 +1,158 @@
+[
+  {
+    "id": "w0",
+    "text": "If",
+    "start": 0,
+    "end": 0.16
+  },
+  {
+    "id": "w1",
+    "text": "a",
+    "start": 0.16,
+    "end": 0.24
+  },
+  {
+    "id": "w2",
+    "text": "load",
+    "start": 0.24,
+    "end": 0.64
+  },
+  {
+    "id": "w3",
+    "text": "cell",
+    "start": 0.64,
+    "end": 0.96
+  },
+  {
+    "id": "w4",
+    "text": "drifts",
+    "start": 0.96,
+    "end": 1.44
+  },
+  {
+    "id": "w5",
+    "text": "by",
+    "start": 1.44,
+    "end": 1.6
+  },
+  {
+    "id": "w6",
+    "text": "just",
+    "start": 1.6,
+    "end": 1.84
+  },
+  {
+    "id": "w7",
+    "text": "one",
+    "start": 1.84,
+    "end": 2.08
+  },
+  {
+    "id": "w8",
+    "text": "percent,",
+    "start": 2.08,
+    "end": 2.72
+  },
+  {
+    "id": "w9",
+    "text": "a",
+    "start": 2.72,
+    "end": 2.96
+  },
+  {
+    "id": "w10",
+    "text": "five",
+    "start": 2.96,
+    "end": 3.28
+  },
+  {
+    "id": "w11",
+    "text": "hundred",
+    "start": 3.28,
+    "end": 3.6
+  },
+  {
+    "id": "w12",
+    "text": "kilo",
+    "start": 3.6,
+    "end": 4
+  },
+  {
+    "id": "w13",
+    "text": "load",
+    "start": 4.16,
+    "end": 4.56
+  },
+  {
+    "id": "w14",
+    "text": "loses",
+    "start": 4.56,
+    "end": 5.04
+  },
+  {
+    "id": "w15",
+    "text": "five",
+    "start": 5.04,
+    "end": 5.36
+  },
+  {
+    "id": "w16",
+    "text": "kilos",
+    "start": 5.36,
+    "end": 6.16
+  },
+  {
+    "id": "w17",
+    "text": "on",
+    "start": 6.32,
+    "end": 6.56
+  },
+  {
+    "id": "w18",
+    "text": "every",
+    "start": 6.56,
+    "end": 6.88
+  },
+  {
+    "id": "w19",
+    "text": "weighing,",
+    "start": 6.88,
+    "end": 7.84
+  },
+  {
+    "id": "w20",
+    "text": "for",
+    "start": 7.84,
+    "end": 8.08
+  },
+  {
+    "id": "w21",
+    "text": "every",
+    "start": 8.08,
+    "end": 8.4
+  },
+  {
+    "id": "w22",
+    "text": "farmer,",
+    "start": 8.4,
+    "end": 9.2
+  },
+  {
+    "id": "w23",
+    "text": "all",
+    "start": 9.2,
+    "end": 9.52
+  },
+  {
+    "id": "w24",
+    "text": "season",
+    "start": 9.52,
+    "end": 10
+  },
+  {
+    "id": "w25",
+    "text": "long.",
+    "start": 10,
+    "end": 10.32
+  }
+]

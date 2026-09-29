@@ -1,0 +1,152 @@
+[
+  {
+    "id": "w0",
+    "text": "The",
+    "start": 0,
+    "end": 0.16
+  },
+  {
+    "id": "w1",
+    "text": "foundation",
+    "start": 0.16,
+    "end": 0.8
+  },
+  {
+    "id": "w2",
+    "text": "is",
+    "start": 0.8,
+    "end": 0.96
+  },
+  {
+    "id": "w3",
+    "text": "already",
+    "start": 0.96,
+    "end": 1.36
+  },
+  {
+    "id": "w4",
+    "text": "built",
+    "start": 1.36,
+    "end": 1.68
+  },
+  {
+    "id": "w5",
+    "text": "for",
+    "start": 1.68,
+    "end": 1.92
+  },
+  {
+    "id": "w6",
+    "text": "it.",
+    "start": 1.92,
+    "end": 2.32
+  },
+  {
+    "id": "w7",
+    "text": "A",
+    "start": 2.32,
+    "end": 2.48
+  },
+  {
+    "id": "w8",
+    "text": "stateless",
+    "start": 2.48,
+    "end": 3.2
+  },
+  {
+    "id": "w9",
+    "text": "API",
+    "start": 3.2,
+    "end": 3.84
+  },
+  {
+    "id": "w10",
+    "text": "on",
+    "start": 3.84,
+    "end": 4
+  },
+  {
+    "id": "w11",
+    "text": "Posker",
+    "start": 4,
+    "end": 4.64
+  },
+  {
+    "id": "w12",
+    "text": "SQL,",
+    "start": 4.88,
+    "end": 5.76
+  },
+  {
+    "id": "w13",
+    "text": "an",
+    "start": 5.92,
+    "end": 6.16
+  },
+  {
+    "id": "w14",
+    "text": "offline",
+    "start": 6.16,
+    "end": 6.64
+  },
+  {
+    "id": "w15",
+    "text": "first",
+    "start": 6.72,
+    "end": 6.88
+  },
+  {
+    "id": "w16",
+    "text": "field",
+    "start": 7.2,
+    "end": 7.6
+  },
+  {
+    "id": "w17",
+    "text": "app,",
+    "start": 7.6,
+    "end": 8.08
+  },
+  {
+    "id": "w18",
+    "text": "and",
+    "start": 8.08,
+    "end": 8.4
+  },
+  {
+    "id": "w19",
+    "text": "seals",
+    "start": 8.4,
+    "end": 8.8
+  },
+  {
+    "id": "w20",
+    "text": "that",
+    "start": 8.96,
+    "end": 9.12
+  },
+  {
+    "id": "w21",
+    "text": "anyone",
+    "start": 9.12,
+    "end": 9.52
+  },
+  {
+    "id": "w22",
+    "text": "can",
+    "start": 9.52,
+    "end": 9.76
+  },
+  {
+    "id": "w23",
+    "text": "verify",
+    "start": 9.76,
+    "end": 10.4
+  },
+  {
+    "id": "w24",
+    "text": "anywhere.",
+    "start": 10.4,
+    "end": 10.96
+  }
+]

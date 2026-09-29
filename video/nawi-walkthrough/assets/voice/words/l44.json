@@ -1,0 +1,62 @@
+[
+  {
+    "id": "w0",
+    "text": "He",
+    "start": 0,
+    "end": 0.24
+  },
+  {
+    "id": "w1",
+    "text": "just",
+    "start": 0.24,
+    "end": 0.48
+  },
+  {
+    "id": "w2",
+    "text": "needs",
+    "start": 0.48,
+    "end": 0.72
+  },
+  {
+    "id": "w3",
+    "text": "to",
+    "start": 0.72,
+    "end": 0.88
+  },
+  {
+    "id": "w4",
+    "text": "know",
+    "start": 0.88,
+    "end": 1.12
+  },
+  {
+    "id": "w5",
+    "text": "that",
+    "start": 1.12,
+    "end": 1.28
+  },
+  {
+    "id": "w6",
+    "text": "the",
+    "start": 1.28,
+    "end": 1.44
+  },
+  {
+    "id": "w7",
+    "text": "scale",
+    "start": 1.44,
+    "end": 1.84
+  },
+  {
+    "id": "w8",
+    "text": "is",
+    "start": 1.84,
+    "end": 2.08
+  },
+  {
+    "id": "w9",
+    "text": "honest.",
+    "start": 2.08,
+    "end": 2.56
+  }
+]

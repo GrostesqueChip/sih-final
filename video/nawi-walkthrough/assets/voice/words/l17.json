@@ -1,0 +1,128 @@
+[
+  {
+    "id": "w0",
+    "text": "Now",
+    "start": 0,
+    "end": 0.32
+  },
+  {
+    "id": "w1",
+    "text": "it's",
+    "start": 0.32,
+    "end": 0.64
+  },
+  {
+    "id": "w2",
+    "text": "time",
+    "start": 0.64,
+    "end": 0.88
+  },
+  {
+    "id": "w3",
+    "text": "for",
+    "start": 0.88,
+    "end": 1.04
+  },
+  {
+    "id": "w4",
+    "text": "this",
+    "start": 1.04,
+    "end": 1.2
+  },
+  {
+    "id": "w5",
+    "text": "year's",
+    "start": 1.2,
+    "end": 1.6
+  },
+  {
+    "id": "w6",
+    "text": "reverification.",
+    "start": 1.6,
+    "end": 3.04
+  },
+  {
+    "id": "w7",
+    "text": "The",
+    "start": 3.04,
+    "end": 3.28
+  },
+  {
+    "id": "w8",
+    "text": "standard",
+    "start": 3.28,
+    "end": 3.84
+  },
+  {
+    "id": "w9",
+    "text": "demands",
+    "start": 3.84,
+    "end": 4.32
+  },
+  {
+    "id": "w10",
+    "text": "six",
+    "start": 4.32,
+    "end": 4.72
+  },
+  {
+    "id": "w11",
+    "text": "separate",
+    "start": 4.72,
+    "end": 5.12
+  },
+  {
+    "id": "w12",
+    "text": "tests,",
+    "start": 5.12,
+    "end": 6
+  },
+  {
+    "id": "w13",
+    "text": "weighing",
+    "start": 6,
+    "end": 6.64
+  },
+  {
+    "id": "w14",
+    "text": "performance,",
+    "start": 6.64,
+    "end": 7.36
+  },
+  {
+    "id": "w15",
+    "text": "repeatability,",
+    "start": 7.36,
+    "end": 8.48
+  },
+  {
+    "id": "w16",
+    "text": "eccentricity,",
+    "start": 8.48,
+    "end": 9.6
+  },
+  {
+    "id": "w17",
+    "text": "temperature,",
+    "start": 9.6,
+    "end": 10.32
+  },
+  {
+    "id": "w18",
+    "text": "stability,",
+    "start": 10.32,
+    "end": 10.88
+  },
+  {
+    "id": "w19",
+    "text": "and",
+    "start": 10.88,
+    "end": 11.04
+  },
+  {
+    "id": "w20",
+    "text": "creep.",
+    "start": 11.04,
+    "end": 11.6
+  }
+]

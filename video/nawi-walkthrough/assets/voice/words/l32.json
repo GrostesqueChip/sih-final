@@ -1,0 +1,122 @@
+[
+  {
+    "id": "w0",
+    "text": "Gerprit",
+    "start": 0,
+    "end": 0.64
+  },
+  {
+    "id": "w1",
+    "text": "sees",
+    "start": 0.8,
+    "end": 1.04
+  },
+  {
+    "id": "w2",
+    "text": "the",
+    "start": 1.04,
+    "end": 1.12
+  },
+  {
+    "id": "w3",
+    "text": "QR",
+    "start": 1.12,
+    "end": 1.6
+  },
+  {
+    "id": "w4",
+    "text": "code",
+    "start": 1.6,
+    "end": 1.84
+  },
+  {
+    "id": "w5",
+    "text": "on",
+    "start": 1.84,
+    "end": 2
+  },
+  {
+    "id": "w6",
+    "text": "the",
+    "start": 2,
+    "end": 2.08
+  },
+  {
+    "id": "w7",
+    "text": "scales",
+    "start": 2.08,
+    "end": 2.56
+  },
+  {
+    "id": "w8",
+    "text": "verification",
+    "start": 2.72,
+    "end": 3.44
+  },
+  {
+    "id": "w9",
+    "text": "sticker.",
+    "start": 3.44,
+    "end": 4.16
+  },
+  {
+    "id": "w10",
+    "text": "He",
+    "start": 4.16,
+    "end": 4.32
+  },
+  {
+    "id": "w11",
+    "text": "scans",
+    "start": 4.32,
+    "end": 4.8
+  },
+  {
+    "id": "w12",
+    "text": "it",
+    "start": 4.8,
+    "end": 4.96
+  },
+  {
+    "id": "w13",
+    "text": "with",
+    "start": 4.96,
+    "end": 5.12
+  },
+  {
+    "id": "w14",
+    "text": "his",
+    "start": 5.12,
+    "end": 5.36
+  },
+  {
+    "id": "w15",
+    "text": "phone.",
+    "start": 5.36,
+    "end": 6.08
+  },
+  {
+    "id": "w16",
+    "text": "No",
+    "start": 6.08,
+    "end": 6.4
+  },
+  {
+    "id": "w17",
+    "text": "app,",
+    "start": 6.4,
+    "end": 7.04
+  },
+  {
+    "id": "w18",
+    "text": "no",
+    "start": 7.04,
+    "end": 7.28
+  },
+  {
+    "id": "w19",
+    "text": "login.",
+    "start": 7.28,
+    "end": 8
+  }
+]

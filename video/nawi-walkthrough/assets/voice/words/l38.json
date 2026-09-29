@@ -1,0 +1,98 @@
+[
+  {
+    "id": "w0",
+    "text": "Today,",
+    "start": 0,
+    "end": 0.48
+  },
+  {
+    "id": "w1",
+    "text": "this",
+    "start": 0.48,
+    "end": 0.72
+  },
+  {
+    "id": "w2",
+    "text": "demo",
+    "start": 0.72,
+    "end": 1.2
+  },
+  {
+    "id": "w3",
+    "text": "covers",
+    "start": 1.2,
+    "end": 1.6
+  },
+  {
+    "id": "w4",
+    "text": "eleven",
+    "start": 1.6,
+    "end": 1.84
+  },
+  {
+    "id": "w5",
+    "text": "districts",
+    "start": 1.92,
+    "end": 2.4
+  },
+  {
+    "id": "w6",
+    "text": "of",
+    "start": 2.4,
+    "end": 2.56
+  },
+  {
+    "id": "w7",
+    "text": "Punjab,",
+    "start": 2.56,
+    "end": 3.68
+  },
+  {
+    "id": "w8",
+    "text": "but",
+    "start": 3.68,
+    "end": 3.92
+  },
+  {
+    "id": "w9",
+    "text": "nothing",
+    "start": 3.92,
+    "end": 4.24
+  },
+  {
+    "id": "w10",
+    "text": "in",
+    "start": 4.24,
+    "end": 4.4
+  },
+  {
+    "id": "w11",
+    "text": "it",
+    "start": 4.4,
+    "end": 4.56
+  },
+  {
+    "id": "w12",
+    "text": "is",
+    "start": 4.56,
+    "end": 4.8
+  },
+  {
+    "id": "w13",
+    "text": "specific",
+    "start": 4.8,
+    "end": 5.2
+  },
+  {
+    "id": "w14",
+    "text": "to",
+    "start": 5.2,
+    "end": 5.44
+  },
+  {
+    "id": "w15",
+    "text": "Punjab.",
+    "start": 5.44,
+    "end": 6.24
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "w0",
+    "text": "One",
+    "start": 0,
+    "end": 0.4
+  },
+  {
+    "id": "w1",
+    "text": "signature",
+    "start": 0.4,
+    "end": 0.88
+  },
+  {
+    "id": "w2",
+    "text": "and",
+    "start": 0.96,
+    "end": 1.2
+  },
+  {
+    "id": "w3",
+    "text": "the",
+    "start": 1.2,
+    "end": 1.28
+  },
+  {
+    "id": "w4",
+    "text": "certificate",
+    "start": 1.28,
+    "end": 1.92
+  },
+  {
+    "id": "w5",
+    "text": "is",
+    "start": 1.92,
+    "end": 2.08
+  },
+  {
+    "id": "w6",
+    "text": "sealed",
+    "start": 2.08,
+    "end": 2.48
+  },
+  {
+    "id": "w7",
+    "text": "with",
+    "start": 2.48,
+    "end": 2.64
+  },
+  {
+    "id": "w8",
+    "text": "an",
+    "start": 2.64,
+    "end": 2.8
+  },
+  {
+    "id": "w9",
+    "text": "HMAC,",
+    "start": 2.8,
+    "end": 4.24
+  },
+  {
+    "id": "w10",
+    "text": "SHA",
+    "start": 4.24,
+    "end": 4.96
+  },
+  {
+    "id": "w11",
+    "text": "two",
+    "start": 5.12,
+    "end": 5.2
+  },
+  {
+    "id": "w12",
+    "text": "hundred",
+    "start": 5.28,
+    "end": 5.36
+  },
+  {
+    "id": "w13",
+    "text": "fifty",
+    "start": 5.52,
+    "end": 5.84
+  },
+  {
+    "id": "w14",
+    "text": "six",
+    "start": 5.84,
+    "end": 6.16
+  },
+  {
+    "id": "w15",
+    "text": "digital",
+    "start": 6.16,
+    "end": 6.48
+  },
+  {
+    "id": "w16",
+    "text": "seal.",
+    "start": 6.72,
+    "end": 7.44
+  },
+  {
+    "id": "w17",
+    "text": "From",
+    "start": 7.44,
+    "end": 7.76
+  },
+  {
+    "id": "w18",
+    "text": "this",
+    "start": 7.76,
+    "end": 8
+  },
+  {
+    "id": "w19",
+    "text": "moment",
+    "start": 8,
+    "end": 8.32
+  },
+  {
+    "id": "w20",
+    "text": "the",
+    "start": 8.4,
+    "end": 8.56
+  },
+  {
+    "id": "w21",
+    "text": "readings",
+    "start": 8.56,
+    "end": 9.04
+  },
+  {
+    "id": "w22",
+    "text": "are",
+    "start": 9.04,
+    "end": 9.2
+  },
+  {
+    "id": "w23",
+    "text": "locked.",
+    "start": 9.2,
+    "end": 9.68
+  }
+]

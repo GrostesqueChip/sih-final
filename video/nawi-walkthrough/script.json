@@ -1,0 +1,311 @@
+{
+  "voice": "am_michael",
+  "speed": 1.0,
+  "scenes": [
+    {
+      "id": "s01-open",
+      "lines": [
+        {
+          "id": "l01",
+          "say": "Bathinda, Punjab. Cotton season.",
+          "cap": "Bathinda, Punjab. Cotton season."
+        },
+        {
+          "id": "l02",
+          "say": "Gurpreet Singh has spent eight months growing this crop. Today, a whole year of his work comes down to one number: the one on the mandi scale.",
+          "cap": "Gurpreet Singh has spent eight months growing this crop. Today, a whole year of his work comes down to one number — the one on the mandi scale."
+        }
+      ]
+    },
+    {
+      "id": "s02-problem",
+      "lines": [
+        {
+          "id": "l03",
+          "say": "But who checked that scale?",
+          "cap": "But who checked that scale?"
+        },
+        {
+          "id": "l04",
+          "say": "If a load cell drifts by just one percent, a five hundred kilo load loses five kilos. On every weighing. For every farmer. All season long.",
+          "cap": "If a load cell drifts by just 1%, a 500 kg load loses 5 kg. On every weighing. For every farmer. All season long."
+        },
+        {
+          "id": "l05",
+          "say": "And nobody notices, because nobody can see.",
+          "cap": "And nobody notices — because nobody can see."
+        }
+      ]
+    },
+    {
+      "id": "s03-paper",
+      "lines": [
+        {
+          "id": "l06",
+          "say": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department. Every year.",
+          "cap": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department. Every year."
+        },
+        {
+          "id": "l07",
+          "say": "But today, verification often means a paper register, readings copied by hand, error limits worked out on a calculator, and a paper certificate that anyone with a printer can forge.",
+          "cap": "But today, verification often means a paper register, readings copied by hand, error limits worked out on a calculator, and a paper certificate anyone with a printer can forge."
+        },
+        {
+          "id": "l08",
+          "say": "And for Gurpreet, there is no way to check any of it.",
+          "cap": "And for Gurpreet, there is no way to check any of it."
+        }
+      ]
+    },
+    {
+      "id": "s04-intro",
+      "lines": [
+        {
+          "id": "l09",
+          "say": "This is Nawi Report Pro.",
+          "cap": "This is NAWI-ReportPro."
+        },
+        {
+          "id": "l10",
+          "say": "A complete digital system for verifying and certifying non-automatic weighing instruments, built on O I M L, R seventy-six, and the Legal Metrology Act of two thousand nine.",
+          "cap": "A complete digital system for verifying and certifying non-automatic weighing instruments — built on OIML R 76 and the Legal Metrology Act, 2009."
+        },
+        {
+          "id": "l11",
+          "say": "It follows a scale from the officer's very first reading, all the way to a sealed certificate that any citizen can check on their phone.",
+          "cap": "It follows a scale from the officer's very first reading, all the way to a sealed certificate any citizen can check on their phone."
+        }
+      ]
+    },
+    {
+      "id": "s05-dashboard",
+      "lines": [
+        {
+          "id": "l12",
+          "say": "Meet Inspector Vikramaditya Sharma. One click, and he's in.",
+          "cap": "Meet Inspector Vikramaditya Sharma. One click, and he's in."
+        },
+        {
+          "id": "l13",
+          "say": "His dashboard shows the whole jurisdiction at a glance. Which scales hold a valid stamp, which are due, expired, or rejected, and the fees collected, district by district.",
+          "cap": "His dashboard shows the whole jurisdiction at a glance: which scales hold a valid stamp, which are due, expired or rejected, and the fees collected — district by district."
+        }
+      ]
+    },
+    {
+      "id": "s06-registry",
+      "lines": [
+        {
+          "id": "l14",
+          "say": "Every weighing instrument in trade lives in one registry. Mandi weighbridges, ration shop scales, milk collection scales, even jewellers' balances.",
+          "cap": "Every weighing instrument in trade lives in one registry: mandi weighbridges, ration-shop scales, milk-collection scales, even jewellers' balances."
+        },
+        {
+          "id": "l15",
+          "say": "Here is Gurpreet's mandi scale. And its history tells a story. Last December, this very scale failed verification. It was pulled from trade, repaired, and passed again in February.",
+          "cap": "Here is Gurpreet's mandi scale — and its history tells a story. Last December, this very scale failed verification. It was pulled from trade, repaired, and passed again in February."
+        }
+      ]
+    },
+    {
+      "id": "s07-register",
+      "lines": [
+        {
+          "id": "l16",
+          "say": "Registering a new scale takes a minute. As the officer types, the app checks the specifications against the standard, live, and previews the maximum permissible error at every load.",
+          "cap": "Registering a new scale takes a minute. As the officer types, the app checks the specifications against OIML R 76 — live — and previews the maximum permissible error at every load."
+        }
+      ]
+    },
+    {
+      "id": "s08-session",
+      "lines": [
+        {
+          "id": "l17",
+          "say": "Now it's time for this year's re-verification. The standard demands six separate tests. Weighing performance, repeatability, eccentricity, temperature, stability, and creep.",
+          "cap": "Now it's time for this year's re-verification. OIML R 76 demands six separate tests: weighing performance, repeatability, eccentricity, temperature, stability and creep."
+        },
+        {
+          "id": "l18",
+          "say": "Five are already done. One remains.",
+          "cap": "Five are already done. One remains."
+        }
+      ]
+    },
+    {
+      "id": "s09-capture",
+      "lines": [
+        {
+          "id": "l19",
+          "say": "The scale's digital indicator streams straight into the app. The inspector presses auto-capture.",
+          "cap": "The scale's digital indicator streams straight into the app. The inspector presses auto-capture."
+        },
+        {
+          "id": "l20",
+          "say": "For each test point, the app loads the weight, waits until the reading is truly stable, and only then records it. The error, the legal limit, and the verdict are calculated instantly.",
+          "cap": "For each test point, the app loads the weight, waits until the reading is truly stable, and only then records it. The error, the legal limit and the verdict are calculated instantly."
+        },
+        {
+          "id": "l21",
+          "say": "No handwritten numbers. No calculator. No room for a mistake, or a favour.",
+          "cap": "No handwritten numbers. No calculator. No room for a mistake — or a favour."
+        }
+      ]
+    },
+    {
+      "id": "s10-seal",
+      "lines": [
+        {
+          "id": "l22",
+          "say": "All six tests are complete. He finalises the session.",
+          "cap": "All six tests are complete. He finalises the session."
+        },
+        {
+          "id": "l23",
+          "say": "The verdict is computed by the engine, from the readings themselves. Nobody can override it.",
+          "cap": "The verdict is computed by the engine, from the readings themselves. Nobody can override it."
+        },
+        {
+          "id": "l24",
+          "say": "One signature, and the certificate is sealed with an H MAC, S H A two fifty-six digital seal. From this moment, the readings are locked.",
+          "cap": "One signature, and the certificate is sealed with an HMAC-SHA256 digital seal. From this moment, the readings are locked."
+        }
+      ]
+    },
+    {
+      "id": "s11-pdf",
+      "lines": [
+        {
+          "id": "l25",
+          "say": "The official certificate is generated in seconds.",
+          "cap": "The official certificate is generated in seconds."
+        },
+        {
+          "id": "l26",
+          "say": "Bilingual, in Hindi and English. The State Emblem. Every test and its result. The measurement uncertainty. The officer's signature, the stamp, a QR code, and the digital seal.",
+          "cap": "Bilingual, in Hindi and English. The State Emblem. Every test and its result. The measurement uncertainty. The officer's signature, the stamp, a QR code and the digital seal."
+        },
+        {
+          "id": "l27",
+          "say": "Behind it, a three page technical data sheet records every single reading, and plots the error curve against the legal limits.",
+          "cap": "Behind it, a three-page technical data sheet records every single reading and plots the error curve against the legal limits."
+        }
+      ]
+    },
+    {
+      "id": "s12-reject",
+      "lines": [
+        {
+          "id": "l28",
+          "say": "But what happens when a scale is wrong?",
+          "cap": "But what happens when a scale is wrong?"
+        },
+        {
+          "id": "l29",
+          "say": "Here, we simulate a faulty load cell on a neighbourhood grocery store scale. As the load rises, the readings creep upward. The moment an error crosses the legal limit, it turns red.",
+          "cap": "Here, we simulate a faulty load cell on a neighbourhood grocery-store scale. As the load rises, the readings creep upward. The moment an error crosses the legal limit, it turns red."
+        },
+        {
+          "id": "l30",
+          "say": "A failed scale receives a Certificate of Rejection. It cannot be used in trade until it is repaired and verified again.",
+          "cap": "A failed scale receives a Certificate of Rejection. It cannot be used in trade until it is repaired and verified again."
+        }
+      ]
+    },
+    {
+      "id": "s13-verify",
+      "lines": [
+        {
+          "id": "l31",
+          "say": "Now, back to the mandi.",
+          "cap": "Now, back to the mandi."
+        },
+        {
+          "id": "l32",
+          "say": "Gurpreet sees the QR code on the scale's verification sticker. He scans it with his phone. No app. No login.",
+          "cap": "Gurpreet sees the QR code on the scale's verification sticker. He scans it with his phone. No app. No login."
+        },
+        {
+          "id": "l33",
+          "say": "The portal recomputes the digital seal, and answers in one word. Valid. Who owns this scale, which officer verified it, and until when.",
+          "cap": "The portal recomputes the digital seal and answers in one word: VALID. Who owns this scale, which officer verified it, and until when."
+        },
+        {
+          "id": "l34",
+          "say": "If a scale has been rejected, or a certificate has been tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, nineteen fifteen.",
+          "cap": "If a scale has been rejected, or a certificate tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, 1915."
+        },
+        {
+          "id": "l35",
+          "say": "For the first time, the person on the other side of the scale can see the truth.",
+          "cap": "For the first time, the person on the other side of the scale can see the truth."
+        }
+      ]
+    },
+    {
+      "id": "s14-trust",
+      "lines": [
+        {
+          "id": "l36",
+          "say": "Every action, every reading, every edit, every seal, goes into an append-only audit trail.",
+          "cap": "Every action — every reading, every edit, every seal — goes into an append-only audit trail."
+        },
+        {
+          "id": "l37",
+          "say": "The whole interface works in Hindi and English, follows government accessibility guidelines, and keeps working offline in the field, syncing when the network returns.",
+          "cap": "The whole interface works in Hindi and English, follows GIGW accessibility guidelines, and keeps working offline in the field — syncing when the network returns."
+        }
+      ]
+    },
+    {
+      "id": "s15-scale",
+      "lines": [
+        {
+          "id": "l38",
+          "say": "Today, this demo covers eleven districts of Punjab. But nothing in it is specific to Punjab.",
+          "cap": "Today, this demo covers 11 districts of Punjab. But nothing in it is specific to Punjab."
+        },
+        {
+          "id": "l39",
+          "say": "Imagine every state's Legal Metrology department on one platform. Every mandi weighbridge. Every ration shop scale. Every milk collection centre. Every jeweller's balance.",
+          "cap": "Imagine every state's Legal Metrology department on one platform. Every mandi weighbridge. Every ration-shop scale. Every milk-collection centre. Every jeweller's balance."
+        },
+        {
+          "id": "l40",
+          "say": "Real weighing indicators, plugged straight in. Certificates that could flow into Digi Locker. A scale's stamping status, shown right inside e-Nam mandis. And live compliance dashboards for every district in India.",
+          "cap": "Real weighing indicators, plugged straight in. Certificates that could flow into DigiLocker. A scale's stamping status, shown right inside e-NAM mandis. Live compliance dashboards for every district in India."
+        },
+        {
+          "id": "l41",
+          "say": "The foundation is already built for it. A stateless API on PostgreSQL, an offline-first field app, and seals that anyone can verify, anywhere.",
+          "cap": "The foundation is already built for it: a stateless API on PostgreSQL, an offline-first field app, and seals anyone can verify, anywhere."
+        },
+        {
+          "id": "l42",
+          "say": "Officers spend their time in the field, not on paperwork. Forged certificates stop working. And every citizen can check, in seconds, whether the scale in front of them is honest.",
+          "cap": "Officers spend their time in the field, not on paperwork. Forged certificates stop working. And every citizen can check, in seconds, whether the scale in front of them is honest."
+        }
+      ]
+    },
+    {
+      "id": "s16-close",
+      "lines": [
+        {
+          "id": "l43",
+          "say": "Gurpreet will never read the standard. He doesn't need to.",
+          "cap": "Gurpreet will never read OIML R 76. He doesn't need to."
+        },
+        {
+          "id": "l44",
+          "say": "He just needs to know that the scale is honest.",
+          "cap": "He just needs to know that the scale is honest."
+        },
+        {
+          "id": "l45",
+          "say": "Nawi Report Pro. Every scale, verified. Every weighing, trusted.",
+          "cap": "NAWI-ReportPro. Every scale, verified. Every weighing, trusted."
+        }
+      ]
+    }
+  ]
+}

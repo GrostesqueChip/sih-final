@@ -1,0 +1,26 @@
+[
+  {
+    "id": "w0",
+    "text": "Bathinda",
+    "start": 0,
+    "end": 0.56
+  },
+  {
+    "id": "w1",
+    "text": "Punjab",
+    "start": 0.64,
+    "end": 1.36
+  },
+  {
+    "id": "w2",
+    "text": "cotton",
+    "start": 1.52,
+    "end": 1.92
+  },
+  {
+    "id": "w3",
+    "text": "season.",
+    "start": 1.92,
+    "end": 2.48
+  }
+]

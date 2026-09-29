@@ -1,0 +1,44 @@
+[
+  {
+    "id": "w0",
+    "text": "The",
+    "start": 0,
+    "end": 0.24
+  },
+  {
+    "id": "w1",
+    "text": "official",
+    "start": 0.24,
+    "end": 0.64
+  },
+  {
+    "id": "w2",
+    "text": "certificate",
+    "start": 0.64,
+    "end": 1.36
+  },
+  {
+    "id": "w3",
+    "text": "is",
+    "start": 1.36,
+    "end": 1.68
+  },
+  {
+    "id": "w4",
+    "text": "generated",
+    "start": 1.68,
+    "end": 2.24
+  },
+  {
+    "id": "w5",
+    "text": "in",
+    "start": 2.24,
+    "end": 2.48
+  },
+  {
+    "id": "w6",
+    "text": "seconds.",
+    "start": 2.48,
+    "end": 3.04
+  }
+]

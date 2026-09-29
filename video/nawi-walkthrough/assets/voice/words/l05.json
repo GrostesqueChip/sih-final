@@ -1,0 +1,44 @@
+[
+  {
+    "id": "w0",
+    "text": "And",
+    "start": 0,
+    "end": 0.32
+  },
+  {
+    "id": "w1",
+    "text": "nobody",
+    "start": 0.32,
+    "end": 0.72
+  },
+  {
+    "id": "w2",
+    "text": "notices",
+    "start": 0.72,
+    "end": 1.28
+  },
+  {
+    "id": "w3",
+    "text": "because",
+    "start": 1.6,
+    "end": 1.92
+  },
+  {
+    "id": "w4",
+    "text": "nobody",
+    "start": 1.92,
+    "end": 2.32
+  },
+  {
+    "id": "w5",
+    "text": "can",
+    "start": 2.32,
+    "end": 2.56
+  },
+  {
+    "id": "w6",
+    "text": "see.",
+    "start": 2.56,
+    "end": 2.96
+  }
+]
