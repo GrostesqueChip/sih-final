@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-surface-50 text-slate-800 font-sans;
+  }
+
+  /* Cross-browser scrollbar support (Firefox) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+}
+
+/* Grid children may shrink below their content width, so long unbroken text
+   (serials, certificate numbers) never forces horizontal page scroll on phones. */
+.grid > * {
+  min-width: 0;
+}
+/* 'clip' (not 'hidden') so the body never becomes a scroll container and the
+   sticky header / sidebar keep working. */
+body {
+  overflow-x: clip;
+}
+
+/* Custom scrollbars for tables and panels (WebKit) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Page transition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeInUp 0.2s ease-out forwards;
+}
+
+/* ========================================================================= */
+/* GIGW 3.0 High-Contrast Accessibility Theme                                */
+/* ========================================================================= */
+html.high-contrast {
+}
+
+html.high-contrast img,
+html.high-contrast svg,
+html.high-contrast canvas,
+html.high-contrast video {
+  filter: none !important;
+}
+
+html.high-contrast body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+html.high-contrast header,
+html.high-contrast nav,
+html.high-contrast aside,
+html.high-contrast main,
+html.high-contrast footer,
+html.high-contrast .bg-white,
+html.high-contrast .bg-surface-50,
+html.high-contrast .bg-surface-100 {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+  border-color: #ffff00 !important;
+}
+
+html.high-contrast p,
+html.high-contrast span,
+html.high-contrast h1,
+html.high-contrast h2,
+html.high-contrast h3,
+html.high-contrast h4,
+html.high-contrast td,
+html.high-contrast th,
+html.high-contrast label {
+  color: #ffffff !important;
+}
+
+html.high-contrast a,
+html.high-contrast button {
+  border-color: #ffffff !important;
+}
+
+html.high-contrast .text-primary-700,
+html.high-contrast .text-primary-600,
+html.high-contrast .text-blue-600 {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .bg-primary-600,
+html.high-contrast .bg-primary-700,
+html.high-contrast [class*="bg-[#1e3a5f]"] {
+  background-color: #000000 !important;
+  border: 2px solid #ffff00 !important;
+  color: #ffff00 !important;
+}
+
+/* ========================================================================= */
+/* Official Government Guilloche & Security Pattern                          */
+/* ========================================================================= */
+.guilloche-border {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(30, 58, 95, 0.04),
+    rgba(30, 58, 95, 0.04) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  border: 2px double #1e3a5f;
+}
+
+/* Clean Government Print Certificate Rules */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "nawi-reportpro",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "demo": "concurrently -n api,web -c blue,green \"npm run demo --workspace=server\" \"npm run dev --workspace=client\"",
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
+    "setup:postgres": "cd server && npx prisma migrate dev --name init && npx prisma db seed",
+    "build": "npm run build --workspace=client",
+    "start": "concurrently \"npm start --workspace=server\" \"npm run preview --workspace=client\"",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.11",
+    "concurrently": "^8.2.0",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.11"
+  },
+  "description": "NAWI-ReportPro \u2014 digital OIML R 76 verification and certification of non-automatic weighing instruments (Department of Legal Metrology)."
+}

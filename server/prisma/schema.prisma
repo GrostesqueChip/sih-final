@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  INSPECTOR
+  VIEWER
+}
+
+enum AccuracyClass {
+  CLASS_I
+  CLASS_II
+  CLASS_III
+  CLASS_IIII
+}
+
+enum InstrumentType {
+  ELECTRONIC_SCALE
+  PLATFORM_SCALE
+  WEIGHBRIDGE
+  LABORATORY_BALANCE
+}
+
+enum TestStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum TestType {
+  WEIGHING_PERFORMANCE
+  REPEATABILITY
+  ECCENTRICITY
+  TEMPERATURE
+  STABILITY
+  TIME_DEPENDENCE
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  name         String
+  role         Role          @default(INSPECTOR)
+  designation  String?
+  district     String?
+  phone        String?
+  lastLoginAt  DateTime?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  testSessions TestSession[]
+  auditLogs    AuditLog[]
+}
+
+model Instrument {
+  id                   String         @id @default(uuid())
+  name                 String
+  type                 InstrumentType
+  manufacturer         String
+  model                String
+  serialNumber         String         @unique
+  accuracyClass        AccuracyClass
+  maxCapacity          Float
+  minCapacity          Float
+  verificationInterval Float          // e value
+  actualInterval       Float          // d value
+  unit                 String         @default("kg")
+  ranges             Json?
+  location             String
+  district             String?
+  ownerName            String?
+  photo                String?
+  isActive             Boolean        @default(true)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  testSessions         TestSession[]
+}
+
+model TestSession {
+  id            String       @id @default(uuid())
+  certificateNo String       @unique
+  instrumentId  String
+  instrument    Instrument   @relation(fields: [instrumentId], references: [id])
+  conductedById String
+  conductedBy   User         @relation(fields: [conductedById], references: [id])
+  status        TestStatus   @default(PENDING)
+  overallResult String?      // PASS or FAIL
+  temperature   Float?       // ambient temperature during test
+  humidity      Float?       // ambient humidity
+  atmosphericPressure Float?
+  verificationType String      @default("PERIODIC") // INITIAL | PERIODIC | INSPECTION
+  standardWeightsUsed String?
+  feeAmount        Float?
+  remarks          String?
+  verificationSeal String?
+  sealedAt         DateTime?
+  startedAt        DateTime     @default(now())
+  completedAt      DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  testResults      TestResult[]
+}
+
+model TestResult {
+  id            String      @id @default(uuid())
+  testSessionId String
+  testSession   TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+  testType      TestType
+  status        TestStatus  @default(PENDING)
+  result        String?     // PASS or FAIL
+  data          Json        // raw measurement data
+  calculations  Json?       // calculated errors, MPE comparisons
+  remarks       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([testSessionId, testType])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String   // LOGIN, CREATE_INSTRUMENT, ENTER_TEST_DATA, MODIFY_TEST, GENERATE_REPORT, etc.
+  entityType String?  // Instrument, TestSession, TestResult, User
+  entityId   String?
+  details    String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}

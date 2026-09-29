@@ -1,0 +1,63 @@
+{
+  "name": "NAWI-ReportPro — Legal Metrology Verification System",
+  "short_name": "NAWI-ReportPro",
+  "description": "Field-ready Non-Automatic Weighing Instrument verification and test report management system conforming to OIML R-76 (Edition 2006/E) and Legal Metrology Act, 2009.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a5f",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": [
+    "government",
+    "productivity",
+    "business",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%231e3a5f'/%3E%3Ccircle cx='96' cy='96' r='64' fill='none' stroke='%23FF9933' stroke-width='8'/%3E%3Ccircle cx='96' cy='96' r='14' fill='%23138808'/%3E%3Ctext x='96' y='108' font-size='38' text-anchor='middle' fill='%23ffffff' font-family='Arial, sans-serif' font-weight='bold'%3EN%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231e3a5f'/%3E%3Ccircle cx='256' cy='256' r='180' fill='none' stroke='%23FF9933' stroke-width='20'/%3E%3Ccircle cx='256' cy='256' r='36' fill='%23138808'/%3E%3Ctext x='256' y='288' font-size='100' text-anchor='middle' fill='%23ffffff' font-family='Arial, sans-serif' font-weight='bold'%3EN%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Test Session",
+      "short_name": "New Test",
+      "description": "Start an offline or online NAWI verification test session",
+      "url": "/tests/new",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='16' fill='%231e3a5f'/%3E%3Cpath d='M48 24v48M24 48h48' stroke='%23FF9933' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Instrument Directory",
+      "short_name": "Instruments",
+      "description": "View and manage verified weighing instruments",
+      "url": "/instruments",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='16' fill='%231e3a5f'/%3E%3Ccircle cx='48' cy='48' r='28' fill='none' stroke='%23138808' stroke-width='8'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
