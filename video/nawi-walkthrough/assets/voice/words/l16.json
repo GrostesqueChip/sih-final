@@ -1,176 +1,152 @@
 [
-  {
-    "id": "w0",
-    "text": "Registering",
-    "start": 0,
-    "end": 0.72
-  },
-  {
-    "id": "w1",
-    "text": "a",
-    "start": 0.72,
-    "end": 0.8
-  },
-  {
-    "id": "w2",
-    "text": "new",
-    "start": 0.8,
-    "end": 1.04
-  },
-  {
-    "id": "w3",
-    "text": "scale",
-    "start": 1.04,
-    "end": 1.52
-  },
-  {
-    "id": "w4",
-    "text": "takes",
-    "start": 1.52,
-    "end": 1.84
-  },
-  {
-    "id": "w5",
-    "text": "a",
-    "start": 1.84,
-    "end": 2
-  },
-  {
-    "id": "w6",
-    "text": "minute.",
-    "start": 2,
-    "end": 2.56
-  },
-  {
-    "id": "w7",
-    "text": "As",
-    "start": 2.56,
-    "end": 2.8
-  },
-  {
-    "id": "w8",
-    "text": "the",
-    "start": 2.8,
-    "end": 3.04
-  },
-  {
-    "id": "w9",
-    "text": "officer",
-    "start": 3.04,
-    "end": 3.68
-  },
-  {
-    "id": "w10",
-    "text": "types,",
-    "start": 3.68,
-    "end": 4.32
-  },
-  {
-    "id": "w11",
-    "text": "the",
-    "start": 4.32,
-    "end": 4.56
-  },
-  {
-    "id": "w12",
-    "text": "app",
-    "start": 4.56,
-    "end": 4.88
-  },
-  {
-    "id": "w13",
-    "text": "checks",
-    "start": 4.88,
-    "end": 5.28
-  },
-  {
-    "id": "w14",
-    "text": "the",
-    "start": 5.28,
-    "end": 5.44
-  },
-  {
-    "id": "w15",
-    "text": "specifications",
-    "start": 5.44,
-    "end": 6.24
-  },
-  {
-    "id": "w16",
-    "text": "against",
-    "start": 6.24,
-    "end": 6.64
-  },
-  {
-    "id": "w17",
-    "text": "the",
-    "start": 6.64,
-    "end": 6.88
-  },
-  {
-    "id": "w18",
-    "text": "standard",
-    "start": 6.88,
-    "end": 7.28
-  },
-  {
-    "id": "w19",
-    "text": "live",
-    "start": 7.52,
-    "end": 8
-  },
-  {
-    "id": "w20",
-    "text": "and",
-    "start": 8.24,
-    "end": 8.48
-  },
-  {
-    "id": "w21",
-    "text": "previews",
-    "start": 8.48,
-    "end": 9.12
-  },
-  {
-    "id": "w22",
-    "text": "the",
-    "start": 9.12,
-    "end": 9.28
-  },
-  {
-    "id": "w23",
-    "text": "maximum",
-    "start": 9.28,
-    "end": 9.84
-  },
-  {
-    "id": "w24",
-    "text": "permissible",
-    "start": 9.84,
-    "end": 10.48
-  },
-  {
-    "id": "w25",
-    "text": "error",
-    "start": 10.48,
-    "end": 10.88
-  },
-  {
-    "id": "w26",
-    "text": "at",
-    "start": 10.88,
-    "end": 11.12
-  },
-  {
-    "id": "w27",
-    "text": "every",
-    "start": 11.12,
-    "end": 11.44
-  },
-  {
-    "id": "w28",
-    "text": "load.",
-    "start": 11.44,
-    "end": 11.92
-  }
+ {
+  "text": "Registering",
+  "start": 0.088,
+  "end": 0.569
+ },
+ {
+  "text": "a",
+  "start": 0.608,
+  "end": 0.685
+ },
+ {
+  "text": "new",
+  "start": 0.685,
+  "end": 0.887
+ },
+ {
+  "text": "scale",
+  "start": 0.887,
+  "end": 1.213
+ },
+ {
+  "text": "takes",
+  "start": 1.252,
+  "end": 1.531
+ },
+ {
+  "text": "a",
+  "start": 1.579,
+  "end": 1.646
+ },
+ {
+  "text": "minute",
+  "start": 1.646,
+  "end": 1.963
+ },
+ {
+  "text": "As",
+  "start": 2.644,
+  "end": 2.817
+ },
+ {
+  "text": "the",
+  "start": 2.817,
+  "end": 2.942
+ },
+ {
+  "text": "officer",
+  "start": 3.0,
+  "end": 3.375
+ },
+ {
+  "text": "types",
+  "start": 3.375,
+  "end": 3.721
+ },
+ {
+  "text": "the",
+  "start": 3.952,
+  "end": 4.067
+ },
+ {
+  "text": "app",
+  "start": 4.067,
+  "end": 4.25
+ },
+ {
+  "text": "checks",
+  "start": 4.279,
+  "end": 4.49
+ },
+ {
+  "text": "the",
+  "start": 4.49,
+  "end": 4.596
+ },
+ {
+  "text": "specifications",
+  "start": 4.596,
+  "end": 5.375
+ },
+ {
+  "text": "against",
+  "start": 5.442,
+  "end": 5.769
+ },
+ {
+  "text": "O.I.M.L.",
+  "start": 5.827,
+  "end": 6.221
+ },
+ {
+  "text": "R",
+  "start": 6.269,
+  "end": 6.442
+ },
+ {
+  "text": "seventy-six",
+  "start": 6.442,
+  "end": 7.077
+ },
+ {
+  "text": "live",
+  "start": 7.24,
+  "end": 7.49
+ },
+ {
+  "text": "and",
+  "start": 7.644,
+  "end": 7.808
+ },
+ {
+  "text": "previews",
+  "start": 7.808,
+  "end": 8.231
+ },
+ {
+  "text": "the",
+  "start": 8.231,
+  "end": 8.337
+ },
+ {
+  "text": "maximum",
+  "start": 8.337,
+  "end": 8.769
+ },
+ {
+  "text": "permissible",
+  "start": 8.779,
+  "end": 9.269
+ },
+ {
+  "text": "error",
+  "start": 9.327,
+  "end": 9.538
+ },
+ {
+  "text": "at",
+  "start": 9.596,
+  "end": 9.769
+ },
+ {
+  "text": "every",
+  "start": 9.817,
+  "end": 10.087
+ },
+ {
+  "text": "load",
+  "start": 10.115,
+  "end": 10.365
+ }
 ]

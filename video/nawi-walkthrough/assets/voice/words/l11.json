@@ -1,152 +1,127 @@
 [
-  {
-    "id": "w0",
-    "text": "It",
-    "start": 0,
-    "end": 0.24
-  },
-  {
-    "id": "w1",
-    "text": "follows",
-    "start": 0.24,
-    "end": 0.64
-  },
-  {
-    "id": "w2",
-    "text": "a",
-    "start": 0.64,
-    "end": 0.8
-  },
-  {
-    "id": "w3",
-    "text": "scale",
-    "start": 0.8,
-    "end": 1.2
-  },
-  {
-    "id": "w4",
-    "text": "from",
-    "start": 1.2,
-    "end": 1.36
-  },
-  {
-    "id": "w5",
-    "text": "the",
-    "start": 1.36,
-    "end": 1.6
-  },
-  {
-    "id": "w6",
-    "text": "officer's",
-    "start": 1.6,
-    "end": 2.32
-  },
-  {
-    "id": "w7",
-    "text": "very",
-    "start": 2.32,
-    "end": 2.64
-  },
-  {
-    "id": "w8",
-    "text": "first",
-    "start": 2.64,
-    "end": 2.96
-  },
-  {
-    "id": "w9",
-    "text": "reading,",
-    "start": 2.96,
-    "end": 3.92
-  },
-  {
-    "id": "w10",
-    "text": "all",
-    "start": 3.92,
-    "end": 4.16
-  },
-  {
-    "id": "w11",
-    "text": "the",
-    "start": 4.16,
-    "end": 4.4
-  },
-  {
-    "id": "w12",
-    "text": "way",
-    "start": 4.4,
-    "end": 4.64
-  },
-  {
-    "id": "w13",
-    "text": "to",
-    "start": 4.64,
-    "end": 4.8
-  },
-  {
-    "id": "w14",
-    "text": "a",
-    "start": 4.8,
-    "end": 4.96
-  },
-  {
-    "id": "w15",
-    "text": "sealed",
-    "start": 4.96,
-    "end": 5.44
-  },
-  {
-    "id": "w16",
-    "text": "certificate",
-    "start": 5.44,
-    "end": 6.08
-  },
-  {
-    "id": "w17",
-    "text": "that",
-    "start": 6.08,
-    "end": 6.32
-  },
-  {
-    "id": "w18",
-    "text": "any",
-    "start": 6.32,
-    "end": 6.64
-  },
-  {
-    "id": "w19",
-    "text": "citizen",
-    "start": 6.72,
-    "end": 7.2
-  },
-  {
-    "id": "w20",
-    "text": "can",
-    "start": 7.2,
-    "end": 7.36
-  },
-  {
-    "id": "w21",
-    "text": "check",
-    "start": 7.36,
-    "end": 7.76
-  },
-  {
-    "id": "w22",
-    "text": "on",
-    "start": 7.76,
-    "end": 7.92
-  },
-  {
-    "id": "w23",
-    "text": "their",
-    "start": 7.92,
-    "end": 8.08
-  },
-  {
-    "id": "w24",
-    "text": "phone.",
-    "start": 8.08,
-    "end": 8.56
-  }
+ {
+  "text": "It",
+  "start": 0.088,
+  "end": 0.185
+ },
+ {
+  "text": "follows",
+  "start": 0.194,
+  "end": 0.598
+ },
+ {
+  "text": "a",
+  "start": 0.656,
+  "end": 0.723
+ },
+ {
+  "text": "scale",
+  "start": 0.723,
+  "end": 1.069
+ },
+ {
+  "text": "from",
+  "start": 1.079,
+  "end": 1.271
+ },
+ {
+  "text": "the",
+  "start": 1.271,
+  "end": 1.358
+ },
+ {
+  "text": "officer's",
+  "start": 1.358,
+  "end": 1.819
+ },
+ {
+  "text": "very",
+  "start": 1.877,
+  "end": 2.127
+ },
+ {
+  "text": "first",
+  "start": 2.127,
+  "end": 2.396
+ },
+ {
+  "text": "reading",
+  "start": 2.406,
+  "end": 2.742
+ },
+ {
+  "text": "all",
+  "start": 3.117,
+  "end": 3.29
+ },
+ {
+  "text": "the",
+  "start": 3.29,
+  "end": 3.367
+ },
+ {
+  "text": "way",
+  "start": 3.367,
+  "end": 3.56
+ },
+ {
+  "text": "to",
+  "start": 3.588,
+  "end": 3.685
+ },
+ {
+  "text": "a",
+  "start": 3.733,
+  "end": 3.79
+ },
+ {
+  "text": "sealed",
+  "start": 3.79,
+  "end": 4.108
+ },
+ {
+  "text": "certificate",
+  "start": 4.108,
+  "end": 4.685
+ },
+ {
+  "text": "that",
+  "start": 4.742,
+  "end": 4.983
+ },
+ {
+  "text": "any",
+  "start": 5.031,
+  "end": 5.223
+ },
+ {
+  "text": "citizen",
+  "start": 5.223,
+  "end": 5.598
+ },
+ {
+  "text": "can",
+  "start": 5.598,
+  "end": 5.838
+ },
+ {
+  "text": "check",
+  "start": 5.838,
+  "end": 6.06
+ },
+ {
+  "text": "on",
+  "start": 6.108,
+  "end": 6.252
+ },
+ {
+  "text": "their",
+  "start": 6.252,
+  "end": 6.463
+ },
+ {
+  "text": "phone",
+  "start": 6.463,
+  "end": 6.79
+ }
 ]

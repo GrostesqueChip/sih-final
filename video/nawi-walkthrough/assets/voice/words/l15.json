@@ -1,176 +1,147 @@
 [
-  {
-    "id": "w0",
-    "text": "Here",
-    "start": 0,
-    "end": 0.16
-  },
-  {
-    "id": "w1",
-    "text": "is",
-    "start": 0.16,
-    "end": 0.24
-  },
-  {
-    "id": "w2",
-    "text": "Gerprit's",
-    "start": 0.24,
-    "end": 1.12
-  },
-  {
-    "id": "w3",
-    "text": "Mandy",
-    "start": 1.12,
-    "end": 1.68
-  },
-  {
-    "id": "w4",
-    "text": "scale,",
-    "start": 1.68,
-    "end": 2.24
-  },
-  {
-    "id": "w5",
-    "text": "and",
-    "start": 2.24,
-    "end": 2.4
-  },
-  {
-    "id": "w6",
-    "text": "its",
-    "start": 2.4,
-    "end": 2.64
-  },
-  {
-    "id": "w7",
-    "text": "history",
-    "start": 2.64,
-    "end": 3.12
-  },
-  {
-    "id": "w8",
-    "text": "tells",
-    "start": 3.12,
-    "end": 3.44
-  },
-  {
-    "id": "w9",
-    "text": "a",
-    "start": 3.44,
-    "end": 3.68
-  },
-  {
-    "id": "w10",
-    "text": "story.",
-    "start": 3.68,
-    "end": 4.4
-  },
-  {
-    "id": "w11",
-    "text": "Last",
-    "start": 4.4,
-    "end": 4.88
-  },
-  {
-    "id": "w12",
-    "text": "December,",
-    "start": 4.88,
-    "end": 5.52
-  },
-  {
-    "id": "w13",
-    "text": "this",
-    "start": 5.52,
-    "end": 5.76
-  },
-  {
-    "id": "w14",
-    "text": "very",
-    "start": 5.76,
-    "end": 6.08
-  },
-  {
-    "id": "w15",
-    "text": "scale",
-    "start": 6.08,
-    "end": 6.56
-  },
-  {
-    "id": "w16",
-    "text": "failed",
-    "start": 6.56,
-    "end": 7.12
-  },
-  {
-    "id": "w17",
-    "text": "verification.",
-    "start": 7.12,
-    "end": 8.24
-  },
-  {
-    "id": "w18",
-    "text": "It",
-    "start": 8.24,
-    "end": 8.4
-  },
-  {
-    "id": "w19",
-    "text": "was",
-    "start": 8.4,
-    "end": 8.56
-  },
-  {
-    "id": "w20",
-    "text": "pulled",
-    "start": 8.56,
-    "end": 9.04
-  },
-  {
-    "id": "w21",
-    "text": "from",
-    "start": 9.04,
-    "end": 9.28
-  },
-  {
-    "id": "w22",
-    "text": "trade,",
-    "start": 9.28,
-    "end": 9.84
-  },
-  {
-    "id": "w23",
-    "text": "repaired,",
-    "start": 9.84,
-    "end": 10.48
-  },
-  {
-    "id": "w24",
-    "text": "and",
-    "start": 10.48,
-    "end": 10.72
-  },
-  {
-    "id": "w25",
-    "text": "passed",
-    "start": 10.72,
-    "end": 11.04
-  },
-  {
-    "id": "w26",
-    "text": "again",
-    "start": 11.04,
-    "end": 11.28
-  },
-  {
-    "id": "w27",
-    "text": "in",
-    "start": 11.28,
-    "end": 11.44
-  },
-  {
-    "id": "w28",
-    "text": "February.",
-    "start": 11.44,
-    "end": 12.24
-  }
+ {
+  "text": "Here",
+  "start": 0.088,
+  "end": 0.319
+ },
+ {
+  "text": "is",
+  "start": 0.396,
+  "end": 0.56
+ },
+ {
+  "text": "Gurpreet's",
+  "start": 0.569,
+  "end": 1.06
+ },
+ {
+  "text": "mandi",
+  "start": 1.069,
+  "end": 1.367
+ },
+ {
+  "text": "scale",
+  "start": 1.367,
+  "end": 1.733
+ },
+ {
+  "text": "And",
+  "start": 2.385,
+  "end": 2.567
+ },
+ {
+  "text": "its",
+  "start": 2.615,
+  "end": 2.788
+ },
+ {
+  "text": "history",
+  "start": 2.788,
+  "end": 3.154
+ },
+ {
+  "text": "tells",
+  "start": 3.173,
+  "end": 3.462
+ },
+ {
+  "text": "a",
+  "start": 3.51,
+  "end": 3.587
+ },
+ {
+  "text": "story",
+  "start": 3.587,
+  "end": 3.952
+ },
+ {
+  "text": "Last",
+  "start": 4.644,
+  "end": 4.933
+ },
+ {
+  "text": "December",
+  "start": 4.981,
+  "end": 5.452
+ },
+ {
+  "text": "this",
+  "start": 5.654,
+  "end": 5.856
+ },
+ {
+  "text": "very",
+  "start": 5.856,
+  "end": 6.125
+ },
+ {
+  "text": "scale",
+  "start": 6.125,
+  "end": 6.452
+ },
+ {
+  "text": "failed",
+  "start": 6.462,
+  "end": 6.779
+ },
+ {
+  "text": "verification",
+  "start": 6.788,
+  "end": 7.433
+ },
+ {
+  "text": "It",
+  "start": 8.125,
+  "end": 8.221
+ },
+ {
+  "text": "was",
+  "start": 8.221,
+  "end": 8.452
+ },
+ {
+  "text": "pulled",
+  "start": 8.452,
+  "end": 8.74
+ },
+ {
+  "text": "from",
+  "start": 8.75,
+  "end": 9.01
+ },
+ {
+  "text": "trade",
+  "start": 9.01,
+  "end": 9.317
+ },
+ {
+  "text": "repaired",
+  "start": 9.481,
+  "end": 9.962
+ },
+ {
+  "text": "and",
+  "start": 10.183,
+  "end": 10.346
+ },
+ {
+  "text": "passed",
+  "start": 10.346,
+  "end": 10.654
+ },
+ {
+  "text": "again",
+  "start": 10.712,
+  "end": 11.058
+ },
+ {
+  "text": "in",
+  "start": 11.115,
+  "end": 11.231
+ },
+ {
+  "text": "February",
+  "start": 11.24,
+  "end": 11.74
+ }
 ]

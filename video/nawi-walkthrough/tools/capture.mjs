@@ -10,7 +10,10 @@ const OUT = process.env.OUT;          // project assets/capture dir
 const ONLY = process.env.ONLY ? process.env.ONLY.split(',') : null;
 fs.mkdirSync(RAW, { recursive: true });
 fs.mkdirSync(OUT, { recursive: true });
-const BASE = 'http://localhost:3000';
+const BASE = process.env.BASE || 'http://localhost:3000';
+const API = process.env.API || 'http://localhost:5000/api';
+// recording harness side port that edits one sealed reading in the demo DB (tamper shot)
+const TAMPER = process.env.TAMPER || 'http://localhost:5055/tamper?session=sess-034';
 
 const CURSOR = `
 (() => {
@@ -51,7 +54,7 @@ async function record(p, name, fn, { maxW = 1920, maxH = 1080 } = {}) {
   const frames = [];
   cdp.on('Page.screencastFrame', async (f) => {
     const i = frames.length;
-    const file = path.join(dir, `f${String(i).padStart(5, '0')}.jpg`);
+    const file = path.join(dir, `f${String(i).padStart(5, '0')}.jpg`).split(path.sep).join('/');
     fs.writeFileSync(file, Buffer.from(f.data, 'base64'));
     frames.push({ file, ts: f.metadata.timestamp });
     try { await cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }); } catch {}
@@ -93,7 +96,7 @@ async function moveTo(p, loc, { click = true, steps = 28, pause = 350 } = {}) {
 async function wheel(p, dy, n = 10, gap = 90) { for (let i = 0; i < n; i++) { await p.mouse.wheel(0, dy / n); await p.waitForTimeout(gap); } }
 async function still(p, name, full = false) { await p.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: full }); console.log('still', name); }
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
 const desk = { viewport: { width: 1440, height: 810 }, deviceScaleFactor: 4 / 3 };
 const { p } = await newPage(browser, desk);
 await p.goto(`${BASE}/login`);
@@ -281,6 +284,17 @@ await mob.p.goto(`${BASE}/verify/NAWI-2026-000120`);
 await mob.p.waitForTimeout(2500);
 await still(mob.p, 's-mobile-rejected');
 
+// 10b. tamper: edit one sealed reading directly in the database, then scan the same QR again
+if (!ONLY || ONLY.includes('c14-verify-mobile-tampered')) console.log('tamper', await (await fetch(TAMPER)).text());
+await record(mob.p, 'c14-verify-mobile-tampered', async () => {
+  await mob.p.goto(`${BASE}/verify/NAWI-2026-000124`);
+  await mob.p.waitForTimeout(3500);
+  for (let i = 0; i < 2; i++) { await mob.p.evaluate(() => window.scrollBy({ top: 420, behavior: 'smooth' })); await mob.p.waitForTimeout(1800); }
+}, { maxW: 1170, maxH: 2532 });
+await mob.p.goto(`${BASE}/verify/NAWI-2026-000124`);
+await mob.p.waitForTimeout(2500);
+await still(mob.p, 's-mobile-tampered');
+
 // 11. audit trail
 await record(p, 'c13-audit', async () => {
   await p.goto(`${BASE}/audit`);
@@ -290,5 +304,14 @@ await record(p, 'c13-audit', async () => {
   await p.waitForTimeout(2500);
 });
 await still(p, 's-audit');
+
+// 12. PDFs (certificate of verification, certificate of rejection, data sheet), fetched with the officer's token
+// (sealed before the tamper edit; rendered to PNG by tools/pdf2png.py)
+const token = await p.evaluate(() => { for (const k of Object.keys(localStorage)) { const v = localStorage.getItem(k) || ''; const m = v.match(/eyJ[\w-]+\.[\w-]+\.[\w-]+/); if (m) return m[0]; } return null; });
+for (const [name, url] of [['cert-pass', `${API}/reports/sess-034/certificate`], ['cert-reject', `${API}/reports/sess-030/certificate`], ['datasheet', `${API}/reports/sess-034/datasheet`]]) {
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  fs.writeFileSync(path.join(RAW, `${name}.pdf`), Buffer.from(await r.arrayBuffer()));
+  console.log('pdf', name, r.status);
+}
 
 await browser.close();

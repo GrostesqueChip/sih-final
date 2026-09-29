@@ -1,188 +1,152 @@
 [
-  {
-    "id": "w0",
-    "text": "Real",
-    "start": 0,
-    "end": 0.4
-  },
-  {
-    "id": "w1",
-    "text": "weighing",
-    "start": 0.4,
-    "end": 0.96
-  },
-  {
-    "id": "w2",
-    "text": "indicators",
-    "start": 0.96,
-    "end": 1.6
-  },
-  {
-    "id": "w3",
-    "text": "plugged",
-    "start": 1.76,
-    "end": 2.24
-  },
-  {
-    "id": "w4",
-    "text": "straight",
-    "start": 2.24,
-    "end": 2.56
-  },
-  {
-    "id": "w5",
-    "text": "in,",
-    "start": 2.72,
-    "end": 3.2
-  },
-  {
-    "id": "w6",
-    "text": "certificates",
-    "start": 3.2,
-    "end": 3.92
-  },
-  {
-    "id": "w7",
-    "text": "that",
-    "start": 3.92,
-    "end": 4.16
-  },
-  {
-    "id": "w8",
-    "text": "could",
-    "start": 4.16,
-    "end": 4.32
-  },
-  {
-    "id": "w9",
-    "text": "flow",
-    "start": 4.32,
-    "end": 4.64
-  },
-  {
-    "id": "w10",
-    "text": "into",
-    "start": 4.64,
-    "end": 4.88
-  },
-  {
-    "id": "w11",
-    "text": "Diggy",
-    "start": 4.88,
-    "end": 5.36
-  },
-  {
-    "id": "w12",
-    "text": "Locker,",
-    "start": 5.52,
-    "end": 6.32
-  },
-  {
-    "id": "w13",
-    "text": "a",
-    "start": 6.32,
-    "end": 6.56
-  },
-  {
-    "id": "w14",
-    "text": "scale",
-    "start": 6.56,
-    "end": 6.96
-  },
-  {
-    "id": "w15",
-    "text": "stamping",
-    "start": 7.12,
-    "end": 7.76
-  },
-  {
-    "id": "w16",
-    "text": "status",
-    "start": 7.76,
-    "end": 8.24
-  },
-  {
-    "id": "w17",
-    "text": "shown",
-    "start": 8.4,
-    "end": 8.88
-  },
-  {
-    "id": "w18",
-    "text": "right",
-    "start": 8.88,
-    "end": 9.12
-  },
-  {
-    "id": "w19",
-    "text": "inside",
-    "start": 9.12,
-    "end": 9.52
-  },
-  {
-    "id": "w20",
-    "text": "Enam",
-    "start": 9.52,
-    "end": 10.24
-  },
-  {
-    "id": "w21",
-    "text": "Mandy's,",
-    "start": 10.4,
-    "end": 11.28
-  },
-  {
-    "id": "w22",
-    "text": "and",
-    "start": 11.28,
-    "end": 11.52
-  },
-  {
-    "id": "w23",
-    "text": "live",
-    "start": 11.52,
-    "end": 11.92
-  },
-  {
-    "id": "w24",
-    "text": "compliance",
-    "start": 11.92,
-    "end": 12.56
-  },
-  {
-    "id": "w25",
-    "text": "dashboards",
-    "start": 12.56,
-    "end": 13.28
-  },
-  {
-    "id": "w26",
-    "text": "for",
-    "start": 13.28,
-    "end": 13.44
-  },
-  {
-    "id": "w27",
-    "text": "every",
-    "start": 13.44,
-    "end": 13.76
-  },
-  {
-    "id": "w28",
-    "text": "district",
-    "start": 13.76,
-    "end": 14.24
-  },
-  {
-    "id": "w29",
-    "text": "in",
-    "start": 14.24,
-    "end": 14.4
-  },
-  {
-    "id": "w30",
-    "text": "India.",
-    "start": 14.4,
-    "end": 14.88
-  }
+ {
+  "text": "Real",
+  "start": 0.088,
+  "end": 0.329
+ },
+ {
+  "text": "weighing",
+  "start": 0.329,
+  "end": 0.637
+ },
+ {
+  "text": "indicators",
+  "start": 0.685,
+  "end": 1.29
+ },
+ {
+  "text": "plugged",
+  "start": 1.473,
+  "end": 1.752
+ },
+ {
+  "text": "straight",
+  "start": 1.752,
+  "end": 2.079
+ },
+ {
+  "text": "in",
+  "start": 2.127,
+  "end": 2.348
+ },
+ {
+  "text": "Certificates",
+  "start": 3.019,
+  "end": 3.635
+ },
+ {
+  "text": "that",
+  "start": 3.635,
+  "end": 3.856
+ },
+ {
+  "text": "could",
+  "start": 3.856,
+  "end": 4.048
+ },
+ {
+  "text": "flow",
+  "start": 4.048,
+  "end": 4.308
+ },
+ {
+  "text": "into",
+  "start": 4.346,
+  "end": 4.577
+ },
+ {
+  "text": "DigiLocker",
+  "start": 4.587,
+  "end": 5.135
+ },
+ {
+  "text": "A",
+  "start": 5.827,
+  "end": 5.875
+ },
+ {
+  "text": "scale's",
+  "start": 5.875,
+  "end": 6.279
+ },
+ {
+  "text": "stamping",
+  "start": 6.317,
+  "end": 6.731
+ },
+ {
+  "text": "status",
+  "start": 6.731,
+  "end": 7.183
+ },
+ {
+  "text": "shown",
+  "start": 7.423,
+  "end": 7.692
+ },
+ {
+  "text": "right",
+  "start": 7.692,
+  "end": 7.942
+ },
+ {
+  "text": "inside",
+  "start": 7.99,
+  "end": 8.385
+ },
+ {
+  "text": "e-NAM",
+  "start": 8.452,
+  "end": 8.731
+ },
+ {
+  "text": "mandis",
+  "start": 8.731,
+  "end": 9.183
+ },
+ {
+  "text": "And",
+  "start": 9.856,
+  "end": 10.058
+ },
+ {
+  "text": "live",
+  "start": 10.058,
+  "end": 10.346
+ },
+ {
+  "text": "compliance",
+  "start": 10.346,
+  "end": 10.904
+ },
+ {
+  "text": "dashboards",
+  "start": 10.923,
+  "end": 11.529
+ },
+ {
+  "text": "for",
+  "start": 11.702,
+  "end": 11.904
+ },
+ {
+  "text": "every",
+  "start": 11.981,
+  "end": 12.269
+ },
+ {
+  "text": "district",
+  "start": 12.269,
+  "end": 12.663
+ },
+ {
+  "text": "in",
+  "start": 12.721,
+  "end": 12.865
+ },
+ {
+  "text": "India",
+  "start": 12.923,
+  "end": 13.231
+ }
 ]

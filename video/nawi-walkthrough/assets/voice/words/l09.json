@@ -1,32 +1,27 @@
 [
-  {
-    "id": "w0",
-    "text": "This",
-    "start": 0,
-    "end": 0.16
-  },
-  {
-    "id": "w1",
-    "text": "is",
-    "start": 0.16,
-    "end": 0.4
-  },
-  {
-    "id": "w2",
-    "text": "NAWI",
-    "start": 0.4,
-    "end": 0.88
-  },
-  {
-    "id": "w3",
-    "text": "Report",
-    "start": 1.04,
-    "end": 1.28
-  },
-  {
-    "id": "w4",
-    "text": "Pro.",
-    "start": 1.44,
-    "end": 1.92
-  }
+ {
+  "text": "This",
+  "start": 0.088,
+  "end": 0.29
+ },
+ {
+  "text": "is",
+  "start": 0.338,
+  "end": 0.502
+ },
+ {
+  "text": "NAWI",
+  "start": 0.502,
+  "end": 0.771
+ },
+ {
+  "text": "Report",
+  "start": 0.771,
+  "end": 1.127
+ },
+ {
+  "text": "Pro",
+  "start": 1.127,
+  "end": 1.377
+ }
 ]

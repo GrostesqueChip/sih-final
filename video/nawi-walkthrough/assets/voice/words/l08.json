@@ -1,74 +1,62 @@
 [
-  {
-    "id": "w0",
-    "text": "And",
-    "start": 0,
-    "end": 0.16
-  },
-  {
-    "id": "w1",
-    "text": "for",
-    "start": 0.16,
-    "end": 0.32
-  },
-  {
-    "id": "w2",
-    "text": "Gerprit,",
-    "start": 0.32,
-    "end": 1.36
-  },
-  {
-    "id": "w3",
-    "text": "there",
-    "start": 1.36,
-    "end": 1.52
-  },
-  {
-    "id": "w4",
-    "text": "is",
-    "start": 1.52,
-    "end": 1.68
-  },
-  {
-    "id": "w5",
-    "text": "no",
-    "start": 1.68,
-    "end": 1.84
-  },
-  {
-    "id": "w6",
-    "text": "way",
-    "start": 1.84,
-    "end": 2
-  },
-  {
-    "id": "w7",
-    "text": "to",
-    "start": 2,
-    "end": 2.16
-  },
-  {
-    "id": "w8",
-    "text": "check",
-    "start": 2.16,
-    "end": 2.48
-  },
-  {
-    "id": "w9",
-    "text": "any",
-    "start": 2.48,
-    "end": 2.64
-  },
-  {
-    "id": "w10",
-    "text": "of",
-    "start": 2.64,
-    "end": 2.8
-  },
-  {
-    "id": "w11",
-    "text": "it.",
-    "start": 2.8,
-    "end": 3.04
-  }
+ {
+  "text": "And",
+  "start": 0.088,
+  "end": 0.262
+ },
+ {
+  "text": "for",
+  "start": 0.262,
+  "end": 0.483
+ },
+ {
+  "text": "Gurpreet",
+  "start": 0.492,
+  "end": 0.973
+ },
+ {
+  "text": "there",
+  "start": 1.175,
+  "end": 1.435
+ },
+ {
+  "text": "is",
+  "start": 1.512,
+  "end": 1.656
+ },
+ {
+  "text": "no",
+  "start": 1.656,
+  "end": 1.829
+ },
+ {
+  "text": "way",
+  "start": 1.838,
+  "end": 2.002
+ },
+ {
+  "text": "to",
+  "start": 2.04,
+  "end": 2.146
+ },
+ {
+  "text": "check",
+  "start": 2.156,
+  "end": 2.386
+ },
+ {
+  "text": "any",
+  "start": 2.444,
+  "end": 2.637
+ },
+ {
+  "text": "of",
+  "start": 2.656,
+  "end": 2.829
+ },
+ {
+  "text": "it",
+  "start": 2.829,
+  "end": 3.002
+ }
 ]

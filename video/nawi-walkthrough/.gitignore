@@ -1,4 +1,3 @@
-renders/*
-!renders/*.mp4
+renders/
 snapshots/
 .hyperframes/

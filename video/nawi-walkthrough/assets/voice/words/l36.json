@@ -1,92 +1,72 @@
 [
-  {
-    "id": "w0",
-    "text": "Every",
-    "start": 0,
-    "end": 0.48
-  },
-  {
-    "id": "w1",
-    "text": "action,",
-    "start": 0.48,
-    "end": 1.04
-  },
-  {
-    "id": "w2",
-    "text": "every",
-    "start": 1.04,
-    "end": 1.36
-  },
-  {
-    "id": "w3",
-    "text": "reading,",
-    "start": 1.36,
-    "end": 2
-  },
-  {
-    "id": "w4",
-    "text": "every",
-    "start": 2,
-    "end": 2.32
-  },
-  {
-    "id": "w5",
-    "text": "edit,",
-    "start": 2.32,
-    "end": 2.88
-  },
-  {
-    "id": "w6",
-    "text": "every",
-    "start": 2.88,
-    "end": 3.2
-  },
-  {
-    "id": "w7",
-    "text": "seal",
-    "start": 3.2,
-    "end": 3.76
-  },
-  {
-    "id": "w8",
-    "text": "goes",
-    "start": 3.84,
-    "end": 4.16
-  },
-  {
-    "id": "w9",
-    "text": "into",
-    "start": 4.16,
-    "end": 4.4
-  },
-  {
-    "id": "w10",
-    "text": "an",
-    "start": 4.4,
-    "end": 4.64
-  },
-  {
-    "id": "w11",
-    "text": "append",
-    "start": 4.64,
-    "end": 5.2
-  },
-  {
-    "id": "w12",
-    "text": "only",
-    "start": 5.2,
-    "end": 5.36
-  },
-  {
-    "id": "w13",
-    "text": "audit",
-    "start": 5.52,
-    "end": 5.92
-  },
-  {
-    "id": "w14",
-    "text": "trail.",
-    "start": 5.92,
-    "end": 6.32
-  }
+ {
+  "text": "Every",
+  "start": 0.088,
+  "end": 0.338
+ },
+ {
+  "text": "action",
+  "start": 0.396,
+  "end": 0.762
+ },
+ {
+  "text": "every",
+  "start": 0.925,
+  "end": 1.213
+ },
+ {
+  "text": "reading",
+  "start": 1.213,
+  "end": 1.579
+ },
+ {
+  "text": "every",
+  "start": 1.675,
+  "end": 1.954
+ },
+ {
+  "text": "edit",
+  "start": 2.012,
+  "end": 2.281
+ },
+ {
+  "text": "every",
+  "start": 2.463,
+  "end": 2.713
+ },
+ {
+  "text": "seal",
+  "start": 2.713,
+  "end": 3.021
+ },
+ {
+  "text": "goes",
+  "start": 3.281,
+  "end": 3.55
+ },
+ {
+  "text": "into",
+  "start": 3.608,
+  "end": 3.829
+ },
+ {
+  "text": "an",
+  "start": 3.838,
+  "end": 3.992
+ },
+ {
+  "text": "append-only",
+  "start": 4.002,
+  "end": 4.531
+ },
+ {
+  "text": "audit",
+  "start": 4.588,
+  "end": 4.829
+ },
+ {
+  "text": "trail",
+  "start": 4.877,
+  "end": 5.233
+ }
 ]

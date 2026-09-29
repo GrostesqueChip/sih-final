@@ -1,164 +1,137 @@
 [
-  {
-    "id": "w0",
-    "text": "Gerprit",
-    "start": 0,
-    "end": 0.64
-  },
-  {
-    "id": "w1",
-    "text": "Singh",
-    "start": 0.72,
-    "end": 1.12
-  },
-  {
-    "id": "w2",
-    "text": "has",
-    "start": 1.12,
-    "end": 1.28
-  },
-  {
-    "id": "w3",
-    "text": "spent",
-    "start": 1.28,
-    "end": 1.52
-  },
-  {
-    "id": "w4",
-    "text": "eight",
-    "start": 1.52,
-    "end": 1.76
-  },
-  {
-    "id": "w5",
-    "text": "months",
-    "start": 1.76,
-    "end": 2.08
-  },
-  {
-    "id": "w6",
-    "text": "growing",
-    "start": 2.08,
-    "end": 2.48
-  },
-  {
-    "id": "w7",
-    "text": "this",
-    "start": 2.48,
-    "end": 2.64
-  },
-  {
-    "id": "w8",
-    "text": "crop.",
-    "start": 2.64,
-    "end": 3.44
-  },
-  {
-    "id": "w9",
-    "text": "Today,",
-    "start": 3.44,
-    "end": 4.24
-  },
-  {
-    "id": "w10",
-    "text": "a",
-    "start": 4.24,
-    "end": 4.48
-  },
-  {
-    "id": "w11",
-    "text": "whole",
-    "start": 4.48,
-    "end": 4.8
-  },
-  {
-    "id": "w12",
-    "text": "year",
-    "start": 4.8,
-    "end": 5.04
-  },
-  {
-    "id": "w13",
-    "text": "of",
-    "start": 5.04,
-    "end": 5.2
-  },
-  {
-    "id": "w14",
-    "text": "his",
-    "start": 5.2,
-    "end": 5.36
-  },
-  {
-    "id": "w15",
-    "text": "work",
-    "start": 5.36,
-    "end": 5.68
-  },
-  {
-    "id": "w16",
-    "text": "comes",
-    "start": 5.68,
-    "end": 6
-  },
-  {
-    "id": "w17",
-    "text": "down",
-    "start": 6,
-    "end": 6.24
-  },
-  {
-    "id": "w18",
-    "text": "to",
-    "start": 6.24,
-    "end": 6.4
-  },
-  {
-    "id": "w19",
-    "text": "one",
-    "start": 6.4,
-    "end": 6.72
-  },
-  {
-    "id": "w20",
-    "text": "number,",
-    "start": 6.72,
-    "end": 7.36
-  },
-  {
-    "id": "w21",
-    "text": "the",
-    "start": 7.36,
-    "end": 7.44
-  },
-  {
-    "id": "w22",
-    "text": "one",
-    "start": 7.44,
-    "end": 7.68
-  },
-  {
-    "id": "w23",
-    "text": "on",
-    "start": 7.68,
-    "end": 7.84
-  },
-  {
-    "id": "w24",
-    "text": "the",
-    "start": 7.84,
-    "end": 8
-  },
-  {
-    "id": "w25",
-    "text": "Mandy",
-    "start": 8,
-    "end": 8.72
-  },
-  {
-    "id": "w26",
-    "text": "scale.",
-    "start": 8.72,
-    "end": 9.04
-  }
+ {
+  "text": "Gurpreet",
+  "start": 0.088,
+  "end": 0.54
+ },
+ {
+  "text": "Singh",
+  "start": 0.54,
+  "end": 0.819
+ },
+ {
+  "text": "has",
+  "start": 0.838,
+  "end": 1.098
+ },
+ {
+  "text": "spent",
+  "start": 1.127,
+  "end": 1.415
+ },
+ {
+  "text": "eight",
+  "start": 1.473,
+  "end": 1.646
+ },
+ {
+  "text": "months",
+  "start": 1.665,
+  "end": 2.021
+ },
+ {
+  "text": "growing",
+  "start": 2.06,
+  "end": 2.387
+ },
+ {
+  "text": "this",
+  "start": 2.387,
+  "end": 2.598
+ },
+ {
+  "text": "crop",
+  "start": 2.617,
+  "end": 2.925
+ },
+ {
+  "text": "Today",
+  "start": 3.606,
+  "end": 3.875
+ },
+ {
+  "text": "a",
+  "start": 4.173,
+  "end": 4.231
+ },
+ {
+  "text": "whole",
+  "start": 4.24,
+  "end": 4.51
+ },
+ {
+  "text": "year",
+  "start": 4.51,
+  "end": 4.769
+ },
+ {
+  "text": "of",
+  "start": 4.779,
+  "end": 4.933
+ },
+ {
+  "text": "his",
+  "start": 4.933,
+  "end": 5.087
+ },
+ {
+  "text": "work",
+  "start": 5.087,
+  "end": 5.346
+ },
+ {
+  "text": "comes",
+  "start": 5.346,
+  "end": 5.644
+ },
+ {
+  "text": "down",
+  "start": 5.644,
+  "end": 5.962
+ },
+ {
+  "text": "to",
+  "start": 5.99,
+  "end": 6.077
+ },
+ {
+  "text": "one",
+  "start": 6.096,
+  "end": 6.327
+ },
+ {
+  "text": "number",
+  "start": 6.327,
+  "end": 6.731
+ },
+ {
+  "text": "the",
+  "start": 6.962,
+  "end": 7.048
+ },
+ {
+  "text": "one",
+  "start": 7.048,
+  "end": 7.279
+ },
+ {
+  "text": "on",
+  "start": 7.346,
+  "end": 7.462
+ },
+ {
+  "text": "the",
+  "start": 7.471,
+  "end": 7.558
+ },
+ {
+  "text": "mandi",
+  "start": 7.558,
+  "end": 7.827
+ },
+ {
+  "text": "scale",
+  "start": 7.827,
+  "end": 8.183
+ }
 ]

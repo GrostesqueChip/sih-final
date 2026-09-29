@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s06-registry" data-width="1920" data-height="1080" data-duration="24.428">
+      <div id="root" data-composition-id="s06-registry" data-width="1920" data-height="1080" data-duration="22.002">
         <div class="wrap" id="s06-registry-wrap">
           <div class="bg"></div>
           <div class="glow" id="s06-registry-glow" style="left:900px; top:-300px;"></div>
@@ -54,11 +54,11 @@
           
           <div class="chapter" id="s06-registry-chap"><span class="num">02</span><span>Instrument registry</span><span class="rule"></span></div>
           <div class="win" id="s06-registry-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3000/instruments</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/instruments</span></div>
             <div class="screen">
               <div class="cam" id="s06-registry-cam">
                 <img id="s06-registry-still" src="assets/capture/s-instrument-detail.png" alt="" />
-                <video id="s06-registry-vid" src="assets/capture/c02-registry.mp4" data-start="0.3" data-duration="22.706" data-media-start="0" data-playback-rate="0.85" muted playsinline></video>
+                <video id="s06-registry-vid" src="assets/capture/c02-registry.mp4" data-start="0.3" data-duration="21.402" data-media-start="0" data-playback-rate="1.059" muted playsinline></video>
               </div>
             </div>
           </div>
@@ -82,25 +82,25 @@
       </div>
       <script>
         (function () {
-          const D = 24.428;
+          const D = 22.002;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s06-registry-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s06-registry-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
           tl.fromTo("#s06-registry-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
           
           tl.fromTo("#s06-registry-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
-          tl.fromTo("#s06-registry-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 4.840000000000001);
-          tl.fromTo("#s06-registry-r1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 5.800000000000001);
-          tl.fromTo("#s06-registry-r2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 7.5600000000000005);
-          tl.fromTo("#s06-registry-r3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 9.32);
-          tl.to("#s06-registry-list", { opacity: 0, x: 40, duration: 0.5 }, 11.119000000000002);
-          tl.fromTo("#s06-registry-hist", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 11.519);
+          tl.fromTo("#s06-registry-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 4.344);
+          tl.fromTo("#s06-registry-r1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 4.979);
+          tl.fromTo("#s06-registry-r2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 6.258);
+          tl.fromTo("#s06-registry-r3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 7.758);
+          tl.to("#s06-registry-list", { opacity: 0, x: 40, duration: 0.5 }, 9.162);
+          tl.fromTo("#s06-registry-hist", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 9.562);
           tl.set(["#s06-registry-h0", "#s06-registry-h1", "#s06-registry-h2", "#s06-registry-note"], { opacity: 0 }, 0);
-          tl.fromTo("#s06-registry-h0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 17.779);
-          tl.fromTo("#s06-registry-note", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 19.879);
-          tl.fromTo("#s06-registry-h1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 21.939);
-          tl.fromTo("#s06-registry-h2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 23.059);
-          tl.to("#s06-registry-cam", { scale: 1.45, x: -411.0, y: -364.5, duration: 1.2, ease: "power2.inOut" }, 13.658999999999999);
+          tl.fromTo("#s06-registry-h0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 15.724);
+          tl.fromTo("#s06-registry-note", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 17.814);
+          tl.fromTo("#s06-registry-h1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 19.607999999999997);
+          tl.fromTo("#s06-registry-h2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 20.902);
+          tl.to("#s06-registry-cam", { scale: 1.45, x: -411.0, y: -364.5, duration: 1.2, ease: "power2.inOut" }, 11.85);
           window.__timelines["s06-registry"] = tl;
         })();
       </script>

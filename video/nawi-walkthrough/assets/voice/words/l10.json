@@ -1,164 +1,122 @@
 [
-  {
-    "id": "w0",
-    "text": "A",
-    "start": 0,
-    "end": 0.16
-  },
-  {
-    "id": "w1",
-    "text": "complete",
-    "start": 0.32,
-    "end": 0.72
-  },
-  {
-    "id": "w2",
-    "text": "digital",
-    "start": 0.72,
-    "end": 1.28
-  },
-  {
-    "id": "w3",
-    "text": "system",
-    "start": 1.28,
-    "end": 1.52
-  },
-  {
-    "id": "w4",
-    "text": "for",
-    "start": 1.68,
-    "end": 1.92
-  },
-  {
-    "id": "w5",
-    "text": "verifying",
-    "start": 1.92,
-    "end": 2.72
-  },
-  {
-    "id": "w6",
-    "text": "and",
-    "start": 2.72,
-    "end": 2.88
-  },
-  {
-    "id": "w7",
-    "text": "certifying",
-    "start": 2.88,
-    "end": 3.6
-  },
-  {
-    "id": "w8",
-    "text": "non",
-    "start": 3.6,
-    "end": 3.84
-  },
-  {
-    "id": "w9",
-    "text": "automatic",
-    "start": 3.92,
-    "end": 4.56
-  },
-  {
-    "id": "w10",
-    "text": "weighing",
-    "start": 4.56,
-    "end": 5.12
-  },
-  {
-    "id": "w11",
-    "text": "instruments",
-    "start": 5.12,
-    "end": 5.76
-  },
-  {
-    "id": "w12",
-    "text": "built",
-    "start": 5.92,
-    "end": 6.32
-  },
-  {
-    "id": "w13",
-    "text": "on",
-    "start": 6.32,
-    "end": 6.64
-  },
-  {
-    "id": "w14",
-    "text": "OIML",
-    "start": 6.64,
-    "end": 8.08
-  },
-  {
-    "id": "w15",
-    "text": "R",
-    "start": 8.4,
-    "end": 8.64
-  },
-  {
-    "id": "w16",
-    "text": "seventy",
-    "start": 8.88,
-    "end": 9.36
-  },
-  {
-    "id": "w17",
-    "text": "six",
-    "start": 9.36,
-    "end": 9.76
-  },
-  {
-    "id": "w18",
-    "text": "and",
-    "start": 9.84,
-    "end": 10.08
-  },
-  {
-    "id": "w19",
-    "text": "the",
-    "start": 10.08,
-    "end": 10.16
-  },
-  {
-    "id": "w20",
-    "text": "Legal",
-    "start": 10.16,
-    "end": 10.64
-  },
-  {
-    "id": "w21",
-    "text": "Metrology",
-    "start": 10.64,
-    "end": 11.28
-  },
-  {
-    "id": "w22",
-    "text": "Act",
-    "start": 11.44,
-    "end": 11.76
-  },
-  {
-    "id": "w23",
-    "text": "of",
-    "start": 11.76,
-    "end": 11.92
-  },
-  {
-    "id": "w24",
-    "text": "two",
-    "start": 11.92,
-    "end": 12.08
-  },
-  {
-    "id": "w25",
-    "text": "thousand",
-    "start": 12.08,
-    "end": 12.4
-  },
-  {
-    "id": "w26",
-    "text": "nine.",
-    "start": 12.4,
-    "end": 12.88
-  }
+ {
+  "text": "A",
+  "start": 0.088,
+  "end": 0.137
+ },
+ {
+  "text": "complete",
+  "start": 0.137,
+  "end": 0.569
+ },
+ {
+  "text": "digital",
+  "start": 0.617,
+  "end": 0.983
+ },
+ {
+  "text": "system",
+  "start": 0.983,
+  "end": 1.358
+ },
+ {
+  "text": "for",
+  "start": 1.358,
+  "end": 1.56
+ },
+ {
+  "text": "verifying",
+  "start": 1.56,
+  "end": 2.088
+ },
+ {
+  "text": "and",
+  "start": 2.185,
+  "end": 2.358
+ },
+ {
+  "text": "certifying",
+  "start": 2.358,
+  "end": 2.906
+ },
+ {
+  "text": "non-automatic",
+  "start": 2.906,
+  "end": 3.531
+ },
+ {
+  "text": "weighing",
+  "start": 3.531,
+  "end": 3.848
+ },
+ {
+  "text": "instruments",
+  "start": 3.877,
+  "end": 4.377
+ },
+ {
+  "text": "built",
+  "start": 4.598,
+  "end": 4.848
+ },
+ {
+  "text": "on",
+  "start": 4.896,
+  "end": 5.06
+ },
+ {
+  "text": "O.I.M.L.",
+  "start": 5.127,
+  "end": 5.531
+ },
+ {
+  "text": "R",
+  "start": 5.569,
+  "end": 5.742
+ },
+ {
+  "text": "seventy-six",
+  "start": 5.742,
+  "end": 6.387
+ },
+ {
+  "text": "and",
+  "start": 6.617,
+  "end": 6.752
+ },
+ {
+  "text": "the",
+  "start": 6.752,
+  "end": 6.877
+ },
+ {
+  "text": "Legal",
+  "start": 6.877,
+  "end": 7.233
+ },
+ {
+  "text": "Metrology",
+  "start": 7.233,
+  "end": 7.704
+ },
+ {
+  "text": "Act",
+  "start": 7.762,
+  "end": 8.002
+ },
+ {
+  "text": "two",
+  "start": 8.233,
+  "end": 8.31
+ },
+ {
+  "text": "thousand",
+  "start": 8.329,
+  "end": 8.656
+ },
+ {
+  "text": "nine",
+  "start": 8.656,
+  "end": 8.983
+ }
 ]

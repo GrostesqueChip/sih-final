@@ -1,62 +1,57 @@
 [
-  {
-    "id": "w0",
-    "text": "Gerprit",
-    "start": 0,
-    "end": 0.72
-  },
-  {
-    "id": "w1",
-    "text": "will",
-    "start": 0.8,
-    "end": 0.96
-  },
-  {
-    "id": "w2",
-    "text": "never",
-    "start": 0.96,
-    "end": 1.12
-  },
-  {
-    "id": "w3",
-    "text": "read",
-    "start": 1.12,
-    "end": 1.44
-  },
-  {
-    "id": "w4",
-    "text": "the",
-    "start": 1.44,
-    "end": 1.6
-  },
-  {
-    "id": "w5",
-    "text": "standard.",
-    "start": 1.6,
-    "end": 2.32
-  },
-  {
-    "id": "w6",
-    "text": "He",
-    "start": 2.32,
-    "end": 2.56
-  },
-  {
-    "id": "w7",
-    "text": "doesn't",
-    "start": 2.56,
-    "end": 2.88
-  },
-  {
-    "id": "w8",
-    "text": "need",
-    "start": 2.88,
-    "end": 3.04
-  },
-  {
-    "id": "w9",
-    "text": "to.",
-    "start": 3.04,
-    "end": 3.36
-  }
+ {
+  "text": "Gurpreet",
+  "start": 0.088,
+  "end": 0.54
+ },
+ {
+  "text": "will",
+  "start": 0.55,
+  "end": 0.762
+ },
+ {
+  "text": "never",
+  "start": 0.762,
+  "end": 1.079
+ },
+ {
+  "text": "read",
+  "start": 1.079,
+  "end": 1.348
+ },
+ {
+  "text": "O.I.M.L.",
+  "start": 1.415,
+  "end": 1.838
+ },
+ {
+  "text": "R",
+  "start": 1.887,
+  "end": 2.06
+ },
+ {
+  "text": "seventy-six",
+  "start": 2.06,
+  "end": 2.694
+ },
+ {
+  "text": "He",
+  "start": 3.365,
+  "end": 3.49
+ },
+ {
+  "text": "doesn't",
+  "start": 3.49,
+  "end": 3.837
+ },
+ {
+  "text": "need",
+  "start": 3.875,
+  "end": 4.135
+ },
+ {
+  "text": "to",
+  "start": 4.202,
+  "end": 4.394
+ }
 ]

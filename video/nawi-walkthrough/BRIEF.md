@@ -6,9 +6,9 @@ message: "A scale nobody can check becomes a scale anyone can check — NAWI-Rep
 audience: "Smart India Hackathon 2026 judges"
 destination: "Presentation / YouTube-style playback"
 aspect: "16:9 (1920x1080)"
-language: "English narration (bilingual app shown)"
-length: "as needed to cover the full journey (~6 min)"
-voice: "male (Kokoro am_michael, local)"
+language: "English narration, Indian-English voice (bilingual app shown)"
+length: "as needed to cover the full journey (v2: ~5:45 at 1.3x pace)"
+voice: "Indian-English male (Microsoft en-IN-PrabhatNeural via edge-tts, +30% rate)"
 ---
 
 # NAWI-ReportPro — product walkthrough film
@@ -36,8 +36,12 @@ the QR on the scale → national-scale vision → close on Gurpreet.
 
 ## Customizations
 
-- Voiceover: local Kokoro `am_michael` (HeyGen not signed in; Higgsfield had 0 credits).
-- Captions from Parakeet word timestamps.
+- v2 voiceover: `en-IN-PrabhatNeural` at 1.3x, chosen by the user over Hinglish samples (Madhur, Kokoro hm_omega/hm_psi) so
+  terms like "mandi" sound right while the narration stays in English.
+- Captions and beats timed from the TTS engine's word timestamps.
+- v2 factual fixes: verification is periodic (not "every year"); no offline-capture claim; no GIGW claim
+  (text-size options only); "readings locked" / "tampered? he'll know" kept because PR #2 (seal over verdict +
+  readings digest) is merged, and shown with a real NOT AUTHENTIC shot.
 - Music: a locally synthesized ambient pad (deterministic, no licensing); bundled SFX library.
 - Vision scenes label integrations honestly as BUILT vs PROPOSED. No map of India is drawn (avoids
   boundary-accuracy issues); districts are shown as an abstract dot field.

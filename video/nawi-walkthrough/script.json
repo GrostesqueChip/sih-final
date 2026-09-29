@@ -1,6 +1,5 @@
 {
-  "voice": "am_michael",
-  "speed": 1.0,
+  "voice": "en-IN-PrabhatNeural (Microsoft neural TTS)",
   "scenes": [
     {
       "id": "s01-open",
@@ -42,8 +41,8 @@
       "lines": [
         {
           "id": "l06",
-          "say": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department. Every year.",
-          "cap": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department. Every year."
+          "say": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department, periodically.",
+          "cap": "By law, every weighing instrument used in trade must be verified by the Legal Metrology department — periodically."
         },
         {
           "id": "l07",
@@ -62,12 +61,12 @@
       "lines": [
         {
           "id": "l09",
-          "say": "This is Nawi Report Pro.",
+          "say": "This is NAWI Report Pro.",
           "cap": "This is NAWI-ReportPro."
         },
         {
           "id": "l10",
-          "say": "A complete digital system for verifying and certifying non-automatic weighing instruments, built on O I M L, R seventy-six, and the Legal Metrology Act of two thousand nine.",
+          "say": "A complete digital system for verifying and certifying non-automatic weighing instruments, built on O.I.M.L. R seventy-six, and the Legal Metrology Act, two thousand nine.",
           "cap": "A complete digital system for verifying and certifying non-automatic weighing instruments — built on OIML R 76 and the Legal Metrology Act, 2009."
         },
         {
@@ -112,7 +111,7 @@
       "lines": [
         {
           "id": "l16",
-          "say": "Registering a new scale takes a minute. As the officer types, the app checks the specifications against the standard, live, and previews the maximum permissible error at every load.",
+          "say": "Registering a new scale takes a minute. As the officer types, the app checks the specifications against O.I.M.L. R seventy-six, live, and previews the maximum permissible error at every load.",
           "cap": "Registering a new scale takes a minute. As the officer types, the app checks the specifications against OIML R 76 — live — and previews the maximum permissible error at every load."
         }
       ]
@@ -122,7 +121,7 @@
       "lines": [
         {
           "id": "l17",
-          "say": "Now it's time for this year's re-verification. The standard demands six separate tests. Weighing performance, repeatability, eccentricity, temperature, stability, and creep.",
+          "say": "Now it's time for this year's re-verification. O.I.M.L. R seventy-six demands six separate tests. Weighing performance, repeatability, eccentricity, temperature, stability, and creep.",
           "cap": "Now it's time for this year's re-verification. OIML R 76 demands six separate tests: weighing performance, repeatability, eccentricity, temperature, stability and creep."
         },
         {
@@ -167,8 +166,8 @@
         },
         {
           "id": "l24",
-          "say": "One signature, and the certificate is sealed with an H MAC, S H A two fifty-six digital seal. From this moment, the readings are locked.",
-          "cap": "One signature, and the certificate is sealed with an HMAC-SHA256 digital seal. From this moment, the readings are locked."
+          "say": "One signature, and the certificate is sealed with an H-MAC, S.H.A. two fifty-six digital seal, covering the verdict and every single reading. From this moment, the readings are locked.",
+          "cap": "One signature, and the certificate is sealed with an HMAC-SHA256 digital seal, covering the verdict and every single reading. From this moment, the readings are locked."
         }
       ]
     },
@@ -232,8 +231,8 @@
         },
         {
           "id": "l34",
-          "say": "If a scale has been rejected, or a certificate has been tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, nineteen fifteen.",
-          "cap": "If a scale has been rejected, or a certificate tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, 1915."
+          "say": "If a scale has been rejected, or even one reading on a certificate has been tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, nineteen fifteen.",
+          "cap": "If a scale has been rejected, or even one reading on a certificate has been tampered with, he will know that too. And one tap connects him to the National Consumer Helpline, 1915."
         },
         {
           "id": "l35",
@@ -252,8 +251,8 @@
         },
         {
           "id": "l37",
-          "say": "The whole interface works in Hindi and English, follows government accessibility guidelines, and keeps working offline in the field, syncing when the network returns.",
-          "cap": "The whole interface works in Hindi and English, follows GIGW accessibility guidelines, and keeps working offline in the field — syncing when the network returns."
+          "say": "The whole interface works in Hindi and English, with text-size options for every user.",
+          "cap": "The whole interface works in Hindi and English, with text-size options for every user."
         }
       ]
     },
@@ -272,13 +271,13 @@
         },
         {
           "id": "l40",
-          "say": "Real weighing indicators, plugged straight in. Certificates that could flow into Digi Locker. A scale's stamping status, shown right inside e-Nam mandis. And live compliance dashboards for every district in India.",
+          "say": "Real weighing indicators, plugged straight in. Certificates that could flow into DigiLocker. A scale's stamping status, shown right inside e-NAM mandis. And live compliance dashboards for every district in India.",
           "cap": "Real weighing indicators, plugged straight in. Certificates that could flow into DigiLocker. A scale's stamping status, shown right inside e-NAM mandis. Live compliance dashboards for every district in India."
         },
         {
           "id": "l41",
-          "say": "The foundation is already built for it. A stateless API on PostgreSQL, an offline-first field app, and seals that anyone can verify, anywhere.",
-          "cap": "The foundation is already built for it: a stateless API on PostgreSQL, an offline-first field app, and seals anyone can verify, anywhere."
+          "say": "The foundation is already built for it. A stateless API on PostgreSQL, deployed in the cloud, and seals that anyone can verify, anywhere.",
+          "cap": "The foundation is already built for it: a stateless API on PostgreSQL, deployed in the cloud, and seals anyone can verify, anywhere."
         },
         {
           "id": "l42",
@@ -292,7 +291,7 @@
       "lines": [
         {
           "id": "l43",
-          "say": "Gurpreet will never read the standard. He doesn't need to.",
+          "say": "Gurpreet will never read O.I.M.L. R seventy-six. He doesn't need to.",
           "cap": "Gurpreet will never read OIML R 76. He doesn't need to."
         },
         {
@@ -302,10 +301,11 @@
         },
         {
           "id": "l45",
-          "say": "Nawi Report Pro. Every scale, verified. Every weighing, trusted.",
+          "say": "NAWI Report Pro. Every scale, verified. Every weighing, trusted.",
           "cap": "NAWI-ReportPro. Every scale, verified. Every weighing, trusted."
         }
       ]
     }
-  ]
+  ],
+  "rate": "+30%"
 }

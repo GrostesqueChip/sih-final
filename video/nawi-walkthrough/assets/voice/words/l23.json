@@ -1,92 +1,77 @@
 [
-  {
-    "id": "w0",
-    "text": "The",
-    "start": 0,
-    "end": 0.16
-  },
-  {
-    "id": "w1",
-    "text": "verdict",
-    "start": 0.16,
-    "end": 0.56
-  },
-  {
-    "id": "w2",
-    "text": "is",
-    "start": 0.56,
-    "end": 0.72
-  },
-  {
-    "id": "w3",
-    "text": "computed",
-    "start": 0.72,
-    "end": 1.28
-  },
-  {
-    "id": "w4",
-    "text": "by",
-    "start": 1.28,
-    "end": 1.44
-  },
-  {
-    "id": "w5",
-    "text": "the",
-    "start": 1.44,
-    "end": 1.68
-  },
-  {
-    "id": "w6",
-    "text": "engine,",
-    "start": 1.68,
-    "end": 2.32
-  },
-  {
-    "id": "w7",
-    "text": "from",
-    "start": 2.32,
-    "end": 2.56
-  },
-  {
-    "id": "w8",
-    "text": "the",
-    "start": 2.56,
-    "end": 2.72
-  },
-  {
-    "id": "w9",
-    "text": "readings",
-    "start": 2.72,
-    "end": 3.36
-  },
-  {
-    "id": "w10",
-    "text": "themselves.",
-    "start": 3.36,
-    "end": 4.4
-  },
-  {
-    "id": "w11",
-    "text": "Nobody",
-    "start": 4.4,
-    "end": 4.96
-  },
-  {
-    "id": "w12",
-    "text": "can",
-    "start": 4.96,
-    "end": 5.2
-  },
-  {
-    "id": "w13",
-    "text": "override",
-    "start": 5.2,
-    "end": 5.76
-  },
-  {
-    "id": "w14",
-    "text": "it.",
-    "start": 5.76,
-    "end": 6
-  }
+ {
+  "text": "The",
+  "start": 0.088,
+  "end": 0.156
+ },
+ {
+  "text": "verdict",
+  "start": 0.156,
+  "end": 0.531
+ },
+ {
+  "text": "is",
+  "start": 0.588,
+  "end": 0.723
+ },
+ {
+  "text": "computed",
+  "start": 0.733,
+  "end": 1.175
+ },
+ {
+  "text": "by",
+  "start": 1.175,
+  "end": 1.348
+ },
+ {
+  "text": "the",
+  "start": 1.348,
+  "end": 1.492
+ },
+ {
+  "text": "engine",
+  "start": 1.492,
+  "end": 1.858
+ },
+ {
+  "text": "from",
+  "start": 2.002,
+  "end": 2.194
+ },
+ {
+  "text": "the",
+  "start": 2.194,
+  "end": 2.271
+ },
+ {
+  "text": "readings",
+  "start": 2.271,
+  "end": 2.617
+ },
+ {
+  "text": "themselves",
+  "start": 2.617,
+  "end": 3.137
+ },
+ {
+  "text": "Nobody",
+  "start": 3.808,
+  "end": 4.163
+ },
+ {
+  "text": "can",
+  "start": 4.163,
+  "end": 4.404
+ },
+ {
+  "text": "override",
+  "start": 4.462,
+  "end": 4.894
+ },
+ {
+  "text": "it",
+  "start": 4.904,
+  "end": 5.096
+ }
 ]

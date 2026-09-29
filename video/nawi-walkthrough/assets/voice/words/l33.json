@@ -1,140 +1,117 @@
 [
-  {
-    "id": "w0",
-    "text": "The",
-    "start": 0,
-    "end": 0.24
-  },
-  {
-    "id": "w1",
-    "text": "portal",
-    "start": 0.24,
-    "end": 0.72
-  },
-  {
-    "id": "w2",
-    "text": "recomputes",
-    "start": 0.72,
-    "end": 1.36
-  },
-  {
-    "id": "w3",
-    "text": "the",
-    "start": 1.36,
-    "end": 1.44
-  },
-  {
-    "id": "w4",
-    "text": "digital",
-    "start": 1.44,
-    "end": 1.92
-  },
-  {
-    "id": "w5",
-    "text": "seal",
-    "start": 1.92,
-    "end": 2.4
-  },
-  {
-    "id": "w6",
-    "text": "and",
-    "start": 2.4,
-    "end": 2.64
-  },
-  {
-    "id": "w7",
-    "text": "answers",
-    "start": 2.64,
-    "end": 3.12
-  },
-  {
-    "id": "w8",
-    "text": "in",
-    "start": 3.12,
-    "end": 3.36
-  },
-  {
-    "id": "w9",
-    "text": "one",
-    "start": 3.36,
-    "end": 3.68
-  },
-  {
-    "id": "w10",
-    "text": "word.",
-    "start": 3.68,
-    "end": 4.4
-  },
-  {
-    "id": "w11",
-    "text": "Valid.",
-    "start": 4.4,
-    "end": 5.28
-  },
-  {
-    "id": "w12",
-    "text": "Who",
-    "start": 5.28,
-    "end": 5.6
-  },
-  {
-    "id": "w13",
-    "text": "owns",
-    "start": 5.6,
-    "end": 6
-  },
-  {
-    "id": "w14",
-    "text": "the",
-    "start": 6,
-    "end": 6.16
-  },
-  {
-    "id": "w15",
-    "text": "scale",
-    "start": 6.16,
-    "end": 6.56
-  },
-  {
-    "id": "w16",
-    "text": "which",
-    "start": 6.64,
-    "end": 6.8
-  },
-  {
-    "id": "w17",
-    "text": "officer",
-    "start": 6.96,
-    "end": 7.52
-  },
-  {
-    "id": "w18",
-    "text": "verified",
-    "start": 7.52,
-    "end": 8.08
-  },
-  {
-    "id": "w19",
-    "text": "it",
-    "start": 8.08,
-    "end": 8.16
-  },
-  {
-    "id": "w20",
-    "text": "and",
-    "start": 8.32,
-    "end": 8.48
-  },
-  {
-    "id": "w21",
-    "text": "until",
-    "start": 8.48,
-    "end": 8.8
-  },
-  {
-    "id": "w22",
-    "text": "when?",
-    "start": 8.8,
-    "end": 9.2
-  }
+ {
+  "text": "The",
+  "start": 0.088,
+  "end": 0.156
+ },
+ {
+  "text": "portal",
+  "start": 0.156,
+  "end": 0.521
+ },
+ {
+  "text": "recomputes",
+  "start": 0.521,
+  "end": 1.098
+ },
+ {
+  "text": "the",
+  "start": 1.098,
+  "end": 1.194
+ },
+ {
+  "text": "digital",
+  "start": 1.213,
+  "end": 1.56
+ },
+ {
+  "text": "seal",
+  "start": 1.56,
+  "end": 1.867
+ },
+ {
+  "text": "and",
+  "start": 2.031,
+  "end": 2.204
+ },
+ {
+  "text": "answers",
+  "start": 2.252,
+  "end": 2.713
+ },
+ {
+  "text": "in",
+  "start": 2.781,
+  "end": 2.915
+ },
+ {
+  "text": "one",
+  "start": 2.915,
+  "end": 3.137
+ },
+ {
+  "text": "word",
+  "start": 3.137,
+  "end": 3.473
+ },
+ {
+  "text": "Valid",
+  "start": 4.144,
+  "end": 4.49
+ },
+ {
+  "text": "Who",
+  "start": 5.192,
+  "end": 5.308
+ },
+ {
+  "text": "owns",
+  "start": 5.356,
+  "end": 5.625
+ },
+ {
+  "text": "this",
+  "start": 5.625,
+  "end": 5.865
+ },
+ {
+  "text": "scale",
+  "start": 5.894,
+  "end": 6.24
+ },
+ {
+  "text": "which",
+  "start": 6.433,
+  "end": 6.625
+ },
+ {
+  "text": "officer",
+  "start": 6.683,
+  "end": 7.077
+ },
+ {
+  "text": "verified",
+  "start": 7.077,
+  "end": 7.548
+ },
+ {
+  "text": "it",
+  "start": 7.548,
+  "end": 7.721
+ },
+ {
+  "text": "and",
+  "start": 7.875,
+  "end": 8.067
+ },
+ {
+  "text": "until",
+  "start": 8.106,
+  "end": 8.413
+ },
+ {
+  "text": "when",
+  "start": 8.413,
+  "end": 8.683
+ }
 ]

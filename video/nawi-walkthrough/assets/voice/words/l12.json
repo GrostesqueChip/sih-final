@@ -1,56 +1,47 @@
 [
-  {
-    "id": "w0",
-    "text": "Meet",
-    "start": 0,
-    "end": 0.32
-  },
-  {
-    "id": "w1",
-    "text": "Inspector",
-    "start": 0.32,
-    "end": 0.72
-  },
-  {
-    "id": "w2",
-    "text": "Vikramadity",
-    "start": 0.72,
-    "end": 1.68
-  },
-  {
-    "id": "w3",
-    "text": "Asharma.",
-    "start": 1.68,
-    "end": 2.56
-  },
-  {
-    "id": "w4",
-    "text": "One",
-    "start": 2.56,
-    "end": 2.8
-  },
-  {
-    "id": "w5",
-    "text": "click",
-    "start": 2.8,
-    "end": 3.12
-  },
-  {
-    "id": "w6",
-    "text": "and",
-    "start": 3.2,
-    "end": 3.36
-  },
-  {
-    "id": "w7",
-    "text": "he's",
-    "start": 3.36,
-    "end": 3.68
-  },
-  {
-    "id": "w8",
-    "text": "in.",
-    "start": 3.68,
-    "end": 3.92
-  }
+ {
+  "text": "Meet",
+  "start": 0.088,
+  "end": 0.319
+ },
+ {
+  "text": "Inspector",
+  "start": 0.377,
+  "end": 0.858
+ },
+ {
+  "text": "Vikramaditya",
+  "start": 0.858,
+  "end": 1.473
+ },
+ {
+  "text": "Sharma",
+  "start": 1.473,
+  "end": 1.819
+ },
+ {
+  "text": "One",
+  "start": 2.481,
+  "end": 2.683
+ },
+ {
+  "text": "click",
+  "start": 2.712,
+  "end": 2.99
+ },
+ {
+  "text": "and",
+  "start": 3.212,
+  "end": 3.375
+ },
+ {
+  "text": "he's",
+  "start": 3.375,
+  "end": 3.635
+ },
+ {
+  "text": "in",
+  "start": 3.663,
+  "end": 3.856
+ }
 ]

@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s04-intro" data-width="1920" data-height="1080" data-duration="26.209">
+      <div id="root" data-composition-id="s04-intro" data-width="1920" data-height="1080" data-duration="20.15">
         <div class="wrap" id="s04-intro-wrap">
           <div class="bg"></div>
           <div class="glow" id="s04-intro-glow" style="left:260px; top:-360px;"></div>
@@ -89,25 +89,25 @@
       </div>
       <script>
         (function () {
-          const D = 26.209;
+          const D = 20.15;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s04-intro-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s04-intro-glow", { scale: 0.85 }, { scale: 1.15, duration: D, ease: "sine.inOut" }, 0);
           tl.fromTo("#s04-intro-chakra", { rotation: 0 }, { rotation: 60, duration: D, ease: "none" }, 0);
-          tl.fromTo("#s04-intro-emb", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.6);
-          tl.fromTo("#s04-intro-word", { opacity: 0, y: 50, scale: 1.04 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, 1.2999999999999998);
-          tl.fromTo("#s04-intro-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, 1.7);
-          tl.fromTo("#s04-intro-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 3.663);
-          tl.fromTo("#s04-intro-b0", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 10.003);
-          tl.fromTo("#s04-intro-b1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 13.523);
-          tl.fromTo("#s04-intro-b2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 15.203000000000001);
-          tl.to("#s04-intro-badges", { opacity: 0, y: -20, duration: 0.5 }, 16.512);
-          tl.to("#s04-intro-brand", { y: -60, duration: 0.8, ease: "power2.inOut" }, 16.512);
-          tl.fromTo("#s04-intro-line", { scaleX: 0 }, { scaleX: 1, duration: 5.44, ease: "none" }, 19.352);
-          tl.fromTo("#s04-intro-n0", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 19.252);
-          tl.fromTo("#s04-intro-n1", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 20.532);
-          tl.fromTo("#s04-intro-n2", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 21.572);
-          tl.fromTo("#s04-intro-n3", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 24.692);
+          tl.fromTo("#s04-intro-emb", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.4);
+          tl.fromTo("#s04-intro-word", { opacity: 0, y: 50, scale: 1.04 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, 1.202);
+          tl.fromTo("#s04-intro-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, 1.602);
+          tl.fromTo("#s04-intro-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 3.077);
+          tl.fromTo("#s04-intro-b0", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 7.904);
+          tl.fromTo("#s04-intro-b1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 9.654);
+          tl.fromTo("#s04-intro-b2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 10.939);
+          tl.to("#s04-intro-badges", { opacity: 0, y: -20, duration: 0.5 }, 12.16);
+          tl.to("#s04-intro-brand", { y: -60, duration: 0.8, ease: "power2.inOut" }, 12.16);
+          tl.fromTo("#s04-intro-line", { scaleX: 0 }, { scaleX: 1, duration: 4.34, ease: "none" }, 14.487);
+          tl.fromTo("#s04-intro-n0", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 14.387);
+          tl.fromTo("#s04-intro-n1", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 15.377);
+          tl.fromTo("#s04-intro-n2", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 16.049999999999997);
+          tl.fromTo("#s04-intro-n3", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 18.723);
           window.__timelines["s04-intro"] = tl;
         })();
       </script>

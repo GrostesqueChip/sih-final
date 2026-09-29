@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s12-reject" data-width="1920" data-height="1080" data-duration="25.02">
+      <div id="root" data-composition-id="s12-reject" data-width="1920" data-height="1080" data-duration="22.258">
         <div class="wrap" id="s12-reject-wrap">
           <div class="bg"></div>
           <div class="glow" id="s12-reject-glow" style="left:900px; top:-300px;"></div>
@@ -54,7 +54,7 @@
           
           <div class="chapter" id="s12-reject-chap"><span class="num">05</span><span>When a scale is wrong</span><span class="rule"></span></div>
           <div class="win" id="s12-reject-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3000/tests/…/WEIGHING_PERFORMANCE</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/tests/…/WEIGHING_PERFORMANCE</span></div>
             <div class="screen">
               <div class="cam" id="s12-reject-cam">
                 <img id="s12-reject-still" src="assets/capture/s-faulty.png" alt="" />
@@ -83,7 +83,7 @@
       </div>
       <script>
         (function () {
-          const D = 25.02;
+          const D = 22.258;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s12-reject-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s12-reject-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
@@ -91,14 +91,14 @@
           
           tl.fromTo("#s12-reject-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
           tl.set(["#s12-reject-a", "#s12-reject-r0", "#s12-reject-r1", "#s12-reject-b", "#s12-reject-rej"], { opacity: 0 }, 0);
-          tl.fromTo("#s12-reject-a", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 3.665);
-          tl.fromTo("#s12-reject-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 11.905);
-          tl.fromTo("#s12-reject-r1", { opacity: 0, scale: 0.8 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, 15.025);
-          tl.to("#s12-reject-cam", { scale: 1.5, x: -120.0, y: -375.0, duration: 1, ease: "power2.inOut" }, 11.305);
-          tl.to("#s12-reject-a", { opacity: 0, duration: 0.4 }, 15.748999999999999);
-          tl.fromTo("#s12-reject-rej", { opacity: 0, y: 120, rotation: 3 }, { opacity: 1, y: 0, rotation: 0, duration: 0.9, ease: "power3.out" }, 15.748999999999999);
-          tl.to("#s12-reject-win", { opacity: 0.25, filter: "blur(6px)", duration: 0.8 }, 15.748999999999999);
-          tl.fromTo("#s12-reject-b", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 17.889);
+          tl.fromTo("#s12-reject-a", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 3.77);
+          tl.fromTo("#s12-reject-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 10.835);
+          tl.fromTo("#s12-reject-r1", { opacity: 0, scale: 0.8 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, 13.489);
+          tl.to("#s12-reject-cam", { scale: 1.5, x: -120.0, y: -375.0, duration: 1, ease: "power2.inOut" }, 10.235000000000001);
+          tl.to("#s12-reject-a", { opacity: 0, duration: 0.4 }, 14.039);
+          tl.fromTo("#s12-reject-rej", { opacity: 0, y: 120, rotation: 3 }, { opacity: 1, y: 0, rotation: 0, duration: 0.9, ease: "power3.out" }, 14.039);
+          tl.to("#s12-reject-win", { opacity: 0.25, filter: "blur(6px)", duration: 0.8 }, 14.039);
+          tl.fromTo("#s12-reject-b", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 15.658);
           window.__timelines["s12-reject"] = tl;
         })();
       </script>

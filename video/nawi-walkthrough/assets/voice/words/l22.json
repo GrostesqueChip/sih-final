@@ -1,56 +1,47 @@
 [
-  {
-    "id": "w0",
-    "text": "All",
-    "start": 0,
-    "end": 0.32
-  },
-  {
-    "id": "w1",
-    "text": "six",
-    "start": 0.32,
-    "end": 0.72
-  },
-  {
-    "id": "w2",
-    "text": "tests",
-    "start": 0.72,
-    "end": 1.12
-  },
-  {
-    "id": "w3",
-    "text": "are",
-    "start": 1.12,
-    "end": 1.28
-  },
-  {
-    "id": "w4",
-    "text": "complete.",
-    "start": 1.28,
-    "end": 2.08
-  },
-  {
-    "id": "w5",
-    "text": "He",
-    "start": 2.08,
-    "end": 2.32
-  },
-  {
-    "id": "w6",
-    "text": "finalizes",
-    "start": 2.32,
-    "end": 2.96
-  },
-  {
-    "id": "w7",
-    "text": "the",
-    "start": 3.04,
-    "end": 3.2
-  },
-  {
-    "id": "w8",
-    "text": "session.",
-    "start": 3.2,
-    "end": 3.76
-  }
+ {
+  "text": "All",
+  "start": 0.088,
+  "end": 0.262
+ },
+ {
+  "text": "six",
+  "start": 0.271,
+  "end": 0.531
+ },
+ {
+  "text": "tests",
+  "start": 0.531,
+  "end": 0.867
+ },
+ {
+  "text": "are",
+  "start": 0.915,
+  "end": 1.088
+ },
+ {
+  "text": "complete",
+  "start": 1.088,
+  "end": 1.512
+ },
+ {
+  "text": "He",
+  "start": 2.202,
+  "end": 2.308
+ },
+ {
+  "text": "finalises",
+  "start": 2.317,
+  "end": 2.923
+ },
+ {
+  "text": "the",
+  "start": 2.923,
+  "end": 3.038
+ },
+ {
+  "text": "session",
+  "start": 3.038,
+  "end": 3.404
+ }
 ]

@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s01-open" data-width="1920" data-height="1080" data-duration="15.348">
+      <div id="root" data-composition-id="s01-open" data-width="1920" data-height="1080" data-duration="14.077">
         <div class="wrap" id="s01-open-wrap">
           <div class="bg"></div>
           <div class="cam" id="s01-open-kb" style="width:1920px;height:1080px;transform-origin:50% 50%;"><img class="photo" src="assets/photos/mandi-labour.jpg" alt="" style="object-position: 50% 62%;" /></div>
@@ -67,19 +67,19 @@
       </div>
       <script>
         (function () {
-          const D = 15.348;
+          const D = 14.077;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s01-open-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s01-open-kb", { scale: 1.06 }, { scale: 1.2, duration: D, ease: "none" }, 0);
           tl.fromTo("#s01-open-coord", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" }, 0.6);
-          tl.fromTo("#s01-open-place", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 2.3);
-          tl.fromTo("#s01-open-season", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 3.92);
-          tl.to("#s01-open-loc", { opacity: 0.35, duration: 0.8 }, 8.479);
-          tl.fromTo("#s01-open-lcd", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 8.779);
+          tl.fromTo("#s01-open-place", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 1.7999999999999998);
+          tl.fromTo("#s01-open-season", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 3.602);
+          tl.to("#s01-open-loc", { opacity: 0.35, duration: 0.8 }, 8.2);
+          tl.fromTo("#s01-open-lcd", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 8.5);
           const n = { v: 0 };
-          tl.to(n, { v: 500, duration: 1.6, ease: "power2.out", onUpdate: () => { document.getElementById("s01-open-num").textContent = n.v.toFixed(1).padStart(5, "0"); } }, 11.158999999999999);
-          tl.fromTo("#s01-open-stable", { opacity: 0.2 }, { opacity: 1, duration: 0.15, repeat: 3, yoyo: true }, 12.758999999999999);
-          tl.fromTo("#s01-open-one", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.6)" }, 12.059);
+          tl.to(n, { v: 500, duration: 1.6, ease: "power2.out", onUpdate: () => { document.getElementById("s01-open-num").textContent = n.v.toFixed(1).padStart(5, "0"); } }, 10.321);
+          tl.fromTo("#s01-open-stable", { opacity: 0.2 }, { opacity: 1, duration: 0.15, repeat: 3, yoyo: true }, 11.921);
+          tl.fromTo("#s01-open-one", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.6)" }, 11.221);
           window.__timelines["s01-open"] = tl;
         })();
       </script>

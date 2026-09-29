@@ -1,182 +1,152 @@
 [
-  {
-    "id": "w0",
-    "text": "But",
-    "start": 0,
-    "end": 0.24
-  },
-  {
-    "id": "w1",
-    "text": "today,",
-    "start": 0.24,
-    "end": 0.88
-  },
-  {
-    "id": "w2",
-    "text": "verification",
-    "start": 0.88,
-    "end": 1.76
-  },
-  {
-    "id": "w3",
-    "text": "often",
-    "start": 1.76,
-    "end": 2.16
-  },
-  {
-    "id": "w4",
-    "text": "means",
-    "start": 2.16,
-    "end": 2.48
-  },
-  {
-    "id": "w5",
-    "text": "a",
-    "start": 2.48,
-    "end": 2.64
-  },
-  {
-    "id": "w6",
-    "text": "paper",
-    "start": 2.64,
-    "end": 3.04
-  },
-  {
-    "id": "w7",
-    "text": "register,",
-    "start": 3.04,
-    "end": 3.76
-  },
-  {
-    "id": "w8",
-    "text": "readings",
-    "start": 4,
-    "end": 4.64
-  },
-  {
-    "id": "w9",
-    "text": "copied",
-    "start": 4.64,
-    "end": 5.28
-  },
-  {
-    "id": "w10",
-    "text": "by",
-    "start": 5.28,
-    "end": 5.6
-  },
-  {
-    "id": "w11",
-    "text": "hand,",
-    "start": 5.6,
-    "end": 6.16
-  },
-  {
-    "id": "w12",
-    "text": "error",
-    "start": 6.16,
-    "end": 6.56
-  },
-  {
-    "id": "w13",
-    "text": "limits",
-    "start": 6.56,
-    "end": 7.04
-  },
-  {
-    "id": "w14",
-    "text": "worked",
-    "start": 7.04,
-    "end": 7.44
-  },
-  {
-    "id": "w15",
-    "text": "out",
-    "start": 7.44,
-    "end": 7.6
-  },
-  {
-    "id": "w16",
-    "text": "on",
-    "start": 7.6,
-    "end": 7.76
-  },
-  {
-    "id": "w17",
-    "text": "a",
-    "start": 7.76,
-    "end": 7.92
-  },
-  {
-    "id": "w18",
-    "text": "calculator,",
-    "start": 7.92,
-    "end": 8.88
-  },
-  {
-    "id": "w19",
-    "text": "and",
-    "start": 8.88,
-    "end": 9.12
-  },
-  {
-    "id": "w20",
-    "text": "a",
-    "start": 9.12,
-    "end": 9.2
-  },
-  {
-    "id": "w21",
-    "text": "paper",
-    "start": 9.2,
-    "end": 9.6
-  },
-  {
-    "id": "w22",
-    "text": "certificate",
-    "start": 9.6,
-    "end": 10.24
-  },
-  {
-    "id": "w23",
-    "text": "that",
-    "start": 10.24,
-    "end": 10.48
-  },
-  {
-    "id": "w24",
-    "text": "anyone",
-    "start": 10.48,
-    "end": 10.88
-  },
-  {
-    "id": "w25",
-    "text": "with",
-    "start": 10.88,
-    "end": 11.12
-  },
-  {
-    "id": "w26",
-    "text": "a",
-    "start": 11.12,
-    "end": 11.2
-  },
-  {
-    "id": "w27",
-    "text": "printer",
-    "start": 11.2,
-    "end": 11.68
-  },
-  {
-    "id": "w28",
-    "text": "can",
-    "start": 11.68,
-    "end": 11.84
-  },
-  {
-    "id": "w29",
-    "text": "forge.",
-    "start": 11.84,
-    "end": 12.4
-  }
+ {
+  "text": "But",
+  "start": 0.088,
+  "end": 0.262
+ },
+ {
+  "text": "today",
+  "start": 0.31,
+  "end": 0.598
+ },
+ {
+  "text": "verification",
+  "start": 0.848,
+  "end": 1.512
+ },
+ {
+  "text": "often",
+  "start": 1.588,
+  "end": 1.838
+ },
+ {
+  "text": "means",
+  "start": 1.838,
+  "end": 2.175
+ },
+ {
+  "text": "a",
+  "start": 2.233,
+  "end": 2.29
+ },
+ {
+  "text": "paper",
+  "start": 2.29,
+  "end": 2.617
+ },
+ {
+  "text": "register",
+  "start": 2.617,
+  "end": 3.098
+ },
+ {
+  "text": "readings",
+  "start": 3.396,
+  "end": 3.742
+ },
+ {
+  "text": "copied",
+  "start": 3.762,
+  "end": 4.108
+ },
+ {
+  "text": "by",
+  "start": 4.108,
+  "end": 4.3
+ },
+ {
+  "text": "hand",
+  "start": 4.3,
+  "end": 4.588
+ },
+ {
+  "text": "error",
+  "start": 4.771,
+  "end": 4.983
+ },
+ {
+  "text": "limits",
+  "start": 4.983,
+  "end": 5.3
+ },
+ {
+  "text": "worked",
+  "start": 5.338,
+  "end": 5.637
+ },
+ {
+  "text": "out",
+  "start": 5.665,
+  "end": 5.867
+ },
+ {
+  "text": "on",
+  "start": 5.915,
+  "end": 6.031
+ },
+ {
+  "text": "a",
+  "start": 6.04,
+  "end": 6.079
+ },
+ {
+  "text": "calculator",
+  "start": 6.079,
+  "end": 6.656
+ },
+ {
+  "text": "and",
+  "start": 6.867,
+  "end": 7.031
+ },
+ {
+  "text": "a",
+  "start": 7.031,
+  "end": 7.06
+ },
+ {
+  "text": "paper",
+  "start": 7.06,
+  "end": 7.377
+ },
+ {
+  "text": "certificate",
+  "start": 7.377,
+  "end": 7.935
+ },
+ {
+  "text": "that",
+  "start": 7.983,
+  "end": 8.213
+ },
+ {
+  "text": "anyone",
+  "start": 8.262,
+  "end": 8.637
+ },
+ {
+  "text": "with",
+  "start": 8.637,
+  "end": 8.819
+ },
+ {
+  "text": "a",
+  "start": 8.819,
+  "end": 8.867
+ },
+ {
+  "text": "printer",
+  "start": 8.867,
+  "end": 9.204
+ },
+ {
+  "text": "can",
+  "start": 9.204,
+  "end": 9.406
+ },
+ {
+  "text": "forge",
+  "start": 9.406,
+  "end": 9.781
+ }
 ]

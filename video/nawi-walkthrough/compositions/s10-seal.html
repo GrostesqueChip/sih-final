@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s10-seal" data-width="1920" data-height="1080" data-duration="22.14">
+      <div id="root" data-composition-id="s10-seal" data-width="1920" data-height="1080" data-duration="21.41">
         <div class="wrap" id="s10-seal-wrap">
           <div class="bg"></div>
           <div class="glow" id="s10-seal-glow" style="left:900px; top:-300px;"></div>
@@ -54,17 +54,17 @@
           
           <div class="chapter" id="s10-seal-chap"><span class="num">04</span><span>Finalise & seal</span><span class="rule"></span></div>
           <div class="win" id="s10-seal-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3000/tests/sess-034</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/tests/sess-034</span></div>
             <div class="screen">
               <div class="cam" id="s10-seal-cam">
                 <img id="s10-seal-still" src="assets/capture/s-report.png" alt="" />
-                <video id="s10-seal-vid" src="assets/capture/c06-seal.mp4" data-start="0.3" data-duration="21.286" data-media-start="0" data-playback-rate="0.7" muted playsinline></video>
+                <video id="s10-seal-vid" src="assets/capture/c06-seal.mp4" data-start="0.3" data-duration="20.810" data-media-start="0" data-playback-rate="0.738" muted playsinline></video>
               </div>
             </div>
           </div>
           <div class="rail">
             <div class="card pass" id="s10-seal-v"><div class="k">Verdict</div><div class="v">Computed from the readings. Cannot be overridden.</div></div>
-            <div class="card hot" id="s10-seal-seal"><div class="k">HMAC-SHA256 digital seal</div><div class="mono" id="s10-seal-hash" style="font-size:22px; line-height:1.45; color:#ffb020; word-break:break-all; margin-top:8px; height:132px;"></div></div>
+            <div class="card hot" id="s10-seal-seal"><div class="k">HMAC-SHA256 seal · verdict + every reading</div><div class="mono" id="s10-seal-hash" style="font-size:22px; line-height:1.45; color:#ffb020; word-break:break-all; margin-top:8px; height:132px;"></div></div>
             <div class="card" id="s10-seal-lock" style="display:flex; align-items:center; gap:16px;">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
               <div class="v" style="margin-top:0;">Readings locked. Session read-only.</div>
@@ -74,20 +74,20 @@
       </div>
       <script>
         (function () {
-          const D = 22.14;
+          const D = 21.41;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s10-seal-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s10-seal-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
           tl.fromTo("#s10-seal-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
           
           tl.fromTo("#s10-seal-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
-          tl.fromTo("#s10-seal-v", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 5.043);
-          tl.to("#s10-seal-cam", { scale: 1.45, x: -324.0, y: -276.5, duration: 1, ease: "power2.inOut" }, 4.742999999999999);
-          tl.to("#s10-seal-cam", { scale: 1, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 11.163);
-          tl.fromTo("#s10-seal-seal", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 13.343);
+          tl.fromTo("#s10-seal-v", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 4.61);
+          tl.to("#s10-seal-cam", { scale: 1.45, x: -324.0, y: -276.5, duration: 1, ease: "power2.inOut" }, 4.31);
+          tl.to("#s10-seal-cam", { scale: 1, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 10.049999999999999);
+          tl.fromTo("#s10-seal-seal", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 12.254000000000001);
           const h = { n: 0 };
-          tl.to(h, { n: 64, duration: 2.2, ease: "none", onUpdate: () => { document.getElementById("s10-seal-hash").textContent = "056d0a99d38166a3402cfcf2b214314d74ff3ae19d6f51d5f9d34596d58e4c9a".slice(0, Math.round(h.n)); } }, 13.742999999999999);
-          tl.fromTo("#s10-seal-lock", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 20.363);
+          tl.to(h, { n: 64, duration: 2.2, ease: "none", onUpdate: () => { document.getElementById("s10-seal-hash").textContent = "9a558094b0a676941dc6e8ab0c769136205f40905a0c1b765669282ff4c24e22".slice(0, Math.round(h.n)); } }, 12.654);
+          tl.fromTo("#s10-seal-lock", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 19.892);
           window.__timelines["s10-seal"] = tl;
         })();
       </script>

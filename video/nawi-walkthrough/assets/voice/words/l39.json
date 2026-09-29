@@ -1,140 +1,117 @@
 [
-  {
-    "id": "w0",
-    "text": "Imagine",
-    "start": 0,
-    "end": 0.64
-  },
-  {
-    "id": "w1",
-    "text": "every",
-    "start": 0.64,
-    "end": 0.96
-  },
-  {
-    "id": "w2",
-    "text": "state's",
-    "start": 0.96,
-    "end": 1.36
-  },
-  {
-    "id": "w3",
-    "text": "legal",
-    "start": 1.36,
-    "end": 1.76
-  },
-  {
-    "id": "w4",
-    "text": "metrology",
-    "start": 1.76,
-    "end": 2.64
-  },
-  {
-    "id": "w5",
-    "text": "department",
-    "start": 2.64,
-    "end": 3.12
-  },
-  {
-    "id": "w6",
-    "text": "on",
-    "start": 3.12,
-    "end": 3.36
-  },
-  {
-    "id": "w7",
-    "text": "one",
-    "start": 3.36,
-    "end": 3.6
-  },
-  {
-    "id": "w8",
-    "text": "platform,",
-    "start": 3.6,
-    "end": 4.48
-  },
-  {
-    "id": "w9",
-    "text": "every",
-    "start": 4.48,
-    "end": 4.8
-  },
-  {
-    "id": "w10",
-    "text": "Mandy",
-    "start": 4.8,
-    "end": 5.44
-  },
-  {
-    "id": "w11",
-    "text": "Waybridge,",
-    "start": 5.44,
-    "end": 6.4
-  },
-  {
-    "id": "w12",
-    "text": "every",
-    "start": 6.4,
-    "end": 6.64
-  },
-  {
-    "id": "w13",
-    "text": "Ration",
-    "start": 6.64,
-    "end": 7.04
-  },
-  {
-    "id": "w14",
-    "text": "Shop",
-    "start": 7.36,
-    "end": 7.76
-  },
-  {
-    "id": "w15",
-    "text": "Scale,",
-    "start": 7.76,
-    "end": 8.48
-  },
-  {
-    "id": "w16",
-    "text": "every",
-    "start": 8.48,
-    "end": 8.8
-  },
-  {
-    "id": "w17",
-    "text": "Milk",
-    "start": 8.8,
-    "end": 9.2
-  },
-  {
-    "id": "w18",
-    "text": "Collection",
-    "start": 9.2,
-    "end": 9.76
-  },
-  {
-    "id": "w19",
-    "text": "Center,",
-    "start": 9.76,
-    "end": 10.4
-  },
-  {
-    "id": "w20",
-    "text": "every",
-    "start": 10.4,
-    "end": 10.64
-  },
-  {
-    "id": "w21",
-    "text": "Jewelers",
-    "start": 10.64,
-    "end": 11.28
-  },
-  {
-    "id": "w22",
-    "text": "Balance.",
-    "start": 11.44,
-    "end": 11.92
-  }
+ {
+  "text": "Imagine",
+  "start": 0.088,
+  "end": 0.483
+ },
+ {
+  "text": "every",
+  "start": 0.56,
+  "end": 0.848
+ },
+ {
+  "text": "state's",
+  "start": 0.848,
+  "end": 1.194
+ },
+ {
+  "text": "Legal",
+  "start": 1.233,
+  "end": 1.579
+ },
+ {
+  "text": "Metrology",
+  "start": 1.579,
+  "end": 2.079
+ },
+ {
+  "text": "department",
+  "start": 2.079,
+  "end": 2.617
+ },
+ {
+  "text": "on",
+  "start": 2.694,
+  "end": 2.858
+ },
+ {
+  "text": "one",
+  "start": 2.858,
+  "end": 3.088
+ },
+ {
+  "text": "platform",
+  "start": 3.088,
+  "end": 3.665
+ },
+ {
+  "text": "Every",
+  "start": 4.298,
+  "end": 4.558
+ },
+ {
+  "text": "mandi",
+  "start": 4.558,
+  "end": 4.846
+ },
+ {
+  "text": "weighbridge",
+  "start": 4.846,
+  "end": 5.279
+ },
+ {
+  "text": "Every",
+  "start": 5.99,
+  "end": 6.26
+ },
+ {
+  "text": "ration",
+  "start": 6.26,
+  "end": 6.596
+ },
+ {
+  "text": "shop",
+  "start": 6.596,
+  "end": 6.846
+ },
+ {
+  "text": "scale",
+  "start": 6.846,
+  "end": 7.24
+ },
+ {
+  "text": "Every",
+  "start": 7.885,
+  "end": 8.144
+ },
+ {
+  "text": "milk",
+  "start": 8.144,
+  "end": 8.404
+ },
+ {
+  "text": "collection",
+  "start": 8.404,
+  "end": 8.846
+ },
+ {
+  "text": "centre",
+  "start": 8.846,
+  "end": 9.231
+ },
+ {
+  "text": "Every",
+  "start": 9.923,
+  "end": 10.173
+ },
+ {
+  "text": "jeweller's",
+  "start": 10.173,
+  "end": 10.587
+ },
+ {
+  "text": "balance",
+  "start": 10.587,
+  "end": 11.029
+ }
 ]

@@ -1,194 +1,162 @@
 [
-  {
-    "id": "w0",
-    "text": "Here,",
-    "start": 0,
-    "end": 0.32
-  },
-  {
-    "id": "w1",
-    "text": "we",
-    "start": 0.32,
-    "end": 0.56
-  },
-  {
-    "id": "w2",
-    "text": "simulate",
-    "start": 0.56,
-    "end": 1.04
-  },
-  {
-    "id": "w3",
-    "text": "a",
-    "start": 1.04,
-    "end": 1.2
-  },
-  {
-    "id": "w4",
-    "text": "faulty",
-    "start": 1.2,
-    "end": 1.68
-  },
-  {
-    "id": "w5",
-    "text": "load",
-    "start": 1.68,
-    "end": 2.08
-  },
-  {
-    "id": "w6",
-    "text": "cell",
-    "start": 2.08,
-    "end": 2.4
-  },
-  {
-    "id": "w7",
-    "text": "on",
-    "start": 2.4,
-    "end": 2.56
-  },
-  {
-    "id": "w8",
-    "text": "a",
-    "start": 2.56,
-    "end": 2.64
-  },
-  {
-    "id": "w9",
-    "text": "neighborhood",
-    "start": 2.64,
-    "end": 3.2
-  },
-  {
-    "id": "w10",
-    "text": "grocery",
-    "start": 3.2,
-    "end": 3.84
-  },
-  {
-    "id": "w11",
-    "text": "store",
-    "start": 3.84,
-    "end": 4.24
-  },
-  {
-    "id": "w12",
-    "text": "scale.",
-    "start": 4.24,
-    "end": 4.96
-  },
-  {
-    "id": "w13",
-    "text": "As",
-    "start": 4.96,
-    "end": 5.2
-  },
-  {
-    "id": "w14",
-    "text": "the",
-    "start": 5.2,
-    "end": 5.44
-  },
-  {
-    "id": "w15",
-    "text": "load",
-    "start": 5.44,
-    "end": 5.84
-  },
-  {
-    "id": "w16",
-    "text": "rises,",
-    "start": 5.84,
-    "end": 6.4
-  },
-  {
-    "id": "w17",
-    "text": "the",
-    "start": 6.48,
-    "end": 6.64
-  },
-  {
-    "id": "w18",
-    "text": "readings",
-    "start": 6.64,
-    "end": 7.28
-  },
-  {
-    "id": "w19",
-    "text": "creep",
-    "start": 7.28,
-    "end": 7.6
-  },
-  {
-    "id": "w20",
-    "text": "upward.",
-    "start": 7.6,
-    "end": 8.48
-  },
-  {
-    "id": "w21",
-    "text": "The",
-    "start": 8.48,
-    "end": 8.8
-  },
-  {
-    "id": "w22",
-    "text": "moment",
-    "start": 8.8,
-    "end": 9.12
-  },
-  {
-    "id": "w23",
-    "text": "an",
-    "start": 9.12,
-    "end": 9.36
-  },
-  {
-    "id": "w24",
-    "text": "error",
-    "start": 9.36,
-    "end": 9.76
-  },
-  {
-    "id": "w25",
-    "text": "crosses",
-    "start": 9.76,
-    "end": 10.24
-  },
-  {
-    "id": "w26",
-    "text": "the",
-    "start": 10.24,
-    "end": 10.4
-  },
-  {
-    "id": "w27",
-    "text": "legal",
-    "start": 10.4,
-    "end": 10.8
-  },
-  {
-    "id": "w28",
-    "text": "limit,",
-    "start": 10.8,
-    "end": 11.36
-  },
-  {
-    "id": "w29",
-    "text": "it",
-    "start": 11.36,
-    "end": 11.6
-  },
-  {
-    "id": "w30",
-    "text": "turns",
-    "start": 11.6,
-    "end": 11.92
-  },
-  {
-    "id": "w31",
-    "text": "red.",
-    "start": 11.92,
-    "end": 12.32
-  }
+ {
+  "text": "Here",
+  "start": 0.088,
+  "end": 0.338
+ },
+ {
+  "text": "we",
+  "start": 0.521,
+  "end": 0.685
+ },
+ {
+  "text": "simulate",
+  "start": 0.685,
+  "end": 1.108
+ },
+ {
+  "text": "a",
+  "start": 1.165,
+  "end": 1.233
+ },
+ {
+  "text": "faulty",
+  "start": 1.233,
+  "end": 1.598
+ },
+ {
+  "text": "load",
+  "start": 1.627,
+  "end": 1.848
+ },
+ {
+  "text": "cell",
+  "start": 1.848,
+  "end": 2.156
+ },
+ {
+  "text": "on",
+  "start": 2.213,
+  "end": 2.358
+ },
+ {
+  "text": "a",
+  "start": 2.367,
+  "end": 2.435
+ },
+ {
+  "text": "neighbourhood",
+  "start": 2.435,
+  "end": 2.925
+ },
+ {
+  "text": "grocery",
+  "start": 2.935,
+  "end": 3.358
+ },
+ {
+  "text": "store",
+  "start": 3.358,
+  "end": 3.608
+ },
+ {
+  "text": "scale",
+  "start": 3.608,
+  "end": 4.012
+ },
+ {
+  "text": "As",
+  "start": 4.635,
+  "end": 4.808
+ },
+ {
+  "text": "the",
+  "start": 4.808,
+  "end": 4.913
+ },
+ {
+  "text": "load",
+  "start": 4.913,
+  "end": 5.173
+ },
+ {
+  "text": "rises",
+  "start": 5.192,
+  "end": 5.625
+ },
+ {
+  "text": "the",
+  "start": 5.827,
+  "end": 5.904
+ },
+ {
+  "text": "readings",
+  "start": 5.904,
+  "end": 6.269
+ },
+ {
+  "text": "creep",
+  "start": 6.288,
+  "end": 6.529
+ },
+ {
+  "text": "upward",
+  "start": 6.577,
+  "end": 6.981
+ },
+ {
+  "text": "The",
+  "start": 7.673,
+  "end": 7.75
+ },
+ {
+  "text": "moment",
+  "start": 7.75,
+  "end": 8.067
+ },
+ {
+  "text": "an",
+  "start": 8.125,
+  "end": 8.298
+ },
+ {
+  "text": "error",
+  "start": 8.356,
+  "end": 8.577
+ },
+ {
+  "text": "crosses",
+  "start": 8.577,
+  "end": 8.962
+ },
+ {
+  "text": "the",
+  "start": 8.962,
+  "end": 9.077
+ },
+ {
+  "text": "legal",
+  "start": 9.077,
+  "end": 9.423
+ },
+ {
+  "text": "limit",
+  "start": 9.423,
+  "end": 9.731
+ },
+ {
+  "text": "it",
+  "start": 9.933,
+  "end": 10.067
+ },
+ {
+  "text": "turns",
+  "start": 10.067,
+  "end": 10.404
+ },
+ {
+  "text": "red",
+  "start": 10.404,
+  "end": 10.654
+ }
 ]

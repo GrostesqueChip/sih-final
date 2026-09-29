@@ -1,170 +1,142 @@
 [
-  {
-    "id": "w0",
-    "text": "His",
-    "start": 0,
-    "end": 0.24
-  },
-  {
-    "id": "w1",
-    "text": "dashboard",
-    "start": 0.24,
-    "end": 0.96
-  },
-  {
-    "id": "w2",
-    "text": "shows",
-    "start": 0.96,
-    "end": 1.28
-  },
-  {
-    "id": "w3",
-    "text": "the",
-    "start": 1.28,
-    "end": 1.36
-  },
-  {
-    "id": "w4",
-    "text": "whole",
-    "start": 1.36,
-    "end": 1.68
-  },
-  {
-    "id": "w5",
-    "text": "jurisdiction",
-    "start": 1.68,
-    "end": 2.4
-  },
-  {
-    "id": "w6",
-    "text": "at",
-    "start": 2.4,
-    "end": 2.56
-  },
-  {
-    "id": "w7",
-    "text": "a",
-    "start": 2.56,
-    "end": 2.72
-  },
-  {
-    "id": "w8",
-    "text": "glance,",
-    "start": 2.72,
-    "end": 3.52
-  },
-  {
-    "id": "w9",
-    "text": "which",
-    "start": 3.52,
-    "end": 3.76
-  },
-  {
-    "id": "w10",
-    "text": "scales",
-    "start": 3.92,
-    "end": 4.48
-  },
-  {
-    "id": "w11",
-    "text": "hold",
-    "start": 4.48,
-    "end": 4.8
-  },
-  {
-    "id": "w12",
-    "text": "a",
-    "start": 4.8,
-    "end": 4.88
-  },
-  {
-    "id": "w13",
-    "text": "valid",
-    "start": 4.88,
-    "end": 5.28
-  },
-  {
-    "id": "w14",
-    "text": "stamp",
-    "start": 5.28,
-    "end": 5.68
-  },
-  {
-    "id": "w15",
-    "text": "which",
-    "start": 5.76,
-    "end": 6
-  },
-  {
-    "id": "w16",
-    "text": "are",
-    "start": 6,
-    "end": 6.32
-  },
-  {
-    "id": "w17",
-    "text": "due,",
-    "start": 6.32,
-    "end": 6.88
-  },
-  {
-    "id": "w18",
-    "text": "expired,",
-    "start": 6.88,
-    "end": 7.68
-  },
-  {
-    "id": "w19",
-    "text": "or",
-    "start": 7.68,
-    "end": 7.92
-  },
-  {
-    "id": "w20",
-    "text": "rejected,",
-    "start": 7.92,
-    "end": 8.72
-  },
-  {
-    "id": "w21",
-    "text": "and",
-    "start": 8.72,
-    "end": 8.88
-  },
-  {
-    "id": "w22",
-    "text": "the",
-    "start": 8.88,
-    "end": 9.04
-  },
-  {
-    "id": "w23",
-    "text": "fees",
-    "start": 9.04,
-    "end": 9.52
-  },
-  {
-    "id": "w24",
-    "text": "collected",
-    "start": 9.52,
-    "end": 10
-  },
-  {
-    "id": "w25",
-    "text": "district",
-    "start": 10.16,
-    "end": 10.72
-  },
-  {
-    "id": "w26",
-    "text": "by",
-    "start": 10.72,
-    "end": 10.88
-  },
-  {
-    "id": "w27",
-    "text": "district.",
-    "start": 10.88,
-    "end": 11.44
-  }
+ {
+  "text": "His",
+  "start": 0.088,
+  "end": 0.242
+ },
+ {
+  "text": "dashboard",
+  "start": 0.271,
+  "end": 0.781
+ },
+ {
+  "text": "shows",
+  "start": 0.8,
+  "end": 1.108
+ },
+ {
+  "text": "the",
+  "start": 1.108,
+  "end": 1.213
+ },
+ {
+  "text": "whole",
+  "start": 1.213,
+  "end": 1.483
+ },
+ {
+  "text": "jurisdiction",
+  "start": 1.483,
+  "end": 2.088
+ },
+ {
+  "text": "at",
+  "start": 2.165,
+  "end": 2.348
+ },
+ {
+  "text": "a",
+  "start": 2.348,
+  "end": 2.387
+ },
+ {
+  "text": "glance",
+  "start": 2.387,
+  "end": 2.81
+ },
+ {
+  "text": "Which",
+  "start": 3.471,
+  "end": 3.673
+ },
+ {
+  "text": "scales",
+  "start": 3.712,
+  "end": 4.077
+ },
+ {
+  "text": "hold",
+  "start": 4.077,
+  "end": 4.327
+ },
+ {
+  "text": "a",
+  "start": 4.385,
+  "end": 4.442
+ },
+ {
+  "text": "valid",
+  "start": 4.442,
+  "end": 4.75
+ },
+ {
+  "text": "stamp",
+  "start": 4.75,
+  "end": 5.115
+ },
+ {
+  "text": "which",
+  "start": 5.337,
+  "end": 5.538
+ },
+ {
+  "text": "are",
+  "start": 5.577,
+  "end": 5.74
+ },
+ {
+  "text": "due",
+  "start": 5.74,
+  "end": 5.981
+ },
+ {
+  "text": "expired",
+  "start": 6.173,
+  "end": 6.712
+ },
+ {
+  "text": "or",
+  "start": 6.913,
+  "end": 7.048
+ },
+ {
+  "text": "rejected",
+  "start": 7.048,
+  "end": 7.51
+ },
+ {
+  "text": "and",
+  "start": 7.731,
+  "end": 7.875
+ },
+ {
+  "text": "the",
+  "start": 7.875,
+  "end": 7.981
+ },
+ {
+  "text": "fees",
+  "start": 7.981,
+  "end": 8.26
+ },
+ {
+  "text": "collected",
+  "start": 8.279,
+  "end": 8.692
+ },
+ {
+  "text": "district",
+  "start": 8.837,
+  "end": 9.221
+ },
+ {
+  "text": "by",
+  "start": 9.24,
+  "end": 9.433
+ },
+ {
+  "text": "district",
+  "start": 9.433,
+  "end": 9.837
+ }
 ]

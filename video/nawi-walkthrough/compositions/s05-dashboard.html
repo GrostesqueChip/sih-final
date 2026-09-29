@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s05-dashboard" data-width="1920" data-height="1080" data-duration="17.516">
+      <div id="root" data-composition-id="s05-dashboard" data-width="1920" data-height="1080" data-duration="15.743">
         <div class="wrap" id="s05-dashboard-wrap">
           <div class="bg"></div>
           <div class="glow" id="s05-dashboard-glow" style="left:900px; top:-300px;"></div>
@@ -54,11 +54,11 @@
           
           <div class="chapter" id="s05-dashboard-chap"><span class="num">02</span><span>The solution · inspector</span><span class="rule"></span></div>
           <div class="win" id="s05-dashboard-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3000/dashboard</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/dashboard</span></div>
             <div class="screen">
               <div class="cam" id="s05-dashboard-cam">
                 <img id="s05-dashboard-still" src="assets/capture/s-dashboard.png" alt="" />
-                <video id="s05-dashboard-vid" src="assets/capture/c01-login-dashboard.mp4" data-start="0.3" data-duration="17.216" data-media-start="0" data-playback-rate="1" muted playsinline></video>
+                <video id="s05-dashboard-vid" src="assets/capture/c01-login-dashboard.mp4" data-start="0.3" data-duration="15.137" data-media-start="0" data-playback-rate="1.253" muted playsinline></video>
               </div>
             </div>
           </div>
@@ -74,18 +74,18 @@
       </div>
       <script>
         (function () {
-          const D = 17.516;
+          const D = 15.743;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s05-dashboard-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s05-dashboard-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
           tl.fromTo("#s05-dashboard-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
           
           tl.fromTo("#s05-dashboard-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
-          tl.fromTo(["#s05-dashboard-ey", "#s05-dashboard-h"], { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.6, stagger: 0.12, ease: "power3.out" }, 1.02);
-          tl.fromTo("#s05-dashboard-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 9.933);
-          tl.fromTo("#s05-dashboard-r1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 11.373000000000001);
-          tl.fromTo("#s05-dashboard-r2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 14.093);
-          tl.fromTo("#s05-dashboard-r3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 15.213000000000001);
+          tl.fromTo(["#s05-dashboard-ey", "#s05-dashboard-h"], { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.6, stagger: 0.12, ease: "power3.out" }, 0.927);
+          tl.fromTo("#s05-dashboard-r0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 9.348);
+          tl.fromTo("#s05-dashboard-r1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 10.646);
+          tl.fromTo("#s05-dashboard-r2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 12.887);
+          tl.fromTo("#s05-dashboard-r3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 13.743);
           window.__timelines["s05-dashboard"] = tl;
         })();
       </script>

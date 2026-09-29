@@ -46,7 +46,7 @@
 .big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
 .strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
 </style>
-      <div id="root" data-composition-id="s09-capture" data-width="1920" data-height="1080" data-duration="25.745">
+      <div id="root" data-composition-id="s09-capture" data-width="1920" data-height="1080" data-duration="23.707">
         <div class="wrap" id="s09-capture-wrap">
           <div class="bg"></div>
           <div class="glow" id="s09-capture-glow" style="left:900px; top:-300px;"></div>
@@ -54,11 +54,11 @@
           
           <div class="chapter" id="s09-capture-chap"><span class="num">03</span><span>Live capture · creep test</span><span class="rule"></span></div>
           <div class="win" id="s09-capture-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3000/tests/sess-034/TIME_DEPENDENCE</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/tests/sess-034/TIME_DEPENDENCE</span></div>
             <div class="screen">
               <div class="cam" id="s09-capture-cam">
                 <img id="s09-capture-still" src="assets/capture/s-creep-done.png" alt="" />
-                <video id="s09-capture-vid" src="assets/capture/c05-creep-capture.mp4" data-start="0.3" data-duration="24.273" data-media-start="0" data-playback-rate="0.55" muted playsinline></video>
+                <video id="s09-capture-vid" src="assets/capture/c05-creep-capture.mp4" data-start="0.3" data-duration="23.107" data-media-start="0" data-playback-rate="0.561" muted playsinline></video>
               </div>
             </div>
           </div>
@@ -79,27 +79,27 @@
       </div>
       <script>
         (function () {
-          const D = 25.745;
+          const D = 23.707;
           const tl = gsap.timeline({ paused: true });
           tl.fromTo("#s09-capture-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
           tl.fromTo("#s09-capture-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
           tl.fromTo("#s09-capture-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
           
           tl.fromTo("#s09-capture-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
-          tl.fromTo("#s09-capture-h", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.8999999999999999);
-          tl.fromTo("#s09-capture-s0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 8.536);
-          tl.fromTo("#s09-capture-s1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 9.816);
-          tl.fromTo("#s09-capture-s2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 13.416);
-          tl.fromTo("#s09-capture-s3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 14.936);
-          tl.to("#s09-capture-cam", { scale: 1.55, x: -792.0, y: -215.0, duration: 1.2, ease: "power2.inOut" }, 6.9159999999999995);
-          tl.to("#s09-capture-cam", { scale: 1, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 14.735999999999999);
-          tl.to(["#s09-capture-s0", "#s09-capture-s1", "#s09-capture-s2", "#s09-capture-s3"], { opacity: 0.35, duration: 0.4 }, 19.404999999999998);
-          tl.fromTo("#s09-capture-x0", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 20.115);
-          tl.fromTo("#s09-capture-xs0", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 20.565);
-          tl.fromTo("#s09-capture-x1", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 21.154999999999998);
-          tl.fromTo("#s09-capture-xs1", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 21.605);
-          tl.fromTo("#s09-capture-x2", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 23.154999999999998);
-          tl.fromTo("#s09-capture-xs2", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 23.605);
+          tl.fromTo("#s09-capture-h", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.75);
+          tl.fromTo("#s09-capture-s0", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 7.994);
+          tl.fromTo("#s09-capture-s1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 9.032);
+          tl.fromTo("#s09-capture-s2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 11.975);
+          tl.fromTo("#s09-capture-s3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 13.444);
+          tl.to("#s09-capture-cam", { scale: 1.55, x: -792.0, y: -215.0, duration: 1.2, ease: "power2.inOut" }, 6.278);
+          tl.to("#s09-capture-cam", { scale: 1, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 13.244);
+          tl.to(["#s09-capture-s0", "#s09-capture-s1", "#s09-capture-s2", "#s09-capture-s3"], { opacity: 0.35, duration: 0.4 }, 17.534);
+          tl.fromTo("#s09-capture-x0", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 18.017);
+          tl.fromTo("#s09-capture-xs0", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 18.467000000000002);
+          tl.fromTo("#s09-capture-x1", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 19.293999999999997);
+          tl.fromTo("#s09-capture-xs1", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 19.744);
+          tl.fromTo("#s09-capture-x2", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 21.206999999999997);
+          tl.fromTo("#s09-capture-xs2", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, 21.657);
           window.__timelines["s09-capture"] = tl;
         })();
       </script>

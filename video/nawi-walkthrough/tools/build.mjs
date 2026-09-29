@@ -1,28 +1,31 @@
 // Generates index.html + compositions/*.html for the NAWI-ReportPro walkthrough film.
-// Timing comes from the real voice files (assets/voice/*.wav) and their Parakeet word
-// timestamps (assets/voice/words/*.json), so every visual beat lands on the spoken word.
+// Timing comes from the real voice files (assets/voice/*.wav) and the TTS engine's word
+// timestamps (assets/voice/words/*.json, from tools/voice.py), so every visual beat lands
+// on the spoken word.
 //
 //   node tools/build.mjs
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const script = JSON.parse(fs.readFileSync(path.join(ROOT, 'script.json'), 'utf8'));
 const probe = (f) => parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString());
 
 // ---------------------------------------------------------------- timing
-const GAP = 0.4;          // between lines inside a scene
-const OVERLAP = 0.5;      // scene crossfade
+// v1 padding scaled down for the 1.3x narration
+const GAP = 0.3;          // between lines inside a scene
+const OVERLAP = 0.4;      // scene crossfade
 const SCENE_PAD = {       // [lead, tail] seconds of picture around the voice
-  's01-open': [2.4, 0.9], 's04-intro': [1.0, 0.9], 's11-pdf': [0.8, 1.0], 's13-verify': [0.8, 1.0],
-  's15-scale': [0.9, 1.0], 's16-close': [0.8, 6.5],
+  's01-open': [1.9, 0.7], 's04-intro': [0.8, 0.7], 's11-pdf': [0.6, 0.8], 's13-verify': [0.6, 0.8],
+  's15-scale': [0.7, 0.8], 's16-close': [0.6, 5.5],
 };
 const lines = {};
 const scenes = [];
 let cursor = 0;
 for (const sc of script.scenes) {
-  const [lead, tail] = SCENE_PAD[sc.id] || [0.7, 0.8];
+  const [lead, tail] = SCENE_PAD[sc.id] || [0.55, 0.6];
   const start = scenes.length ? cursor - OVERLAP : 0;
   let t = lead;
   for (const l of sc.lines) {
@@ -52,6 +55,14 @@ function W(id, prefix, nth = 0) {
 const L = (id) => +lines[id].local.toFixed(3);                 // line start (scene-local)
 const E = (id) => +(lines[id].local + lines[id].dur).toFixed(3); // line end (scene-local)
 const sceneOf = (id) => scenes.find((s) => s.id === id);
+// recordings: speed a clip up (never below its v1 rate) so its usable part fits the scene
+const clipLen = (f) => probe(path.join(ROOT, 'assets/capture', f));
+const fit = (id, usable, minRate, start = 0.3) => {
+  const avail = sceneOf(id).dur - start - 0.3;
+  const rate = +Math.max(minRate, usable / avail).toFixed(3);
+  return { rate, dur: Math.min(avail, usable / rate) };
+};
+const rates = {};
 
 // ---------------------------------------------------------------- captions
 function captionChunks(l) {
@@ -291,7 +302,7 @@ ${ambient(id)}
 ${chapter(id, '01', 'The problem · today')}
           <div id="${id}-law" style="position:absolute; left:110px; top:120px; width:1700px;">
             <div class="mono" style="font-size:24px; font-weight:700; letter-spacing:0.14em; color:#f59e0b;">LEGAL METROLOGY ACT, 2009</div>
-            <div class="big" style="font-size:84px; margin-top:14px;">Every weighing instrument used in trade — verified. Every year.</div>
+            <div class="big" style="font-size:84px; margin-top:14px;">Every weighing instrument used in trade — verified periodically.</div>
           </div>
           <div style="position:absolute; left:110px; top:430px; width:1700px; display:flex; gap:28px;">
 ${cards.map((c, i) => `            <div class="card" id="${id}-p${i}" style="flex:1; height:300px; padding:30px; position:relative;">
@@ -377,7 +388,7 @@ function railList(id, items) {
   ];
   const html = `${bgLayer(id)}
 ${chapter(id, '02', 'The solution · inspector')}
-${win(id, { url: 'localhost:3000/dashboard', video: 'c01-login-dashboard.mp4', still: 's-dashboard.png', dur: Math.min(sc.dur - 0.3, 18.1) })}
+${win(id, { url: 'nawi-reportpro.vercel.app/dashboard', video: 'c01-login-dashboard.mp4', still: 's-dashboard.png', ...fit(id, clipLen('c01-login-dashboard.mp4') - 0.6, 1) })}
           <div class="rail">
             <div class="eyebrow" id="${id}-ey">Inspector</div>
             <h2 id="${id}-h">Shri Vikramaditya Sharma</h2>
@@ -395,12 +406,11 @@ ${items.map((it, i) => pop(`#${id}-r${i}`, it.t - 0.1, '{ opacity: 0, x: 40 }'))
 {
   const id = 's06-registry';
   const sc = sceneOf(id);
-  const rate = 0.85;
   const items = [
-    { k: 'Registry', v: 'Mandi weighbridges', t: W('l14', 'weybridges') },
+    { k: 'Registry', v: 'Mandi weighbridges', t: W('l14', 'weighbridges') },
     { k: 'Registry', v: 'Ration-shop scales', t: W('l14', 'ration') },
     { k: 'Registry', v: 'Milk-collection scales', t: W('l14', 'milk') },
-    { k: 'Registry', v: 'Jewellers’ balances', t: W('l14', 'jewelers') },
+    { k: 'Registry', v: 'Jewellers’ balances', t: W('l14', 'jewellers') },
   ];
   const hist = [
     ['03 Dec 2025', 'FAIL', 'fail', 'failed'],
@@ -409,7 +419,7 @@ ${items.map((it, i) => pop(`#${id}-r${i}`, it.t - 0.1, '{ opacity: 0, x: 40 }'))
   ];
   const html = `${bgLayer(id)}
 ${chapter(id, '02', 'Instrument registry')}
-${win(id, { url: 'localhost:3000/instruments', video: 'c02-registry.mp4', still: 's-instrument-detail.png', dur: Math.min(sc.dur - 0.3, 19.3 / rate), rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/instruments', video: 'c02-registry.mp4', still: 's-instrument-detail.png', ...fit(id, clipLen('c02-registry.mp4') - 0.6, 0.85) })}
           <div class="rail">
             <div id="${id}-list" data-layout-allow-overlap data-layout-allow-occlusion style="display:flex; flex-direction:column; gap:14px;">
 ${railList(id, items)}
@@ -440,7 +450,6 @@ ${punch(id, W('l15', 'history') - 0.3, 1.45, 780, 610, 1.2)}`;
 {
   const id = 's07-register';
   const sc = sceneOf(id);
-  const rate = 0.75;
   const items = [
     { k: 'Live OIML R 76 check', v: 'n = Max / e = 3,000 ✓', t: W('l16', 'checks') },
     { k: 'Class III limits', v: 'Min ≥ 20 e ✓ · d ≤ e ✓', t: W('l16', 'specifications') },
@@ -448,7 +457,7 @@ ${punch(id, W('l15', 'history') - 0.3, 1.45, 780, 610, 1.2)}`;
   ];
   const html = `${bgLayer(id)}
 ${chapter(id, '02', 'Register an instrument')}
-${win(id, { url: 'localhost:3000/instruments/new', video: 'c03-register.mp4', still: 's-register.png', dur: Math.min(sc.dur - 0.3, 9.8 / rate), rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/instruments/new', video: 'c03-register.mp4', still: 's-register.png', ...fit(id, clipLen('c03-register.mp4') - 0.6, 0.75) })}
           <div class="rail">
             <div class="eyebrow">New instrument</div>
             <h2>Checked against the standard as you type</h2>
@@ -467,11 +476,10 @@ ${unpunch(id, E('l16') - 0.6)}`;
 {
   const id = 's08-session';
   const sc = sceneOf(id);
-  const rate = 0.6;
   const tests = [['Weighing performance', 'weighing', 'A.4.4'], ['Repeatability', 'repeatability', 'A.4.10'], ['Eccentricity', 'eccentricity', 'A.4.7'], ['Temperature', 'temperature', 'A.5.3'], ['Stability', 'stability', 'A.4.11'], ['Creep', 'creep', 'A.4.8']];
   const html = `${bgLayer(id)}
 ${chapter(id, '03', 'Re-verification · six tests')}
-${win(id, { url: 'localhost:3000/tests/sess-034', video: 'c04-session.mp4', dur: Math.min(sc.dur - 0.3, 9.55 / rate), rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/tests/sess-034', video: 'c04-session.mp4', ...fit(id, clipLen('c04-session.mp4') - 0.6, 0.6) })}
           <div class="rail" style="gap:12px;">
             <div class="eyebrow">OIML R 76-1 test programme</div>
 ${tests.map((t, i) => `            <div class="card" id="${id}-t${i}" style="display:flex; align-items:center; gap:16px; padding:14px 18px;">
@@ -495,7 +503,8 @@ ${tests.map((t, i) => pop(`#${id}-t${i}`, W('l17', t[1]) - 0.1, '{ opacity: 0, x
 {
   const id = 's09-capture';
   const sc = sceneOf(id);
-  const rate = 0.55;
+  const f = fit(id, clipLen('c05-creep-capture.mp4') - 0.6, 0.55);
+  rates[id] = f.rate;
   const steps = [
     ['Load the test point', 'loads'],
     ['Wait for STABLE', 'waits'],
@@ -504,7 +513,7 @@ ${tests.map((t, i) => pop(`#${id}-t${i}`, W('l17', t[1]) - 0.1, '{ opacity: 0, x
   ];
   const html = `${bgLayer(id)}
 ${chapter(id, '03', 'Live capture · creep test')}
-${win(id, { url: 'localhost:3000/tests/sess-034/TIME_DEPENDENCE', video: 'c05-creep-capture.mp4', still: 's-creep-done.png', dur: Math.min(sc.dur - 0.3, 13.35 / rate), rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/tests/sess-034/TIME_DEPENDENCE', video: 'c05-creep-capture.mp4', still: 's-creep-done.png', ...f })}
           <div class="rail">
             <div class="eyebrow">RS-232 indicator → app</div>
             <h2 id="${id}-h">No reading until the scale settles</h2>
@@ -530,14 +539,14 @@ ${['numbers', 'calculator', 'mistake'].map((w, i) => `          tl.fromTo("#${id
 {
   const id = 's10-seal';
   const sc = sceneOf(id);
-  const rate = 0.7;
-  const hash = '056d0a99d38166a3402cfcf2b214314d74ff3ae19d6f51d5f9d34596d58e4c9a';
+  // the real seal on certificate NAWI-2026-000124, as encoded in its QR code
+  const hash = '9a558094b0a676941dc6e8ab0c769136205f40905a0c1b765669282ff4c24e22';
   const html = `${bgLayer(id)}
 ${chapter(id, '04', 'Finalise & seal')}
-${win(id, { url: 'localhost:3000/tests/sess-034', video: 'c06-seal.mp4', still: 's-report.png', dur: Math.min(sc.dur - 0.3, 14.9 / rate), rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/tests/sess-034', video: 'c06-seal.mp4', still: 's-report.png', ...fit(id, clipLen('c06-seal.mp4') - 0.6, 0.7) })}
           <div class="rail">
             <div class="card pass" id="${id}-v"><div class="k">Verdict</div><div class="v">Computed from the readings. Cannot be overridden.</div></div>
-            <div class="card hot" id="${id}-seal"><div class="k">HMAC-SHA256 digital seal</div><div class="mono" id="${id}-hash" style="font-size:22px; line-height:1.45; color:#ffb020; word-break:break-all; margin-top:8px; height:132px;"></div></div>
+            <div class="card hot" id="${id}-seal"><div class="k">HMAC-SHA256 seal · verdict + every reading</div><div class="mono" id="${id}-hash" style="font-size:22px; line-height:1.45; color:#ffb020; word-break:break-all; margin-top:8px; height:132px;"></div></div>
             <div class="card" id="${id}-lock" style="display:flex; align-items:center; gap:16px;">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
               <div class="v" style="margin-top:0;">Readings locked. Session read-only.</div>
@@ -621,11 +630,10 @@ ${ambient(id)}
 // ================================================================ S12 — reject
 {
   const id = 's12-reject';
-  const rate = 1.6;
-  const vDur = (42 - 15) / rate; // faulty load cell run: source 15s → 42s
+  const { rate, dur: vDur } = fit(id, 42 - 15, 1.6); // faulty load cell run: source 15s → 42s
   const html = `${bgLayer(id)}
 ${chapter(id, '05', 'When a scale is wrong')}
-${win(id, { url: 'localhost:3000/tests/…/WEIGHING_PERFORMANCE', video: 'c08-faulty.mp4', still: 's-faulty.png', dur: vDur, mediaStart: 15, rate })}
+${win(id, { url: 'nawi-reportpro.vercel.app/tests/…/WEIGHING_PERFORMANCE', video: 'c08-faulty.mp4', still: 's-faulty.png', dur: vDur, mediaStart: 15, rate })}
           <div id="${id}-rej" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:300px; top:40px; width:707px; height:1000px; box-shadow:0 30px 90px rgba(0,0,0,0.7);">
             <img src="assets/capture/pdf-cert-reject-p1.png" alt="" style="width:707px; height:1000px; display:block;" />
           </div>
@@ -665,8 +673,11 @@ ${punch(id, tRed - 0.6, 1.5, 560, 520, 1.0)}
   const id = 's13-verify';
   const tScan = W('l32', 'scans');
   const tReject = W('l34', 'rejected');
-  const vA = { start: tScan + 0.2, dur: Math.min(11.8, tReject - tScan - 0.2) };
-  const vB = { start: tReject, dur: 9.9 };
+  const tTamper = W('l34', 'tampered');
+  const vA = { start: tScan + 0.2, dur: Math.min(clipLen('c11-verify-mobile.mp4') - 0.6, tReject - tScan - 0.2) };
+  const vB = { start: tReject, dur: Math.min(clipLen('c12-verify-mobile-rejected.mp4') - 0.6, tTamper - tReject) };
+  // tampered: one sealed reading edited in the database, same certificate scanned again
+  const vC = { start: tTamper, dur: clipLen('c14-verify-mobile-tampered.mp4') - 0.6 };
   const html = `          <div class="bg"></div>
           <div class="cam" id="${id}-kb" style="width:1920px;height:1080px;transform-origin:50% 50%;"><img class="photo" src="assets/photos/mandi-labour.jpg" alt="" style="object-position: 50% 62%;" /></div>
           <div class="shade" id="${id}-shade"></div>
@@ -685,12 +696,19 @@ ${chapter(id, '06', 'Public verification · no login')}
             <div style="display:flex; flex-direction:column; gap:14px; margin-top:10px;">
               <div class="card pass" id="${id}-f0"><div class="k">Owner · place</div><div class="v">M/s Guru Nanak Cotton Traders, Bathinda</div></div>
               <div class="card pass" id="${id}-f1"><div class="k">Verified by</div><div class="v">Shri Vikramaditya Sharma</div></div>
-              <div class="card pass" id="${id}-f2"><div class="k">Valid until</div><div class="v">29 Sep 2027</div></div>
+              <div class="card pass" id="${id}-f2"><div class="k">Valid until</div><div class="v">30 Sep 2027</div></div>
             </div>
           </div>
           <div id="${id}-bad" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:330px; width:760px;">
-            <div class="big" style="font-size:120px; color:#ff6b6b;">REJECTED?</div>
-            <div style="font-size:36px; margin-top:14px; line-height:1.3; color:#f3efe6;">Tampered certificate? The seal won’t match. He’ll know.</div>
+            <div id="${id}-rj" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:0; top:0; width:760px;">
+              <div class="big" style="font-size:120px; color:#ff6b6b;">REJECTED</div>
+              <div style="font-size:36px; margin-top:14px; line-height:1.3; color:#f3efe6;">Failed verification. Not valid for trade.</div>
+            </div>
+            <div id="${id}-tp" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:0; top:0; width:1040px;">
+              <div class="big" style="font-size:112px; color:#ff6b6b; white-space:nowrap;">NOT AUTHENTIC</div>
+              <div style="font-size:36px; margin-top:14px; line-height:1.3; color:#f3efe6; width:760px;">One reading edited after sealing. The seal no longer matches.</div>
+            </div>
+            <div style="height:240px;"></div>
             <div class="card hot" id="${id}-help" style="margin-top:30px; display:flex; align-items:center; gap:22px;">
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
               <div><div class="k">National Consumer Helpline</div><div class="big" style="font-size:72px; color:#f59e0b;">1915</div></div>
@@ -703,13 +721,15 @@ ${chapter(id, '06', 'Public verification · no login')}
               <video id="${id}-va" src="assets/capture/c11-verify-mobile.mp4" data-start="${vA.start.toFixed(3)}" data-duration="${vA.dur.toFixed(3)}" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
               <img id="${id}-rimg" src="assets/capture/s-mobile-rejected.png" alt="" style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;" />
               <video id="${id}-vb" src="assets/capture/c12-verify-mobile-rejected.mp4" data-start="${vB.start.toFixed(3)}" data-duration="${vB.dur.toFixed(3)}" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
+              <img id="${id}-timg" src="assets/capture/s-mobile-tampered.png" alt="" style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;" />
+              <video id="${id}-vc" src="assets/capture/c14-verify-mobile-tampered.mp4" data-start="${vC.start.toFixed(3)}" data-duration="${vC.dur.toFixed(3)}" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
             </div>
           </div>`;
   const js = `          tl.fromTo("#${id}-kb", { scale: 1.2 }, { scale: 1.06, duration: D, ease: "none" }, 0);
 ${chapterIn(id)}
           tl.fromTo("#${id}-loc", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, ${L('l31') - 0.1});
           tl.to("#${id}-loc", { opacity: 0, y: -20, duration: 0.5 }, ${W('l32', 'qr') - 0.4});
-          tl.set(["#${id}-valid", "#${id}-bad", "#${id}-truth", "#${id}-rimg"], { opacity: 0 }, 0);
+          tl.set(["#${id}-valid", "#${id}-bad", "#${id}-truth", "#${id}-rimg", "#${id}-timg", "#${id}-tp"], { opacity: 0 }, 0);
           tl.fromTo("#${id}-qr", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, ${W('l32', 'qr') - 0.2});
           tl.fromTo("#${id}-qrl", { opacity: 0 }, { opacity: 1, duration: 0.5 }, ${W('l32', 'qr')});
           tl.fromTo("#${id}-scan", { y: 0 }, { y: 320, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 3 }, ${tScan - 0.6});
@@ -723,6 +743,9 @@ ${pop(`#${id}-f2`, W('l33', 'until') - 0.1, '{ opacity: 0, x: -30 }', 0.4)}
           tl.to("#${id}-valid", { opacity: 0, x: -40, duration: 0.5 }, ${L('l34') - 0.1});
           tl.set("#${id}-rimg", { opacity: 1 }, ${tReject});
           tl.fromTo("#${id}-bad", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, ${tReject - 0.3});
+          tl.set("#${id}-timg", { opacity: 1 }, ${tTamper});
+          tl.to("#${id}-rj", { opacity: 0, y: -16, duration: 0.3 }, ${tTamper - 0.3});
+          tl.fromTo("#${id}-tp", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, ${tTamper - 0.05});
           tl.set("#${id}-help", { opacity: 0 }, 0);
 ${pop(`#${id}-help`, W('l34', 'national') - 0.2, '{ opacity: 0, scale: 0.85 }', 0.5, 'back.out(1.8)')}
           tl.to("#${id}-bad", { opacity: 0, duration: 0.5 }, ${L('l35') - 0.3});
@@ -740,18 +763,17 @@ ${pop(`#${id}-help`, W('l34', 'national') - 0.2, '{ opacity: 0, scale: 0.85 }', 
   const items = [
     { k: 'Accountability', v: 'Append-only audit trail', t: W('l36', 'append') },
     { k: 'Language', v: 'Hindi + English, every screen', t: W('l37', 'hindi') },
-    { k: 'Accessibility', v: 'GIGW 3.0 · text size · contrast', t: W('l37', 'government') },
-    { k: 'Field-ready', v: 'Offline queue · syncs later', t: W('l37', 'offline') },
+    { k: 'Readability', v: 'Text-size options', t: W('l37', 'text') },
   ];
   const html = `${bgLayer(id)}
 ${chapter(id, '07', 'Built for trust')}
           <div class="win" id="${id}-win">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url" id="${id}-url">localhost:3000/audit · /dashboard (हिंदी)</span></div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url" id="${id}-url">nawi-reportpro.vercel.app/audit · /dashboard (हिंदी)</span></div>
             <div class="screen">
               <div class="cam" id="${id}-cam">
                 <img src="assets/capture/s-hindi.png" alt="" />
-                <video id="${id}-va" src="assets/capture/c13-audit.mp4" data-start="0.3" data-duration="${(tHindi - 0.3).toFixed(3)}" data-playback-rate="${(8.25 / (tHindi - 0.3)).toFixed(3)}" muted playsinline></video>
-                <video id="${id}-vb" src="assets/capture/c09-hindi.mp4" data-start="${tHindi.toFixed(3)}" data-duration="${Math.min(11.7, sc.dur - tHindi).toFixed(3)}" muted playsinline></video>
+                <video id="${id}-va" src="assets/capture/c13-audit.mp4" data-start="0.3" data-duration="${(tHindi - 0.3).toFixed(3)}" data-playback-rate="${((clipLen('c13-audit.mp4') - 0.6) / (tHindi - 0.3)).toFixed(3)}" muted playsinline></video>
+                <video id="${id}-vb" src="assets/capture/c09-hindi.mp4" data-start="${tHindi.toFixed(3)}" data-duration="${Math.min(clipLen('c09-hindi.mp4') - 0.6, sc.dur - tHindi).toFixed(3)}" muted playsinline></video>
               </div>
             </div>
           </div>
@@ -774,21 +796,21 @@ ${items.map((it, i) => pop(`#${id}-r${i}`, it.t - 0.1, '{ opacity: 0, x: 40 }'))
   const punjab = new Set();
   [[8, 4], [9, 4], [10, 4], [8, 5], [9, 5], [10, 5], [11, 5], [9, 6], [10, 6], [11, 6], [10, 3]].forEach(([c, r]) => punjab.add(r * COLS + c));
   const tiles = [
-    ['weighbridge.jpg', 'Mandi weighbridges', 'waybridge'],
+    ['weighbridge.jpg', 'Mandi weighbridges', 'weighbridge'],
     ['counter-scale.jpg', 'Ration-shop scales', 'ration'],
     ['bench-scale.jpg', 'Milk-collection centres', 'milk'],
     ['lab-balance.jpg', 'Jewellers’ balances', 'jewel'],
   ];
   const hub = [
     ['Weighing indicators', 'RS-232 · Web Serial', 'built', 'BUILT', 'indicators', 60, 40],
-    ['DigiLocker', 'certificates in citizens’ wallets', 'prop', 'PROPOSED', 'diggy', 1180, 40],
+    ['DigiLocker', 'certificates in citizens’ wallets', 'prop', 'PROPOSED', 'digilocker', 1180, 40],
     ['e-NAM mandis', 'stamping status at the point of sale', 'prop', 'PROPOSED', 'stamping', 60, 420],
     ['District dashboards', 'live compliance, nationwide', 'built', 'BUILT', 'dashboards', 1180, 420],
   ];
   const arch = [
     ['Stateless REST API', 'JWT · horizontal scaling', 'stateless'],
-    ['PostgreSQL · Prisma', 'one schema, every state', 'posker'],
-    ['Offline-first field app', 'IndexedDB queue · batch sync', 'offline'],
+    ['PostgreSQL · Prisma', 'one schema, every state', 'postgresql'],
+    ['Deployed on Vercel', 'live at nawi-reportpro.vercel.app', 'deployed'],
     ['HMAC-SHA256 seals', 'verifiable anywhere, by anyone', 'seals'],
   ];
   const outcomes = [
@@ -873,7 +895,7 @@ ${ambient(id)}
           wave.forEach(([i, t]) => { tl.to("#${id}-d" + i, { backgroundColor: "#f59e0b", duration: 0.35, ease: "power1.out" }, t); });`;
   js += `\n          tl.to("#${id}-dots", { scale: 0.72, x: 60, y: -120, opacity: 0.5, duration: 0.8, ease: "power2.inOut" }, ${W('l39', 'every', 1) - 0.4});`;
   tiles.forEach((t, i) => { js += `\n          tl.fromTo("#${id}-ti${i}", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, ${W('l39', t[2]) - 0.15});`; });
-  js += `\n          tl.set("#${id}-tiles", { opacity: 1 }, ${W('l39', 'waybridge') - 0.3});
+  js += `\n          tl.set("#${id}-tiles", { opacity: 1 }, ${W('l39', 'weighbridge') - 0.3});
           tl.set([${tiles.map((t, i) => `"#${id}-ti${i}"`).join(',')}], { opacity: 0 }, 0);
           tl.to(["#${id}-p1", "#${id}-tiles"], { opacity: 0, duration: 0.5 }, ${t40 - 0.2});
           tl.to("#${id}-hub", { opacity: 1, duration: 0.3 }, ${t40});
@@ -944,12 +966,13 @@ const sfx = [
   ['impact-bass-1', G('s04-intro', W('l09', 'nawi') - 0.1), 0.45],
   ['whoosh-short', G('s05-dashboard', 0.1), 0.35],
   ['chime', G('s08-session', W('l18', 'five')), 0.3],
-  ['click-soft', G('s09-capture', 0.3 + 1.6 / 0.55), 0.5],
+  ['click-soft', G('s09-capture', 0.3 + 1.6 / rates['s09-capture']), 0.5],
   ['chime', G('s10-seal', W('l24', 'sealed')), 0.4],
   ['whoosh-short', G('s11-pdf', 0.2), 0.35],
   ['error', G('s12-reject', W('l29', 'red')), 0.3],
   ['whoosh-short', G('s12-reject', L('l30') - 0.3), 0.3],
   ['ping', G('s13-verify', W('l33', 'valid') - 0.05), 0.45],
+  ['error', G('s13-verify', W('l34', 'tampered')), 0.25],
   ['riser', G('s15-scale', W('l39', 'imagine') - 1.0), 0.25],
   ['impact-bass-1', G('s16-close', L('l45') - 0.5), 0.4],
 ];
