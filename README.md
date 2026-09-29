@@ -10,9 +10,15 @@ Digital verification and certification of **non-automatic weighing instruments**
 
 *Smart India Hackathon 2026*
 
+**Live demo: [nawi-reportpro.vercel.app](https://nawi-reportpro.vercel.app)**
+
 </div>
 
 ---
+
+## Try it online
+
+Open **[nawi-reportpro.vercel.app](https://nawi-reportpro.vercel.app)** and sign in with one of the accounts in the table below. The hosted demo runs on the in-memory demo database, so the pre-loaded instruments, certificates and audit trail are identical on every visit. Records you create yourself are kept only while the serverless instance stays warm and may disappear afterwards.
 
 ## Run it in one minute
 
@@ -100,16 +106,25 @@ npm run setup:postgres      # migrate + seed the same demo data
 npm run dev
 ```
 
-### Deploying on Vercel (public demo)
+### Deploying to Vercel
 
-The repository deploys as one Vercel project: the React app as static files and the API as a serverless function (`api/index.js`, routed by `vercel.json`).
+The repository deploys to [Vercel](https://vercel.com) as it is. `vercel.json` builds the React client to `client/dist` and rewrites every `/api/*` request to `api/index.js`, which wraps the Express app as a single serverless function (with the PDF fonts and images from `server/assets` bundled in). Any other path falls back to `index.html`, so client-side routes work on refresh.
 
-1. Import the GitHub repository in Vercel. Keep the settings from `vercel.json` (no framework preset).
-2. In the project, open **Storage → Create database → Neon (Postgres)** and connect it. This sets `DATABASE_URL`.
-3. In **Settings → Environment Variables**, add `HMAC_SECRET` and `JWT_SECRET`: two different long random strings (for example `openssl rand -hex 32`). Certificates are sealed with `HMAC_SECRET`, so never change it after the first deploy.
-4. Deploy. The build (`scripts/vercel-build.sh`) applies the migrations and loads the demo register into the empty database; later deploys keep the data.
+1. Import the GitHub repository in Vercel. The build settings come from `vercel.json`, so keep the defaults.
+2. Add these environment variables for **Production**:
 
-Certificate QR codes point to the project's production domain automatically; set `PUBLIC_VERIFY_URL` to use a custom domain instead.
+   | Variable | Value |
+   |---|---|
+   | `JWT_SECRET` | a long random string (the API refuses to start in production without it) |
+   | `HMAC_SECRET` | a different long random string, used for the certificate seal |
+   | `PUBLIC_VERIFY_URL` | optional: the URL printed in certificate QR codes. On Vercel it defaults to the project's production domain |
+
+   Generate a secret with `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`.
+3. Deploy. Every later push to `main` redeploys production automatically, and other branches get a preview URL.
+
+Notes:
+- `api/index.js` forces `NAWI_DB_MODE=memory`, so no database is needed. For persistent storage, remove that line and set `DATABASE_URL` to a hosted PostgreSQL instance (for example Neon); run `npx prisma migrate deploy` and `node prisma/seed.js --if-empty` in `server/` once. In production the API then refuses to fall back to demo data if the database is unreachable.
+- Serverless functions are time-limited (30 s here), so long-lived connections such as the live telemetry stream (SSE) may be cut off on Vercel. They run without that limit with `npm run demo` locally.
 
 ### Tests
 
