@@ -41,7 +41,7 @@ The demo data covers 18 instruments across 11 districts, including:
 - a jeweller's balance and State Metrology Laboratory balances
 - two **type evaluation test samples** (a counter scale and a precision balance) submitted for model approval
 
-There are 38 sessions over 12 months — verification sessions and type evaluation sessions — 7 officers and more than 300 audit entries. Every verdict is computed by the same OIML engine the live API uses.
+There are 39 sessions over 12 months — verification sessions and type evaluation sessions — 7 officers and more than 300 audit entries. Every verdict is computed by the same OIML engine the live API uses.
 
 ## A 3-minute walkthrough for judges
 
