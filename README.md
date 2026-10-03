@@ -71,7 +71,7 @@ There are 39 sessions over 12 months — verification sessions and type evaluati
 |---|---|
 | **Instrument registry** | Registration with live checks against OIML R 76 Table 3 (n = Max/e, Min ≥ k·e, d ≤ e) and an MPE preview. Each instrument's stamping status is derived from the statutory 12-month validity: *Valid · Due · Expired · Rejected · Not verified*. |
 | **Two report types** | **Verification** (initial / periodic / in-service): weighing (A.4.4), repeatability (A.4.10), eccentricity (A.4.7) → Certificate of Verification or Rejection. **Type evaluation** (model approval): the same three plus static temperatures & no-load temperature effect (A.5.3; 1e per 1 °C for class I, per 5 °C otherwise), warm-up time (A.5.2; \|EL − E0\| ≤ MPE) and zero return & creep (A.4.11; 0.5e / 0.2e) → Type Evaluation Test Report. Stepped MPE per OIML R 76-1 Table 6, with 2 × MPE for in-service inspection (derived on the server from the session type). |
-| **Indicator capture** | A live RS-232 stream (Mettler-Toledo SICS, Avery Weigh-Tronix or Essae protocols) with stability detection, zero and tare, guided per-cell capture and auto-capture. Readings are never recorded unless the indicator has settled on the test load. A **Web Serial** option connects a real USB indicator. |
+| **Indicator capture** | A live RS-232 stream (Mettler-Toledo SICS, Avery Weigh-Tronix or Essae protocols) with stability detection, zero and tare, guided per-cell capture and auto-capture. Readings are never recorded unless the indicator has settled on the test load. A **Web Serial** option connects a USB indicator: eight output formats are parsed and identified automatically (Mettler-Toledo SICS and continuous, Sartorius SBI, A&D, CAS, Ohaus, Avery Weigh-Tronix, Essae), with a choice of serial settings. Verified with a USB serial emulator built from the makers' published formats; not yet tested on physical indicators. |
 | **Integrity** | Partial saves never count as complete. A session can be sealed only when every module required for its type is done, and a sealed session is read-only. The seal covers the readings, the verdict and the instrument particulars (class, serial, Min, d, report type, test conditions); those particulars are locked once a certificate or report has been issued. Only the owning officer or the Controller can record readings. Every action goes into an append-only audit trail. |
 | **Certificates & reports** | A one-page bilingual Certificate of Verification or Rejection (verification tests only), or a one-page OIML R 76 Type Evaluation Test Report for model approval. A Technical Data Sheet includes every reading, the ISO GUM uncertainty budget and the error-envelope chart. |
 | **Public portal** | `/verify/:certificateNo` recomputes the seal in constant time, and shows the validity dates and a National Consumer Helpline (1915) link. |
@@ -87,7 +87,7 @@ There are 39 sessions over 12 months — verification sessions and type evaluati
 | Data-entry forms for OIML R 76 tests | `/tests/:id/:module` — one form per test, with indicator capture or manual/CSV entry |
 | Automatic permissible-error calculation and pass/fail | `mpeCalculator.js` (R 76-1 Table 6), evaluated live in the form and re-computed on the server |
 | Standardised test report | Type Evaluation Test Report (R 76-2 structure) + Technical Data Sheet; Certificate of Verification for verification sessions |
-| Report export: PDF / Word | PDF implemented. Editable Word (DOCX) export: **not yet implemented** |
+| Report export: PDF / Word | Sealed PDF (official record) and an editable Word (.docx) copy of the Type Evaluation Test Report |
 | Instrument-wise test history, repository, search | Instrument detail → history tab; Certificates & Reports hub with search |
 | Dashboard | `/dashboard` |
 | Role-based access | Controller / Inspector / Auditor, enforced on every write route |
@@ -108,7 +108,7 @@ There are 39 sessions over 12 months — verification sessions and type evaluati
 ```
 client/   React 18 · Vite · Tailwind · TanStack Query · Recharts · pdf.js · i18next (EN/HI)
 server/   Node.js · Express · Prisma (PostgreSQL) with an in-memory fallback · PDFKit · QR · HMAC-SHA256
-tests/    Vitest + Supertest — 225 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
+tests/    Vitest + Supertest — 258 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
 ```
 
 - `server/src/services/mpeCalculator.js` is the OIML R 76 engine: stepped MPE, multi-interval ranges, tare, and the six implemented test modules.

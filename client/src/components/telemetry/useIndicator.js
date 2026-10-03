@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getSettings } from '../../utils/settings';
 import { BrowserIndicatorSimulator } from './browserSimulator';
+import { SERIAL_PRESETS, detectProtocol, parseIndicatorLine, splitFrames } from '../../utils/indicatorProtocols';
 
 /**
  * Connection to a weighing indicator: the RS-232 indicator simulator running in
@@ -19,6 +20,8 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const [condition, setConditionState] = useState('HEALTHY');
   const [frame, setFrame] = useState({ weight: 0, isStable: false, isZero: true, isOverload: false, isNet: false, rawAscii: '', rawHex: '' });
   const [target, setTarget] = useState(0);
+  const [serialPreset, setSerialPreset] = useState(SERIAL_PRESETS[0].key);
+  const [detected, setDetected] = useState(null); // { key, label, share } once a USB indicator's format is recognised
 
   const simRef = useRef(null); // BrowserIndicatorSimulator, kept across reconnects so a placed load survives
   const frameRef = useRef(frame);
@@ -43,6 +46,7 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
     }
     readerRef.current = null;
     portRef.current = null;
+    setDetected(null);
     setMode('OFF');
   }, []);
 
@@ -72,31 +76,46 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
   const connectSerial = useCallback(async () => {
     if (!('serial' in navigator)) return false;
     try {
+      const preset = SERIAL_PRESETS.find((p) => p.key === serialPreset) || SERIAL_PRESETS[0];
       const port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
+      await port.open({ baudRate: preset.baudRate, dataBits: preset.dataBits, stopBits: preset.stopBits, parity: preset.parity });
       simRef.current?.stop();
       portRef.current = port;
       setMode('SERIAL');
-      const decoder = new TextDecoderStream();
+      setDetected(null);
+      // latin1 keeps status / lamp bytes (CAS, Toledo continuous) as single characters
+      const decoder = new TextDecoderStream('latin1');
       port.readable.pipeTo(decoder.writable);
       const reader = decoder.readable.getReader();
       readerRef.current = reader;
       let buf = '';
       let last = [];
+      let recent = [];
+      let proto = null;
       (async () => {
         while (true) {
           const { value, done } = await reader.read();
           if (done) break;
-          buf += value;
-          const lines = buf.split(/[\r\n]+/);
-          buf = lines.pop();
+          const [lines, rest] = splitFrames(buf + value);
+          buf = rest;
           for (const line of lines) {
-            const m = line.match(/([+-]?\s*\d+(?:\.\d+)?)/);
-            if (!m) continue;
-            const w = parseFloat(m[1].replace(/\s+/g, ''));
+            // name the indicator's format from the last dozen frames, and keep checking in case it is switched
+            recent = [...recent.slice(-11), line];
+            if (recent.length >= 4 && (!proto || recent.length % 4 === 0)) {
+              const det = detectProtocol(recent);
+              if ((det?.key || null) !== proto) {
+                proto = det?.key || null;
+                setDetected(det);
+              }
+            }
+            const r = parseIndicatorLine(line, proto);
+            if (!r) continue;
+            const w = r.weight;
             last = [...last.slice(-3), w];
-            const stable = /^S\s+S/.test(line) || (last.length >= 3 && Math.max(...last) - Math.min(...last) <= d);
-            onFrame({ weight: w, isStable: stable, isZero: Math.abs(w) < d / 2, isOverload: false, isNet: false, rawAscii: line, rawHex: '' });
+            const settled = last.length >= 3 && Math.max(...last) - Math.min(...last) <= d;
+            // a brand parser states stability; an unknown format is judged from successive readings
+            const stable = r.stable === null ? /^S\s+S/.test(line) || settled : r.stable;
+            onFrame({ weight: w, isStable: stable, isZero: Math.abs(w) < d / 2, isOverload: r.overload, isNet: r.net, rawAscii: line, rawHex: '' });
           }
         }
       })();
@@ -104,7 +123,7 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
     } catch {
       return false;
     }
-  }, [d, onFrame]);
+  }, [d, onFrame, serialPreset]);
 
   /** Place a test load on the (simulated) load receptor. */
   const placeLoad = useCallback(
@@ -191,6 +210,9 @@ export default function useIndicator(instrument, { autoConnect = true } = {}) {
     waitForStable,
     setCondition,
     changeProtocol,
+    serialPreset,
+    setSerialPreset,
+    detected,
     zero,
     tare,
     serialSupported: typeof navigator !== 'undefined' && 'serial' in navigator,

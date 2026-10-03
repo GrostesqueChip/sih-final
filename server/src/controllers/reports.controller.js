@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const prisma = require('../lib/prisma');
 const { generateCertificatePdf, generateDatasheetPdf } = require('../services/pdfGenerator');
+const { generateTypeEvaluationDocx } = require('../services/docxTypeEvaluationReport');
 const { createAuditLog, getClientIp } = require('../middleware/auditLog');
 const { generateVerificationSeal, verifySealSignature, computeErrorCurvePoints, buildSealInput } = require('../services/cryptoSeal');
 const { getMPE } = require('../services/mpeCalculator');
@@ -61,6 +62,61 @@ async function getCertificatePdf(req, res, next) {
     res.setHeader('Content-Disposition', `inline; filename="${docName}_${session.certificateNo}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     return res.send(pdfBuffer);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * GET /api/reports/:sessionId/docx
+ * Editable Word copy of the Type Evaluation Test Report (authenticated).
+ * Same gates as the PDF: only for a finalized, sealed TYPE_EVALUATION session.
+ */
+async function getReportDocx(req, res, next) {
+  try {
+    const { sessionId } = req.params;
+
+    const session = await prisma.testSession.findUnique({
+      where: { id: sessionId },
+      include: {
+        instrument: true,
+        conductedBy: { select: { id: true, name: true, email: true, role: true, designation: true, district: true } },
+        testResults: true,
+      },
+    });
+
+    if (!session) {
+      return res.status(404).json({ success: false, message: 'Test session not found' });
+    }
+    if (session.verificationType !== 'TYPE_EVALUATION') {
+      return res.status(400).json({ success: false, message: 'Word export is available for type evaluation test reports only.' });
+    }
+    const isSealed = Boolean(session.verificationSeal) && (session.status === 'COMPLETED' || session.status === 'FAILED');
+    if (!isSealed) {
+      return res.status(409).json({
+        success: false,
+        message: 'Report is not available: this session has not been finalized and sealed yet.',
+        status: session.status,
+      });
+    }
+
+    const buffer = await generateTypeEvaluationDocx(session);
+
+    if (req.user) {
+      await createAuditLog({
+        userId: req.user.id,
+        action: 'GENERATE_REPORT_DOCX',
+        entityType: 'TestSession',
+        entityId: sessionId,
+        details: `Generated editable Word copy of type evaluation report ${session.certificateNo}`,
+        ipAddress: getClientIp(req),
+      });
+    }
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', `attachment; filename="TypeEvaluationReport_${session.certificateNo}.docx"`);
+    res.setHeader('Content-Length', buffer.length);
+    return res.send(buffer);
   } catch (error) {
     next(error);
   }
@@ -345,5 +401,6 @@ module.exports = {
   getPublicSamples,
   getCertificatePdf,
   getDatasheetPdf,
+  getReportDocx,
   verifyCertificate,
 };

@@ -5,6 +5,7 @@ const {
   getPublicSamples,
   getCertificatePdf,
   getDatasheetPdf,
+  getReportDocx,
   verifyCertificate,
 } = require('../controllers/reports.controller');
 
@@ -50,6 +51,12 @@ router.get('/certificate/:sessionId/pdf', verifyToken, getCertificatePdf);
  * Generate and return detailed Technical Data Sheet PDF (Protected)
  */
 router.get('/:sessionId/datasheet', verifyToken, getDatasheetPdf);
+
+/**
+ * Editable Word copy of the Type Evaluation Test Report
+ * GET /api/reports/:sessionId/docx
+ */
+router.get('/:sessionId/docx', verifyToken, getReportDocx);
 router.get('/datasheet/:sessionId/pdf', verifyToken, getDatasheetPdf);
 
 module.exports = router;

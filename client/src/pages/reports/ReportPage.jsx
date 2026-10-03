@@ -94,6 +94,20 @@ export default function ReportPage() {
   const active = tab === 'certificate' ? cert : sheet;
   const fileName = `${tab === 'certificate' ? (isTE ? 'TypeEvaluationReport' : 'Certificate') : 'Datasheet'}_${s.certificateNo}.pdf`;
 
+  const downloadDocx = async () => {
+    try {
+      const res = await apiClient.get(`/reports/${sessionId}/docx`, { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `TypeEvaluationReport_${s.certificateNo}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error(t('report.docxFail', 'Could not generate the Word file.'));
+    }
+  };
+
   const download = () => {
     if (!active.url) return;
     const a = document.createElement('a');
@@ -124,6 +138,11 @@ export default function ReportPage() {
           <button type="button" onClick={download} disabled={!active.url} className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-navy text-white text-sm font-bold hover:bg-navy-light disabled:opacity-50">
             <FiDownload className="w-4 h-4" /> {t('report.download', 'Download PDF')}
           </button>
+          {isTE && (
+            <button type="button" onClick={downloadDocx} className="inline-flex items-center gap-2 h-10 px-4 rounded-md border border-navy bg-white text-navy text-sm font-bold hover:bg-slate-50">
+              <FiFileText className="w-4 h-4" /> {t('report.downloadDocx', 'Download Word (.docx)')}
+            </button>
+          )}
         </div>
       </div>
 

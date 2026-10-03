@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SERIAL_PRESETS } from '../../utils/indicatorProtocols';
 import { FiZap, FiZapOff, FiCpu, FiTerminal, FiCornerDownLeft, FiPlay, FiSquare, FiAlertTriangle } from 'react-icons/fi';
 import { decimalsFor } from '../../utils/format';
 
@@ -27,7 +28,7 @@ export default function DigitalIndicator({ ind, activeSlot, onCapture, onAutoRun
           <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-saffron-500">{t('ind.title', 'Weighing indicator')}</div>
           <div className="text-[11px] text-slate-400 truncate">
             {ind.mode === 'SIM' && t('ind.sim', 'RS-232 simulator · live stream')}
-            {ind.mode === 'SERIAL' && t('ind.serial', 'USB-serial indicator · 9600 8-N-1')}
+            {ind.mode === 'SERIAL' && `${t('ind.serialShort', 'USB-serial indicator')} · ${ind.detected ? ind.detected.label : t('ind.detecting', 'identifying format…')}`}
             {ind.mode === 'OFF' && t('ind.off', 'Not connected')}
           </div>
         </div>
@@ -166,11 +167,27 @@ export default function DigitalIndicator({ ind, activeSlot, onCapture, onAutoRun
             </button>
           )}
           {ind.serialSupported && (
-            <button type="button" onClick={ind.connectSerial} className="flex-1 h-9 rounded-md border border-cyan-400/40 text-xs font-bold text-cyan-300 hover:bg-cyan-400/10 inline-flex items-center justify-center gap-1.5">
+            <button type="button" onClick={() => ind.connectSerial()} className="flex-1 h-9 rounded-md border border-cyan-400/40 text-xs font-bold text-cyan-300 hover:bg-cyan-400/10 inline-flex items-center justify-center gap-1.5">
               <FiCpu className="w-3.5 h-3.5" /> {t('ind.usb', 'USB indicator')}
             </button>
           )}
         </div>
+        {ind.serialSupported && (
+          <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-400">
+            <label htmlFor="serial-preset" className="shrink-0">{t('ind.serialSettings', 'USB serial settings')}</label>
+            <select
+              id="serial-preset"
+              value={ind.serialPreset}
+              onChange={(ev) => ind.setSerialPreset(ev.target.value)}
+              disabled={ind.mode === 'SERIAL'}
+              className="flex-1 min-w-0 h-7 rounded bg-white/10 border border-white/15 text-slate-200 text-[11px] px-1.5 disabled:opacity-60"
+            >
+              {SERIAL_PRESETS.map((p) => (
+                <option key={p.key} value={p.key} className="text-slate-900">{p.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     </div>
   );
