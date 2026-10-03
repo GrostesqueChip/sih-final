@@ -38,6 +38,14 @@ const NOT_COVERED = [
   ['Examination of construction / checklist', 'R 76-2 §4'],
 ];
 
+/** Edition of the OIML limits the stored results were evaluated against (recorded with each result). */
+function ruleSetLabel(session) {
+  const { getRuleSet, getActiveRuleSet } = require('../lib/ruleSets');
+  const id = (session.testResults || []).map((r) => r.calculations?.ruleSet).find(Boolean);
+  const rs = (id && getRuleSet(id)) || getActiveRuleSet();
+  return `${rs.title} (rule set ${rs.id})`;
+}
+
 async function generateTypeEvaluationReport(sessionData) {
   // Lazy require: pdfCertificate requires this module for dispatch.
   const { keyFinding } = require('./pdfCertificate');
@@ -235,7 +243,7 @@ async function generateTypeEvaluationReport(sessionData) {
       doc.fillColor(C.MUTED).font('Helvetica').fontSize(6.6).text('Name, designation, date', X + sw2, by + 34, { width: sw2 });
 
       doc.fillColor(C.FAINT).font('Helvetica').fontSize(6.4).text(
-        'Annex: detailed test forms (every reading, error and limit) are in the Technical Data Sheet generated from the same sealed readings.',
+        `Annex: detailed test forms (every reading, error and limit) are in the Technical Data Sheet generated from the same sealed readings. Limits applied: ${ruleSetLabel(session)}.`,
         X, by + 52, { width: CW }
       );
 
@@ -255,4 +263,4 @@ async function generateTypeEvaluationReport(sessionData) {
   });
 }
 
-module.exports = { generateTypeEvaluationReport, NOT_COVERED };
+module.exports = { generateTypeEvaluationReport, NOT_COVERED, ruleSetLabel };

@@ -7,37 +7,14 @@
  * Clause 3.6.1: Hysteresis error limits
  */
 
-// MPE limits by accuracy class and load range in units of verification interval (e)
-const MPE_TABLE = {
-  CLASS_I: [
-    { minLoad: 0, maxLoad: 50000, mpeInitial: 0.5, stepName: 'STEP_50000E' },
-    { minLoad: 50000, maxLoad: 200000, mpeInitial: 1.0, stepName: 'STEP_200000E' },
-    { minLoad: 200000, maxLoad: Infinity, mpeInitial: 1.5, stepName: 'ABOVE_200000E' },
-  ],
-  CLASS_II: [
-    { minLoad: 0, maxLoad: 5000, mpeInitial: 0.5, stepName: 'STEP_5000E' },
-    { minLoad: 5000, maxLoad: 20000, mpeInitial: 1.0, stepName: 'STEP_20000E' },
-    { minLoad: 20000, maxLoad: 100000, mpeInitial: 1.5, stepName: 'STEP_100000E' },
-  ],
-  CLASS_III: [
-    { minLoad: 0, maxLoad: 500, mpeInitial: 0.5, stepName: 'STEP_500E' },
-    { minLoad: 500, maxLoad: 2000, mpeInitial: 1.0, stepName: 'STEP_2000E' },
-    { minLoad: 2000, maxLoad: 10000, mpeInitial: 1.5, stepName: 'STEP_10000E' },
-  ],
-  CLASS_IIII: [
-    { minLoad: 0, maxLoad: 50, mpeInitial: 0.5, stepName: 'STEP_50E' },
-    { minLoad: 50, maxLoad: 200, mpeInitial: 1.0, stepName: 'STEP_200E' },
-    { minLoad: 200, maxLoad: 1000, mpeInitial: 1.5, stepName: 'STEP_1000E' },
-  ],
-};
+// Every limit comes from a versioned rule set (lib/ruleSets.js), so a revision of
+// OIML R 76 is added as a new edition instead of editing this engine.
+const { getActiveRuleSet, getRuleSet, DEFAULT_RULE_SET_ID, zeroDriftBasisFor } = require('../lib/ruleSets');
+const rules = () => getActiveRuleSet();
 
-// Minimum capacity multipliers in units of e per OIML R-76 Table 3
-const MIN_CAPACITY_IN_E = {
-  CLASS_I: 100,
-  CLASS_II: 50,
-  CLASS_III: 20,
-  CLASS_IIII: 10,
-};
+// Tables of the default edition, exported for callers that read them directly.
+const MPE_TABLE = getRuleSet(DEFAULT_RULE_SET_ID).mpeTable;
+const MIN_CAPACITY_IN_E = getRuleSet(DEFAULT_RULE_SET_ID).minCapacityInE;
 
 /**
  * Returns Maximum Permissible Error (MPE) in units of verification scale interval (e).
@@ -50,7 +27,7 @@ const MIN_CAPACITY_IN_E = {
  */
 function getMPE(accuracyClass, loadInE, isInService = false) {
   const normClass = String(accuracyClass || 'CLASS_III').toUpperCase();
-  const tiers = MPE_TABLE[normClass] || MPE_TABLE.CLASS_III;
+  const tiers = rules().mpeTable[normClass] || rules().mpeTable.CLASS_III;
   const absLoad = Math.abs(Number(loadInE) || 0);
 
   let baseMpe = 1.5;
@@ -61,7 +38,7 @@ function getMPE(accuracyClass, loadInE, isInService = false) {
     }
   }
 
-  return isInService ? baseMpe * 2 : baseMpe;
+  return isInService ? baseMpe * rules().inServiceFactor : baseMpe;
 }
 
 /**
@@ -248,7 +225,7 @@ function generateBoundaryLoadPoints(instrument, options = {}) {
     sortedRanges.forEach((range, rIdx) => {
       const e = Number(range.e || range.verificationInterval || 0.001);
       const max = Number(range.max || range.maxCapacity);
-      const min = Number(range.min || range.minCapacity || (e * (MIN_CAPACITY_IN_E[normClass] || 20)));
+      const min = Number(range.min || range.minCapacity || (e * (rules().minCapacityInE[normClass] || 20)));
 
       // Range Min Point
       if (rIdx === 0) {
@@ -265,7 +242,7 @@ function generateBoundaryLoadPoints(instrument, options = {}) {
       }
 
       // Key boundary loads within range (at tier.maxLoad e.g. 500e, 2000e)
-      const stepTiers = MPE_TABLE[normClass] || MPE_TABLE.CLASS_III;
+      const stepTiers = rules().mpeTable[normClass] || rules().mpeTable.CLASS_III;
       stepTiers.forEach((tier) => {
         if (tier.maxLoad < Infinity && tier.maxLoad > 0) {
           const boundaryLoad = tier.maxLoad * e;
@@ -303,7 +280,7 @@ function generateBoundaryLoadPoints(instrument, options = {}) {
   // Single Range Scale
   const max = Number(instrument?.maxCapacity || 100);
   const e = Number(instrument?.verificationInterval || instrument?.verificationScaleInterval_e || 0.001);
-  const minDefault = e * (MIN_CAPACITY_IN_E[normClass] || 20);
+  const minDefault = e * (rules().minCapacityInE[normClass] || 20);
   const min = Number(instrument?.minCapacity || minDefault);
 
   const rawPoints = [];
@@ -332,7 +309,7 @@ function generateBoundaryLoadPoints(instrument, options = {}) {
   }
 
   // Step points from class table (e.g. 500e, 2000e, 10000e for Class III)
-  const tiers = MPE_TABLE[normClass] || MPE_TABLE.CLASS_III;
+  const tiers = rules().mpeTable[normClass] || rules().mpeTable.CLASS_III;
   tiers.forEach((tier) => {
     if (tier.maxLoad < Infinity && tier.maxLoad > 0) {
       const stepLoad = tier.maxLoad * e;
@@ -826,7 +803,7 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
   let maxSpanError = 0;
   let maxDriftPer5C = 0;
   // Zero-change reference interval: 1 °C for class I, 5 °C for other classes.
-  const zeroBasisC = accuracyClass === 'CLASS_I' ? 1 : 5;
+  const zeroBasisC = zeroDriftBasisFor(accuracyClass);
 
   // Sort points by temperature
   const sortedPoints = [...points].sort((a, b) => Number(a.temperature) - Number(b.temperature));
@@ -884,7 +861,7 @@ function calculateTemperatureEffect(data, instrument, isInService = false) {
       const driftPer5C = Number(((deltaE0 / deltaT) * 5).toFixed(8));
       const driftPerBasis = Number(((deltaE0 / deltaT) * zeroBasisC).toFixed(8));
       // Limit: 1e per basis interval (1 °C class I, 5 °C others).
-      const allowedDrift = Number((1.0 * defaultE).toFixed(8));
+      const allowedDrift = Number((rules().limits.zeroDriftE * defaultE).toFixed(8));
 
       const driftPassed = driftPerBasis <= allowedDrift + 1e-9;
       if (!driftPassed) {
@@ -1050,8 +1027,8 @@ function calculateTimeDependence(data, instrument, isInService = false) {
   const delta30to0 = Number(Math.abs(read30 - read0).toFixed(8));
   const delta30to15 = Number(Math.abs(read30 - read15).toFixed(8));
 
-  const allowedDelta30 = Number((0.5 * defaultE).toFixed(8)); // 0.5 e
-  const allowedDelta15to30 = Number((0.2 * defaultE).toFixed(8)); // 0.2 e
+  const allowedDelta30 = Number((rules().limits.creep30MinE * defaultE).toFixed(8)); // 0.5 e in R 76:2006
+  const allowedDelta15to30 = Number((rules().limits.creep15To30MinE * defaultE).toFixed(8)); // 0.2 e in R 76:2006
 
   const creep30Passed = delta30to0 <= allowedDelta30 + 1e-9;
   const creep15Passed = delta30to15 <= allowedDelta15to30 + 1e-9;
@@ -1066,7 +1043,7 @@ function calculateTimeDependence(data, instrument, isInService = false) {
   // Zero return analysis
   const zeroIndicationAfter = Number(zeroReturn.indicationAfterUnload ?? zeroReturn.readingAfterUnload ?? 0);
   const zeroReturnError = Number(Math.abs(zeroIndicationAfter).toFixed(8));
-  const allowedZeroReturn = Number((0.5 * defaultE).toFixed(8)); // 0.5e
+  const allowedZeroReturn = Number((rules().limits.zeroReturnE * defaultE).toFixed(8)); // 0.5 e in R 76:2006
 
   const zeroReturnPassed = zeroReturnError <= allowedZeroReturn + 1e-9;
 
@@ -1140,6 +1117,8 @@ function evaluateTestResult(testType, data, instrument, isInService = false) {
   }
 
   const result = calculations.overallPass ? 'PASS' : 'FAIL';
+  // Record the edition the limits came from, so a stored result stays traceable after a revision.
+  calculations.ruleSet = rules().id;
 
   return {
     testType,

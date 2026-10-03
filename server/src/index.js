@@ -65,7 +65,14 @@ app.get('/api/health', (req, res) => {
     service: 'NAWI-ReportPro API Server',
     version: '1.0.0',
     standards: 'OIML R-76-1:2006 / R-76-2:2007',
+    ruleSet: require('./lib/ruleSets').getActiveRuleSet().id,
   });
+});
+
+// Rule editions the calculation engine can apply (public: no instrument or session data)
+app.get('/api/rules', (req, res) => {
+  const { listRuleSets, getActiveRuleSet } = require('./lib/ruleSets');
+  res.json({ success: true, active: getActiveRuleSet().id, data: listRuleSets() });
 });
 
 // Mount API Routes
