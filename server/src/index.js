@@ -79,6 +79,7 @@ app.get('/api/rules', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/instruments', instrumentsRoutes);
 app.use('/api/tests', testsRoutes);
+app.use('/api/tests', require('./routes/attachments.routes'));
 app.use('/api/reports', reportsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/audit', auditRoutes);

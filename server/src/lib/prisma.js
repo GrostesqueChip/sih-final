@@ -175,7 +175,7 @@ if (globalThis.__PRISMA_SINGLETON__) {
     return wrapper;
   }
 
-  const modelNames = ['user', 'instrument', 'testSession', 'testResult', 'auditLog'];
+  const modelNames = ['user', 'instrument', 'testSession', 'testResult', 'auditLog', 'sessionAttachment'];
   const modelWrappers = {};
   for (const name of modelNames) {
     const realModel = realPrisma ? realPrisma[name] : null;

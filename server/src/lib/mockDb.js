@@ -19,6 +19,7 @@ const instruments = [];
 const testSessions = [];
 const testResults = [];
 const auditLogs = [];
+const sessionAttachments = []; // uploaded at run time; the demo dataset ships none
 
 /** (Re)load the demonstration dataset in place, keeping array identities. */
 function loadDemoData() {
@@ -32,6 +33,7 @@ function loadDemoData() {
   ].forEach(([target, source]) => {
     target.splice(0, target.length, ...source);
   });
+  sessionAttachments.splice(0, sessionAttachments.length);
   for (const session of testSessions) {
     if (session.status !== 'COMPLETED' && session.status !== 'FAILED') continue;
     const inst = instruments.find((i) => i.id === session.instrumentId);
@@ -277,6 +279,7 @@ const mockDb = {
   testSession: createModelHandler(testSessions, hydrateSession, 'sess'),
   testResult: createModelHandler(testResults, hydrateResult, 'res'),
   auditLog: createModelHandler(auditLogs, hydrateAudit, 'aud'),
+  sessionAttachment: createModelHandler(sessionAttachments, null, 'att'),
   async $transaction(fnOrArray) {
     if (Array.isArray(fnOrArray)) return Promise.all(fnOrArray);
     if (typeof fnOrArray === 'function') return fnOrArray(mockDb);

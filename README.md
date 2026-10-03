@@ -91,7 +91,9 @@ There are 39 sessions over 12 months — verification sessions and type evaluati
 | Instrument-wise test history, repository, search | Instrument detail → history tab; Certificates & Reports hub with search |
 | Dashboard | `/dashboard` |
 | Role-based access | Controller / Inspector / Auditor, enforced on every write route |
-| Future OIML R 76 revisions | Limits are centralised in the engine; moving them to versioned rule tables is planned |
+| Future OIML R 76 revisions | Every limit is held in a versioned rule set (`server/src/lib/ruleSets.js`); a revision is added as a new edition, selected with `OIML_RULE_SET`, and each report states the edition it was judged against |
+| Photographs and supporting documents | Attached to a session (JPEG, PNG, WebP, PDF), listed in the report annex with their SHA-256; locked once the session is sealed |
+| Technical documentation | [docs/TECHNICAL.md](docs/TECHNICAL.md): architecture, calculation methodology, deployment |
 | R 76-2 tests not yet covered | Listed on every type evaluation report: zero-setting, tare, discrimination, sensitivity, stability of equilibrium, tilting, voltage variations, damp heat, disturbances, span stability, endurance, examination checklist |
 
 ## Screenshots
@@ -108,7 +110,7 @@ There are 39 sessions over 12 months — verification sessions and type evaluati
 ```
 client/   React 18 · Vite · Tailwind · TanStack Query · Recharts · pdf.js · i18next (EN/HI)
 server/   Node.js · Express · Prisma (PostgreSQL) with an in-memory fallback · PDFKit · QR · HMAC-SHA256
-tests/    Vitest + Supertest — 258 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
+tests/    Vitest + Supertest — 283 tests in five tiers (features, boundaries, combinations, scenarios, adversarial)
 ```
 
 - `server/src/services/mpeCalculator.js` is the OIML R 76 engine: stepped MPE, multi-interval ranges, tare, and the six implemented test modules.

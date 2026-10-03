@@ -25,6 +25,7 @@ import apiClient from '../../hooks/useApi';
 import StatusBadge from '../../components/shared/StatusBadge';
 import LoadingSpinner from '../../components/shared/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
+import SessionAttachments from '../../components/shared/SessionAttachments';
 import { TricolorBar } from '../../components/common/StateEmblem';
 import {
   modulesFor,
@@ -301,6 +302,8 @@ export default function TestSessionDetailPage() {
           })}
         </div>
       </div>
+
+      <SessionAttachments sessionId={s.id} canEdit={canEdit} sealed={sealed} />
 
       {/* Finalize dialog */}
       {confirmOpen && (

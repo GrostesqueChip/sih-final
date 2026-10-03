@@ -6,6 +6,12 @@ const { createAuditLog, getClientIp } = require('../middleware/auditLog');
 const { generateVerificationSeal, verifySealSignature, computeErrorCurvePoints, buildSealInput } = require('../services/cryptoSeal');
 const { getMPE } = require('../services/mpeCalculator');
 
+/** Attachment metadata for a report annex (never the file bytes). */
+async function listAttachments(sessionId) {
+  const list = await prisma.sessionAttachment.findMany({ where: { testSessionId: sessionId }, orderBy: { createdAt: 'asc' } });
+  return list.map((a) => ({ fileName: a.fileName, mimeType: a.mimeType, size: a.size, sha256: a.sha256, caption: a.caption || '' }));
+}
+
 /**
  * GET /api/reports/:sessionId/certificate
  * Generate and return official Verification Certificate PDF (authenticated)
@@ -43,6 +49,7 @@ async function getCertificatePdf(req, res, next) {
       });
     }
 
+    session.attachments = await listAttachments(sessionId);
     const pdfBuffer = await generateCertificatePdf(session);
 
     if (req.user) {
@@ -100,6 +107,7 @@ async function getReportDocx(req, res, next) {
       });
     }
 
+    session.attachments = await listAttachments(sessionId);
     const buffer = await generateTypeEvaluationDocx(session);
 
     if (req.user) {

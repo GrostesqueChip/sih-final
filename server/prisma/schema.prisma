@@ -109,6 +109,7 @@ model TestSession {
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
   testResults      TestResult[]
+  attachments      SessionAttachment[]
 }
 
 model TestResult {
@@ -125,6 +126,24 @@ model TestResult {
   updatedAt     DateTime    @updatedAt
 
   @@unique([testSessionId, testType])
+}
+
+/// Photograph or supporting document attached to a test session
+model SessionAttachment {
+  id            String      @id @default(uuid())
+  testSessionId String
+  testSession   TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+  fileName      String
+  mimeType      String
+  size          Int
+  sha256        String
+  caption       String?
+  data          Bytes
+  uploadedById  String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([testSessionId])
 }
 
 model AuditLog {

@@ -243,7 +243,7 @@ async function generateTypeEvaluationReport(sessionData) {
       doc.fillColor(C.MUTED).font('Helvetica').fontSize(6.6).text('Name, designation, date', X + sw2, by + 34, { width: sw2 });
 
       doc.fillColor(C.FAINT).font('Helvetica').fontSize(6.4).text(
-        `Annex: detailed test forms (every reading, error and limit) are in the Technical Data Sheet generated from the same sealed readings. Limits applied: ${ruleSetLabel(session)}.`,
+        `Annex: detailed test forms (every reading, error and limit) are in the Technical Data Sheet generated from the same sealed readings. Limits applied: ${ruleSetLabel(session)}. Photographs and documents on file: ${(session.attachments || []).length}.`,
         X, by + 52, { width: CW }
       );
 
