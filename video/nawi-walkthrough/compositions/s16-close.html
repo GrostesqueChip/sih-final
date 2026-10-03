@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Close</title></head>
+  <body>
+    <template>
+      <style>
+#root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; color: #f3efe6; font-family: Montserrat, sans-serif; }
+.wrap { position: absolute; inset: 0; }
+.bg { position: absolute; inset: 0; background: #0b1a33; }
+.glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(245,158,11,0.07) 38%, rgba(11,26,51,0) 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(243,239,230,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(243,239,230,0.05) 2px, transparent 2px); background-size: 96px 96px; }
+.ghost { position: absolute; font-family: Montserrat, sans-serif; font-weight: 900; font-size: 300px; letter-spacing: -0.04em; color: rgba(243,239,230,0.06); white-space: nowrap; line-height: 1; }
+.chapter { position: absolute; left: 40px; top: 22px; display: flex; align-items: center; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: #f59e0b; }
+.chapter .num { color: #0b1a33; background: #f59e0b; padding: 3px 10px; border-radius: 4px; }
+.chapter .rule { width: 120px; height: 3px; background: rgba(245,158,11,0.6); display: block; }
+.win { position: absolute; left: 40px; top: 72px; width: 1440px; height: 846px; border-radius: 14px; overflow: hidden; background: #0e1f3d; box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 3px rgba(243,239,230,0.12); }
+.win .bar { position: absolute; left: 0; top: 0; width: 1440px; height: 36px; background: #1b2c4a; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.win .dot { width: 13px; height: 13px; border-radius: 50%; background: #56627a; display: block; }
+.win .url { margin-left: 18px; height: 24px; width: 560px; border-radius: 12px; background: #0e1f3d; color: #a9b4c7; font-family: 'IBM Plex Mono', monospace; font-size: 15px; display: flex; align-items: center; padding: 0 14px; }
+.win .screen { position: absolute; left: 0; top: 36px; width: 1440px; height: 810px; overflow: hidden; }
+.win .screen img, .win .screen video { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; }
+.cam { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; }
+.rail { position: absolute; left: 1510px; top: 72px; width: 372px; height: 846px; display: flex; flex-direction: column; gap: 18px; }
+.rail h2 { font-weight: 900; font-size: 42px; line-height: 1.05; letter-spacing: -0.02em; color: #f3efe6; }
+.rail .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: #f59e0b; text-transform: uppercase; }
+.card { background: rgba(18,38,74,0.92); border: 3px solid rgba(243,239,230,0.14); border-radius: 12px; padding: 16px 20px; }
+.card .k { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; color: #a9b4c7; text-transform: uppercase; }
+.card .v { font-size: 28px; font-weight: 700; line-height: 1.2; color: #f3efe6; margin-top: 4px; }
+.card.hot { border-color: #f59e0b; }
+.card.pass { border-color: #2fb56a; }
+.card.fail { border-color: #e04848; }
+.tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.08em; }
+.tag.pass { background: #2fb56a; color: #06210f; }
+.tag.fail { background: #e04848; color: #2a0505; }
+.tag.prog { background: #f59e0b; color: #2a1a02; }
+.tag.built { background: #2fb56a; color: #06210f; }
+.tag.prop { background: #3d5a8c; color: #f3efe6; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.lcd { background: #050b16; border-radius: 18px; border: 4px solid #22324f; box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+.lcd .num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; letter-spacing: -0.02em; text-shadow: 0 0 24px rgba(255,176,32,0.45); line-height: 1; }
+.lcd .unit { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; opacity: 0.8; }
+.lcd .flags { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #3a4a66; }
+.lcd .flags .on { color: #2fe07a; }
+.photo { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+.shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(8,18,38,0.55) 0%, rgba(8,18,38,0.88) 75%); }
+.big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
+.strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
+</style>
+      <div id="root" data-composition-id="s16-close" data-width="1920" data-height="1080" data-duration="19.303">
+        <div class="wrap" id="s16-close-wrap">
+          <div class="bg"></div>
+          <div class="cam" id="s16-close-kb" style="width:1920px;height:1080px;transform-origin:50% 50%;"><img class="photo" src="assets/photos/mandi-labour.jpg" alt="" style="object-position: 50% 62%;" /></div>
+          <div class="shade" id="s16-close-shade"></div>
+          <div id="s16-close-q" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:330px; width:1720px;">
+            <div class="big" id="s16-close-q1" data-layout-allow-overlap style="font-size:84px;">Gurpreet will never read OIML R 76.</div>
+            <div class="big" id="s16-close-q2" data-layout-allow-overlap style="font-size:84px; color:#f59e0b; margin-top:24px;">He just needs to know the scale is honest.</div>
+          </div>
+          <div id="s16-close-end" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; inset:0; background:#0b1a33;">
+            <div class="glow" id="s16-close-glow" style="left:260px; top:-340px;"></div>
+            <img id="s16-close-chakra" src="assets/gov/ashoka-chakra.svg" alt="" style="position:absolute; left:1240px; top:180px; width:720px; height:720px; opacity:0.1;" />
+            <div style="position:absolute; left:140px; top:190px; width:1400px;">
+              <img id="s16-close-emb" src="assets/gov/emblem-white-240.png" alt="" style="width:110px; height:auto;" />
+              <div class="big" id="s16-close-word" data-layout-allow-overlap style="font-size:160px; margin-top:24px;">NAWI-ReportPro</div>
+              <div id="s16-close-ul" style="width:1040px; height:10px; background:#f59e0b; margin-top:16px; transform-origin:left center;"></div>
+              <div id="s16-close-tag" data-layout-allow-overlap style="font-size:54px; font-weight:700; margin-top:34px;">Every scale, verified. <span style="color:#f59e0b;">Every weighing, trusted.</span></div>
+              <div id="s16-close-meta" class="mono" style="font-size:24px; color:#a9b4c7; margin-top:40px; letter-spacing:0.08em;">SMART INDIA HACKATHON 2026 · OIML R 76-1:2006 · LEGAL METROLOGY ACT, 2009</div>
+            </div>
+            <div id="s16-close-cred" style="position:absolute; left:140px; top:960px; width:1640px; font-size:20px; color:#7f8ba3;">Demo data and officers are illustrative. Gurpreet Singh is a fictional character. Photographs: Wikimedia Commons.</div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const D = 19.303;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s16-close-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+          tl.fromTo("#s16-close-kb", { scale: 1.08 }, { scale: 1.2, duration: D, ease: "none" }, 0);
+          tl.fromTo("#s16-close-q1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.5);
+          tl.fromTo("#s16-close-q2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 5.494000000000001);
+          tl.fromTo("#s16-close-end", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power1.inOut" }, 8.186);
+          tl.fromTo("#s16-close-glow", { scale: 0.85 }, { scale: 1.15, duration: D - 8.186, ease: "sine.inOut" }, 8.186);
+          tl.fromTo("#s16-close-chakra", { rotation: 0 }, { rotation: 45, duration: D - 8.186, ease: "none" }, 8.186);
+          tl.fromTo("#s16-close-emb", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }, 8.486);
+          tl.fromTo("#s16-close-word", { opacity: 0, y: 50, scale: 1.04 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, 8.553);
+          tl.fromTo("#s16-close-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, 9.053);
+          tl.fromTo("#s16-close-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 10.259);
+          tl.fromTo("#s16-close-meta", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 14.103000000000002);
+          tl.fromTo("#s16-close-cred", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 14.603000000000002);
+          window.__timelines["s16-close"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

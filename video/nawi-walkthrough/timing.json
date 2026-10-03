@@ -1,0 +1,358 @@
+{
+  "total": 344.087,
+  "scenes": [
+    {
+      "id": "s01-open",
+      "start": 0,
+      "dur": 14.077
+    },
+    {
+      "id": "s02-problem",
+      "start": 13.677,
+      "dur": 16.308
+    },
+    {
+      "id": "s03-paper",
+      "start": 29.585,
+      "dur": 21.329
+    },
+    {
+      "id": "s04-intro",
+      "start": 50.514,
+      "dur": 20.15
+    },
+    {
+      "id": "s05-dashboard",
+      "start": 70.264,
+      "dur": 15.743
+    },
+    {
+      "id": "s06-registry",
+      "start": 85.607,
+      "dur": 22.002
+    },
+    {
+      "id": "s07-register",
+      "start": 107.209,
+      "dur": 11.815
+    },
+    {
+      "id": "s08-session",
+      "start": 118.624,
+      "dur": 15.867
+    },
+    {
+      "id": "s09-capture",
+      "start": 134.091,
+      "dur": 23.707
+    },
+    {
+      "id": "s10-seal",
+      "start": 157.398,
+      "dur": 21.41
+    },
+    {
+      "id": "s11-pdf",
+      "start": 178.408,
+      "dur": 23.855
+    },
+    {
+      "id": "s12-reject",
+      "start": 201.863,
+      "dur": 22.258
+    },
+    {
+      "id": "s13-verify",
+      "start": 223.721,
+      "dur": 36.432
+    },
+    {
+      "id": "s14-trust",
+      "start": 259.753,
+      "dur": 12.198
+    },
+    {
+      "id": "s15-scale",
+      "start": 271.551,
+      "dur": 53.633
+    },
+    {
+      "id": "s16-close",
+      "start": 324.784,
+      "dur": 19.303
+    }
+  ],
+  "lines": {
+    "l01": {
+      "scene": "s01-open",
+      "global": 1.9,
+      "local": 1.9,
+      "dur": 2.694
+    },
+    "l02": {
+      "scene": "s01-open",
+      "global": 4.894,
+      "local": 4.894,
+      "dur": 8.483
+    },
+    "l03": {
+      "scene": "s02-problem",
+      "global": 14.227,
+      "local": 0.55,
+      "dur": 1.562
+    },
+    "l04": {
+      "scene": "s02-problem",
+      "global": 16.089,
+      "local": 2.412,
+      "dur": 10.04
+    },
+    "l05": {
+      "scene": "s02-problem",
+      "global": 26.429,
+      "local": 12.752,
+      "dur": 2.956
+    },
+    "l06": {
+      "scene": "s03-paper",
+      "global": 30.135,
+      "local": 0.55,
+      "dur": 6.196
+    },
+    "l07": {
+      "scene": "s03-paper",
+      "global": 36.631,
+      "local": 7.046,
+      "dur": 10.081
+    },
+    "l08": {
+      "scene": "s03-paper",
+      "global": 47.012,
+      "local": 17.427,
+      "dur": 3.302
+    },
+    "l09": {
+      "scene": "s04-intro",
+      "global": 51.314,
+      "local": 0.8,
+      "dur": 1.677
+    },
+    "l10": {
+      "scene": "s04-intro",
+      "global": 53.291,
+      "local": 2.777,
+      "dur": 9.283
+    },
+    "l11": {
+      "scene": "s04-intro",
+      "global": 62.874,
+      "local": 12.36,
+      "dur": 7.09
+    },
+    "l12": {
+      "scene": "s05-dashboard",
+      "global": 70.814,
+      "local": 0.55,
+      "dur": 4.156
+    },
+    "l13": {
+      "scene": "s05-dashboard",
+      "global": 75.27,
+      "local": 5.006,
+      "dur": 10.137
+    },
+    "l14": {
+      "scene": "s06-registry",
+      "global": 86.157,
+      "local": 0.55,
+      "dur": 8.512
+    },
+    "l15": {
+      "scene": "s06-registry",
+      "global": 94.969,
+      "local": 9.362,
+      "dur": 12.04
+    },
+    "l16": {
+      "scene": "s07-register",
+      "global": 107.759,
+      "local": 0.55,
+      "dur": 10.665
+    },
+    "l17": {
+      "scene": "s08-session",
+      "global": 119.174,
+      "local": 0.55,
+      "dur": 11.444
+    },
+    "l18": {
+      "scene": "s08-session",
+      "global": 130.918,
+      "local": 12.294,
+      "dur": 2.973
+    },
+    "l19": {
+      "scene": "s09-capture",
+      "global": 134.641,
+      "local": 0.55,
+      "dur": 5.54
+    },
+    "l20": {
+      "scene": "s09-capture",
+      "global": 140.481,
+      "local": 6.39,
+      "dur": 10.944
+    },
+    "l21": {
+      "scene": "s09-capture",
+      "global": 151.725,
+      "local": 17.634,
+      "dur": 5.473
+    },
+    "l22": {
+      "scene": "s10-seal",
+      "global": 157.948,
+      "local": 0.55,
+      "dur": 3.704
+    },
+    "l23": {
+      "scene": "s10-seal",
+      "global": 161.952,
+      "local": 4.554,
+      "dur": 5.396
+    },
+    "l24": {
+      "scene": "s10-seal",
+      "global": 167.648,
+      "local": 10.25,
+      "dur": 10.56
+    },
+    "l25": {
+      "scene": "s11-pdf",
+      "global": 179.008,
+      "local": 0.6,
+      "dur": 2.898
+    },
+    "l26": {
+      "scene": "s11-pdf",
+      "global": 182.206,
+      "local": 3.798,
+      "dur": 12.117
+    },
+    "l27": {
+      "scene": "s11-pdf",
+      "global": 194.623,
+      "local": 16.215,
+      "dur": 6.84
+    },
+    "l28": {
+      "scene": "s12-reject",
+      "global": 202.413,
+      "local": 0.55,
+      "dur": 2.235
+    },
+    "l29": {
+      "scene": "s12-reject",
+      "global": 204.948,
+      "local": 3.085,
+      "dur": 10.954
+    },
+    "l30": {
+      "scene": "s12-reject",
+      "global": 216.202,
+      "local": 14.339,
+      "dur": 7.319
+    },
+    "l31": {
+      "scene": "s13-verify",
+      "global": 224.321,
+      "local": 0.6,
+      "dur": 1.485
+    },
+    "l32": {
+      "scene": "s13-verify",
+      "global": 226.106,
+      "local": 2.385,
+      "dur": 7.8
+    },
+    "l33": {
+      "scene": "s13-verify",
+      "global": 234.206,
+      "local": 10.485,
+      "dur": 8.983
+    },
+    "l34": {
+      "scene": "s13-verify",
+      "global": 243.489,
+      "local": 19.768,
+      "dur": 11.127
+    },
+    "l35": {
+      "scene": "s13-verify",
+      "global": 254.916,
+      "local": 31.195,
+      "dur": 4.437
+    },
+    "l36": {
+      "scene": "s14-trust",
+      "global": 260.303,
+      "local": 0.55,
+      "dur": 5.533
+    },
+    "l37": {
+      "scene": "s14-trust",
+      "global": 266.136,
+      "local": 6.383,
+      "dur": 5.215
+    },
+    "l38": {
+      "scene": "s15-scale",
+      "global": 272.251,
+      "local": 0.7,
+      "dur": 5.906
+    },
+    "l39": {
+      "scene": "s15-scale",
+      "global": 278.457,
+      "local": 6.906,
+      "dur": 11.329
+    },
+    "l40": {
+      "scene": "s15-scale",
+      "global": 290.086,
+      "local": 18.535,
+      "dur": 13.531
+    },
+    "l41": {
+      "scene": "s15-scale",
+      "global": 303.917,
+      "local": 32.366,
+      "dur": 8.925
+    },
+    "l42": {
+      "scene": "s15-scale",
+      "global": 313.142,
+      "local": 41.591,
+      "dur": 11.242
+    },
+    "l43": {
+      "scene": "s16-close",
+      "global": 325.384,
+      "local": 0.6,
+      "dur": 4.694
+    },
+    "l44": {
+      "scene": "s16-close",
+      "global": 330.378,
+      "local": 5.594,
+      "dur": 2.792
+    },
+    "l45": {
+      "scene": "s16-close",
+      "global": 333.47,
+      "local": 8.686,
+      "dur": 5.117
+    }
+  },
+  "captions": 127
+}

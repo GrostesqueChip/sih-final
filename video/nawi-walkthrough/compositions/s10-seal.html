@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Seal</title></head>
+  <body>
+    <template>
+      <style>
+#root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; color: #f3efe6; font-family: Montserrat, sans-serif; }
+.wrap { position: absolute; inset: 0; }
+.bg { position: absolute; inset: 0; background: #0b1a33; }
+.glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(245,158,11,0.07) 38%, rgba(11,26,51,0) 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(243,239,230,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(243,239,230,0.05) 2px, transparent 2px); background-size: 96px 96px; }
+.ghost { position: absolute; font-family: Montserrat, sans-serif; font-weight: 900; font-size: 300px; letter-spacing: -0.04em; color: rgba(243,239,230,0.06); white-space: nowrap; line-height: 1; }
+.chapter { position: absolute; left: 40px; top: 22px; display: flex; align-items: center; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: #f59e0b; }
+.chapter .num { color: #0b1a33; background: #f59e0b; padding: 3px 10px; border-radius: 4px; }
+.chapter .rule { width: 120px; height: 3px; background: rgba(245,158,11,0.6); display: block; }
+.win { position: absolute; left: 40px; top: 72px; width: 1440px; height: 846px; border-radius: 14px; overflow: hidden; background: #0e1f3d; box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 3px rgba(243,239,230,0.12); }
+.win .bar { position: absolute; left: 0; top: 0; width: 1440px; height: 36px; background: #1b2c4a; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.win .dot { width: 13px; height: 13px; border-radius: 50%; background: #56627a; display: block; }
+.win .url { margin-left: 18px; height: 24px; width: 560px; border-radius: 12px; background: #0e1f3d; color: #a9b4c7; font-family: 'IBM Plex Mono', monospace; font-size: 15px; display: flex; align-items: center; padding: 0 14px; }
+.win .screen { position: absolute; left: 0; top: 36px; width: 1440px; height: 810px; overflow: hidden; }
+.win .screen img, .win .screen video { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; }
+.cam { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; }
+.rail { position: absolute; left: 1510px; top: 72px; width: 372px; height: 846px; display: flex; flex-direction: column; gap: 18px; }
+.rail h2 { font-weight: 900; font-size: 42px; line-height: 1.05; letter-spacing: -0.02em; color: #f3efe6; }
+.rail .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: #f59e0b; text-transform: uppercase; }
+.card { background: rgba(18,38,74,0.92); border: 3px solid rgba(243,239,230,0.14); border-radius: 12px; padding: 16px 20px; }
+.card .k { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; color: #a9b4c7; text-transform: uppercase; }
+.card .v { font-size: 28px; font-weight: 700; line-height: 1.2; color: #f3efe6; margin-top: 4px; }
+.card.hot { border-color: #f59e0b; }
+.card.pass { border-color: #2fb56a; }
+.card.fail { border-color: #e04848; }
+.tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.08em; }
+.tag.pass { background: #2fb56a; color: #06210f; }
+.tag.fail { background: #e04848; color: #2a0505; }
+.tag.prog { background: #f59e0b; color: #2a1a02; }
+.tag.built { background: #2fb56a; color: #06210f; }
+.tag.prop { background: #3d5a8c; color: #f3efe6; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.lcd { background: #050b16; border-radius: 18px; border: 4px solid #22324f; box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+.lcd .num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; letter-spacing: -0.02em; text-shadow: 0 0 24px rgba(255,176,32,0.45); line-height: 1; }
+.lcd .unit { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; opacity: 0.8; }
+.lcd .flags { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #3a4a66; }
+.lcd .flags .on { color: #2fe07a; }
+.photo { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+.shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(8,18,38,0.55) 0%, rgba(8,18,38,0.88) 75%); }
+.big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
+.strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
+</style>
+      <div id="root" data-composition-id="s10-seal" data-width="1920" data-height="1080" data-duration="21.41">
+        <div class="wrap" id="s10-seal-wrap">
+          <div class="bg"></div>
+          <div class="glow" id="s10-seal-glow" style="left:900px; top:-300px;"></div>
+          <div class="grid"></div>
+          
+          <div class="chapter" id="s10-seal-chap"><span class="num">04</span><span>Finalise & seal</span><span class="rule"></span></div>
+          <div class="win" id="s10-seal-win">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">nawi-reportpro.vercel.app/tests/sess-034</span></div>
+            <div class="screen">
+              <div class="cam" id="s10-seal-cam">
+                <img id="s10-seal-still" src="assets/capture/s-report.png" alt="" />
+                <video id="s10-seal-vid" src="assets/capture/c06-seal.mp4" data-start="0.3" data-duration="20.810" data-media-start="0" data-playback-rate="0.738" muted playsinline></video>
+              </div>
+            </div>
+          </div>
+          <div class="rail">
+            <div class="card pass" id="s10-seal-v"><div class="k">Verdict</div><div class="v">Computed from the readings. Cannot be overridden.</div></div>
+            <div class="card hot" id="s10-seal-seal"><div class="k">HMAC-SHA256 seal · verdict + every reading</div><div class="mono" id="s10-seal-hash" style="font-size:22px; line-height:1.45; color:#ffb020; word-break:break-all; margin-top:8px; height:132px;"></div></div>
+            <div class="card" id="s10-seal-lock" style="display:flex; align-items:center; gap:16px;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              <div class="v" style="margin-top:0;">Readings locked. Session read-only.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const D = 21.41;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s10-seal-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+          tl.fromTo("#s10-seal-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+          tl.fromTo("#s10-seal-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+          
+          tl.fromTo("#s10-seal-win", { opacity: 0, y: 40, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.1);
+          tl.fromTo("#s10-seal-v", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 4.61);
+          tl.to("#s10-seal-cam", { scale: 1.45, x: -324.0, y: -276.5, duration: 1, ease: "power2.inOut" }, 4.31);
+          tl.to("#s10-seal-cam", { scale: 1, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 10.049999999999999);
+          tl.fromTo("#s10-seal-seal", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 12.254000000000001);
+          const h = { n: 0 };
+          tl.to(h, { n: 64, duration: 2.2, ease: "none", onUpdate: () => { document.getElementById("s10-seal-hash").textContent = "9a558094b0a676941dc6e8ab0c769136205f40905a0c1b765669282ff4c24e22".slice(0, Math.round(h.n)); } }, 12.654);
+          tl.fromTo("#s10-seal-lock", { opacity: 0, x: 40 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, 19.892);
+          window.__timelines["s10-seal"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

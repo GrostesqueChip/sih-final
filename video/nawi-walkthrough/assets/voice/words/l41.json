@@ -1,0 +1,117 @@
+[
+ {
+  "text": "The",
+  "start": 0.088,
+  "end": 0.156
+ },
+ {
+  "text": "foundation",
+  "start": 0.156,
+  "end": 0.694
+ },
+ {
+  "text": "is",
+  "start": 0.762,
+  "end": 0.906
+ },
+ {
+  "text": "already",
+  "start": 0.963,
+  "end": 1.367
+ },
+ {
+  "text": "built",
+  "start": 1.367,
+  "end": 1.608
+ },
+ {
+  "text": "for",
+  "start": 1.608,
+  "end": 1.81
+ },
+ {
+  "text": "it",
+  "start": 1.81,
+  "end": 1.992
+ },
+ {
+  "text": "A",
+  "start": 2.663,
+  "end": 2.712
+ },
+ {
+  "text": "stateless",
+  "start": 2.712,
+  "end": 3.212
+ },
+ {
+  "text": "API",
+  "start": 3.269,
+  "end": 3.721
+ },
+ {
+  "text": "on",
+  "start": 3.779,
+  "end": 3.933
+ },
+ {
+  "text": "PostgreSQL",
+  "start": 3.942,
+  "end": 4.885
+ },
+ {
+  "text": "deployed",
+  "start": 5.01,
+  "end": 5.433
+ },
+ {
+  "text": "in",
+  "start": 5.5,
+  "end": 5.577
+ },
+ {
+  "text": "the",
+  "start": 5.587,
+  "end": 5.683
+ },
+ {
+  "text": "cloud",
+  "start": 5.683,
+  "end": 6.029
+ },
+ {
+  "text": "and",
+  "start": 6.25,
+  "end": 6.413
+ },
+ {
+  "text": "seals",
+  "start": 6.413,
+  "end": 6.75
+ },
+ {
+  "text": "that",
+  "start": 6.75,
+  "end": 6.981
+ },
+ {
+  "text": "anyone",
+  "start": 7.038,
+  "end": 7.375
+ },
+ {
+  "text": "can",
+  "start": 7.375,
+  "end": 7.587
+ },
+ {
+  "text": "verify",
+  "start": 7.587,
+  "end": 8.038
+ },
+ {
+  "text": "anywhere",
+  "start": 8.202,
+  "end": 8.625
+ }
+]

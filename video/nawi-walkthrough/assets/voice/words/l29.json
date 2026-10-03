@@ -1,0 +1,162 @@
+[
+ {
+  "text": "Here",
+  "start": 0.088,
+  "end": 0.338
+ },
+ {
+  "text": "we",
+  "start": 0.521,
+  "end": 0.685
+ },
+ {
+  "text": "simulate",
+  "start": 0.685,
+  "end": 1.108
+ },
+ {
+  "text": "a",
+  "start": 1.165,
+  "end": 1.233
+ },
+ {
+  "text": "faulty",
+  "start": 1.233,
+  "end": 1.598
+ },
+ {
+  "text": "load",
+  "start": 1.627,
+  "end": 1.848
+ },
+ {
+  "text": "cell",
+  "start": 1.848,
+  "end": 2.156
+ },
+ {
+  "text": "on",
+  "start": 2.213,
+  "end": 2.358
+ },
+ {
+  "text": "a",
+  "start": 2.367,
+  "end": 2.435
+ },
+ {
+  "text": "neighbourhood",
+  "start": 2.435,
+  "end": 2.925
+ },
+ {
+  "text": "grocery",
+  "start": 2.935,
+  "end": 3.358
+ },
+ {
+  "text": "store",
+  "start": 3.358,
+  "end": 3.608
+ },
+ {
+  "text": "scale",
+  "start": 3.608,
+  "end": 4.012
+ },
+ {
+  "text": "As",
+  "start": 4.635,
+  "end": 4.808
+ },
+ {
+  "text": "the",
+  "start": 4.808,
+  "end": 4.913
+ },
+ {
+  "text": "load",
+  "start": 4.913,
+  "end": 5.173
+ },
+ {
+  "text": "rises",
+  "start": 5.192,
+  "end": 5.625
+ },
+ {
+  "text": "the",
+  "start": 5.827,
+  "end": 5.904
+ },
+ {
+  "text": "readings",
+  "start": 5.904,
+  "end": 6.269
+ },
+ {
+  "text": "creep",
+  "start": 6.288,
+  "end": 6.529
+ },
+ {
+  "text": "upward",
+  "start": 6.577,
+  "end": 6.981
+ },
+ {
+  "text": "The",
+  "start": 7.673,
+  "end": 7.75
+ },
+ {
+  "text": "moment",
+  "start": 7.75,
+  "end": 8.067
+ },
+ {
+  "text": "an",
+  "start": 8.125,
+  "end": 8.298
+ },
+ {
+  "text": "error",
+  "start": 8.356,
+  "end": 8.577
+ },
+ {
+  "text": "crosses",
+  "start": 8.577,
+  "end": 8.962
+ },
+ {
+  "text": "the",
+  "start": 8.962,
+  "end": 9.077
+ },
+ {
+  "text": "legal",
+  "start": 9.077,
+  "end": 9.423
+ },
+ {
+  "text": "limit",
+  "start": 9.423,
+  "end": 9.731
+ },
+ {
+  "text": "it",
+  "start": 9.933,
+  "end": 10.067
+ },
+ {
+  "text": "turns",
+  "start": 10.067,
+  "end": 10.404
+ },
+ {
+  "text": "red",
+  "start": 10.404,
+  "end": 10.654
+ }
+]

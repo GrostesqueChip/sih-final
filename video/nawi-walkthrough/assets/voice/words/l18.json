@@ -1,0 +1,32 @@
+[
+ {
+  "text": "Five",
+  "start": 0.088,
+  "end": 0.358
+ },
+ {
+  "text": "are",
+  "start": 0.396,
+  "end": 0.579
+ },
+ {
+  "text": "already",
+  "start": 0.646,
+  "end": 1.04
+ },
+ {
+  "text": "done",
+  "start": 1.04,
+  "end": 1.31
+ },
+ {
+  "text": "One",
+  "start": 1.962,
+  "end": 2.192
+ },
+ {
+  "text": "remains",
+  "start": 2.192,
+  "end": 2.673
+ }
+]

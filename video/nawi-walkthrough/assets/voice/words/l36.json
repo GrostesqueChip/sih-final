@@ -1,0 +1,72 @@
+[
+ {
+  "text": "Every",
+  "start": 0.088,
+  "end": 0.338
+ },
+ {
+  "text": "action",
+  "start": 0.396,
+  "end": 0.762
+ },
+ {
+  "text": "every",
+  "start": 0.925,
+  "end": 1.213
+ },
+ {
+  "text": "reading",
+  "start": 1.213,
+  "end": 1.579
+ },
+ {
+  "text": "every",
+  "start": 1.675,
+  "end": 1.954
+ },
+ {
+  "text": "edit",
+  "start": 2.012,
+  "end": 2.281
+ },
+ {
+  "text": "every",
+  "start": 2.463,
+  "end": 2.713
+ },
+ {
+  "text": "seal",
+  "start": 2.713,
+  "end": 3.021
+ },
+ {
+  "text": "goes",
+  "start": 3.281,
+  "end": 3.55
+ },
+ {
+  "text": "into",
+  "start": 3.608,
+  "end": 3.829
+ },
+ {
+  "text": "an",
+  "start": 3.838,
+  "end": 3.992
+ },
+ {
+  "text": "append-only",
+  "start": 4.002,
+  "end": 4.531
+ },
+ {
+  "text": "audit",
+  "start": 4.588,
+  "end": 4.829
+ },
+ {
+  "text": "trail",
+  "start": 4.877,
+  "end": 5.233
+ }
+]

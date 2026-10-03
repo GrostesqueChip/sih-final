@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Public verification</title></head>
+  <body>
+    <template>
+      <style>
+#root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; color: #f3efe6; font-family: Montserrat, sans-serif; }
+.wrap { position: absolute; inset: 0; }
+.bg { position: absolute; inset: 0; background: #0b1a33; }
+.glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(245,158,11,0.07) 38%, rgba(11,26,51,0) 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(243,239,230,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(243,239,230,0.05) 2px, transparent 2px); background-size: 96px 96px; }
+.ghost { position: absolute; font-family: Montserrat, sans-serif; font-weight: 900; font-size: 300px; letter-spacing: -0.04em; color: rgba(243,239,230,0.06); white-space: nowrap; line-height: 1; }
+.chapter { position: absolute; left: 40px; top: 22px; display: flex; align-items: center; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: #f59e0b; }
+.chapter .num { color: #0b1a33; background: #f59e0b; padding: 3px 10px; border-radius: 4px; }
+.chapter .rule { width: 120px; height: 3px; background: rgba(245,158,11,0.6); display: block; }
+.win { position: absolute; left: 40px; top: 72px; width: 1440px; height: 846px; border-radius: 14px; overflow: hidden; background: #0e1f3d; box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 3px rgba(243,239,230,0.12); }
+.win .bar { position: absolute; left: 0; top: 0; width: 1440px; height: 36px; background: #1b2c4a; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.win .dot { width: 13px; height: 13px; border-radius: 50%; background: #56627a; display: block; }
+.win .url { margin-left: 18px; height: 24px; width: 560px; border-radius: 12px; background: #0e1f3d; color: #a9b4c7; font-family: 'IBM Plex Mono', monospace; font-size: 15px; display: flex; align-items: center; padding: 0 14px; }
+.win .screen { position: absolute; left: 0; top: 36px; width: 1440px; height: 810px; overflow: hidden; }
+.win .screen img, .win .screen video { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; }
+.cam { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; }
+.rail { position: absolute; left: 1510px; top: 72px; width: 372px; height: 846px; display: flex; flex-direction: column; gap: 18px; }
+.rail h2 { font-weight: 900; font-size: 42px; line-height: 1.05; letter-spacing: -0.02em; color: #f3efe6; }
+.rail .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: #f59e0b; text-transform: uppercase; }
+.card { background: rgba(18,38,74,0.92); border: 3px solid rgba(243,239,230,0.14); border-radius: 12px; padding: 16px 20px; }
+.card .k { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; color: #a9b4c7; text-transform: uppercase; }
+.card .v { font-size: 28px; font-weight: 700; line-height: 1.2; color: #f3efe6; margin-top: 4px; }
+.card.hot { border-color: #f59e0b; }
+.card.pass { border-color: #2fb56a; }
+.card.fail { border-color: #e04848; }
+.tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.08em; }
+.tag.pass { background: #2fb56a; color: #06210f; }
+.tag.fail { background: #e04848; color: #2a0505; }
+.tag.prog { background: #f59e0b; color: #2a1a02; }
+.tag.built { background: #2fb56a; color: #06210f; }
+.tag.prop { background: #3d5a8c; color: #f3efe6; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.lcd { background: #050b16; border-radius: 18px; border: 4px solid #22324f; box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+.lcd .num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; letter-spacing: -0.02em; text-shadow: 0 0 24px rgba(255,176,32,0.45); line-height: 1; }
+.lcd .unit { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; opacity: 0.8; }
+.lcd .flags { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #3a4a66; }
+.lcd .flags .on { color: #2fe07a; }
+.photo { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+.shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(8,18,38,0.55) 0%, rgba(8,18,38,0.88) 75%); }
+.big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
+.strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
+</style>
+      <div id="root" data-composition-id="s13-verify" data-width="1920" data-height="1080" data-duration="36.432">
+        <div class="wrap" id="s13-verify-wrap">
+          <div class="bg"></div>
+          <div class="cam" id="s13-verify-kb" style="width:1920px;height:1080px;transform-origin:50% 50%;"><img class="photo" src="assets/photos/mandi-labour.jpg" alt="" style="object-position: 50% 62%;" /></div>
+          <div class="shade" id="s13-verify-shade"></div>
+          <div class="chapter" id="s13-verify-chap"><span class="num">06</span><span>Public verification · no login</span><span class="rule"></span></div>
+          <div id="s13-verify-loc" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:140px; width:900px;">
+            <div class="mono" style="font-size:22px; font-weight:700; letter-spacing:0.16em; color:#f59e0b;">BATHINDA · NEW ANAJ MANDI</div>
+            <div class="big" style="font-size:96px; margin-top:12px;">Back to the mandi.</div>
+          </div>
+          <div id="s13-verify-qr" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:140px; top:360px; width:360px; height:360px; background:#fff; border-radius:16px; padding:22px;">
+            <img src="assets/capture/qr-pass.png" alt="" style="width:316px; height:316px; display:block;" />
+            <div id="s13-verify-scan" style="position:absolute; left:10px; top:22px; width:340px; height:6px; background:#2fe07a; box-shadow:0 0 18px #2fe07a;"></div>
+          </div>
+          <div id="s13-verify-qrl" data-layout-allow-overlap data-layout-allow-occlusion class="mono" style="position:absolute; left:140px; top:740px; width:420px; font-size:22px; font-weight:700; color:#e8dfcc; letter-spacing:0.08em;">SCAN TO VERIFY · NAWI-2026-000124</div>
+          <div id="s13-verify-valid" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:330px; width:760px;">
+            <div class="big" style="font-size:190px; color:#2fe07a; letter-spacing:-0.04em;">VALID</div>
+            <div style="display:flex; flex-direction:column; gap:14px; margin-top:10px;">
+              <div class="card pass" id="s13-verify-f0"><div class="k">Owner · place</div><div class="v">M/s Guru Nanak Cotton Traders, Bathinda</div></div>
+              <div class="card pass" id="s13-verify-f1"><div class="k">Verified by</div><div class="v">Shri Vikramaditya Sharma</div></div>
+              <div class="card pass" id="s13-verify-f2"><div class="k">Valid until</div><div class="v">30 Sep 2027</div></div>
+            </div>
+          </div>
+          <div id="s13-verify-bad" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:330px; width:760px;">
+            <div id="s13-verify-rj" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:0; top:0; width:760px;">
+              <div class="big" style="font-size:120px; color:#ff6b6b;">REJECTED</div>
+              <div style="font-size:36px; margin-top:14px; line-height:1.3; color:#f3efe6;">Failed verification. Not valid for trade.</div>
+            </div>
+            <div id="s13-verify-tp" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:0; top:0; width:1040px;">
+              <div class="big" style="font-size:112px; color:#ff6b6b; white-space:nowrap;">NOT AUTHENTIC</div>
+              <div style="font-size:36px; margin-top:14px; line-height:1.3; color:#f3efe6; width:760px;">One reading edited after sealing. The seal no longer matches.</div>
+            </div>
+            <div style="height:240px;"></div>
+            <div class="card hot" id="s13-verify-help" style="margin-top:30px; display:flex; align-items:center; gap:22px;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+              <div><div class="k">National Consumer Helpline</div><div class="big" style="font-size:72px; color:#f59e0b;">1915</div></div>
+            </div>
+          </div>
+          <div id="s13-verify-truth" data-layout-allow-overlap data-layout-allow-occlusion class="big" style="position:absolute; left:110px; top:360px; width:860px; font-size:78px;">For the first time, the person on the other side of the scale can see the truth.</div>
+          <div id="s13-verify-phone" style="position:absolute; left:1250px; top:40px; width:430px; height:890px; border-radius:62px; background:#0a0f1a; padding:18px; box-shadow:0 40px 100px rgba(0,0,0,0.6), 0 0 0 3px #3a4660;">
+            <div style="position:absolute; left:18px; top:18px; width:394px; height:854px; border-radius:46px; overflow:hidden; background:#f1f4f9;">
+              <img src="assets/capture/s-mobile-valid.png" alt="" style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;" />
+              <video id="s13-verify-va" src="assets/capture/c11-verify-mobile.mp4" data-start="6.537" data-duration="13.067" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
+              <img id="s13-verify-rimg" src="assets/capture/s-mobile-rejected.png" alt="" style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;" />
+              <video id="s13-verify-vb" src="assets/capture/c12-verify-mobile-rejected.mp4" data-start="20.876" data-duration="3.163" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
+              <img id="s13-verify-timg" src="assets/capture/s-mobile-tampered.png" alt="" style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;" />
+              <video id="s13-verify-vc" src="assets/capture/c14-verify-mobile-tampered.mp4" data-start="24.039" data-duration="9.267" muted playsinline style="position:absolute; left:0; top:0; width:394px; height:854px; object-fit:cover; object-position:top;"></video>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const D = 36.432;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s13-verify-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+          tl.fromTo("#s13-verify-kb", { scale: 1.2 }, { scale: 1.06, duration: D, ease: "none" }, 0);
+          tl.fromTo("#s13-verify-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+          tl.fromTo("#s13-verify-loc", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.5);
+          tl.to("#s13-verify-loc", { opacity: 0, y: -20, duration: 0.5 }, 2.8810000000000002);
+          tl.set(["#s13-verify-valid", "#s13-verify-bad", "#s13-verify-truth", "#s13-verify-rimg", "#s13-verify-timg", "#s13-verify-tp"], { opacity: 0 }, 0);
+          tl.fromTo("#s13-verify-qr", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 3.081);
+          tl.fromTo("#s13-verify-qrl", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 3.281);
+          tl.fromTo("#s13-verify-scan", { y: 0 }, { y: 320, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 3 }, 5.737);
+          tl.fromTo("#s13-verify-phone", { opacity: 0, y: 120 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 6.037);
+          tl.to(["#s13-verify-qr", "#s13-verify-qrl"], { opacity: 0, x: -40, duration: 0.5 }, 12.537);
+          tl.fromTo("#s13-verify-valid", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 14.529);
+          tl.set(["#s13-verify-f0", "#s13-verify-f1", "#s13-verify-f2"], { opacity: 0 }, 0);
+          tl.fromTo("#s13-verify-f0", { opacity: 0, x: -30 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.4, ease: "power3.out" }, 15.741);
+          tl.fromTo("#s13-verify-f1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.4, ease: "power3.out" }, 17.067999999999998);
+          tl.fromTo("#s13-verify-f2", { opacity: 0, x: -30 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.4, ease: "power3.out" }, 18.491);
+          tl.to("#s13-verify-valid", { opacity: 0, x: -40, duration: 0.5 }, 19.668);
+          tl.set("#s13-verify-rimg", { opacity: 1 }, 20.876);
+          tl.fromTo("#s13-verify-bad", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 20.576);
+          tl.set("#s13-verify-timg", { opacity: 1 }, 24.039);
+          tl.to("#s13-verify-rj", { opacity: 0, y: -16, duration: 0.3 }, 23.739);
+          tl.fromTo("#s13-verify-tp", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 23.989);
+          tl.set("#s13-verify-help", { opacity: 0 }, 0);
+          tl.fromTo("#s13-verify-help", { opacity: 0, scale: 0.85 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 27.712);
+          tl.to("#s13-verify-bad", { opacity: 0, duration: 0.5 }, 30.895);
+          tl.to("#s13-verify-shade", { opacity: 0.7, duration: 1.0 }, 30.895);
+          tl.to("#s13-verify-phone", { opacity: 0, x: 80, duration: 0.8, ease: "power2.in" }, 30.995);
+          tl.fromTo("#s13-verify-truth", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 31.195);
+          window.__timelines["s13-verify"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

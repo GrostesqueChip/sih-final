@@ -1,0 +1,147 @@
+[
+ {
+  "text": "One",
+  "start": 0.088,
+  "end": 0.31
+ },
+ {
+  "text": "signature",
+  "start": 0.31,
+  "end": 0.877
+ },
+ {
+  "text": "and",
+  "start": 1.137,
+  "end": 1.281
+ },
+ {
+  "text": "the",
+  "start": 1.281,
+  "end": 1.387
+ },
+ {
+  "text": "certificate",
+  "start": 1.387,
+  "end": 1.973
+ },
+ {
+  "text": "is",
+  "start": 2.031,
+  "end": 2.194
+ },
+ {
+  "text": "sealed",
+  "start": 2.204,
+  "end": 2.531
+ },
+ {
+  "text": "with",
+  "start": 2.531,
+  "end": 2.723
+ },
+ {
+  "text": "an",
+  "start": 2.723,
+  "end": 2.858
+ },
+ {
+  "text": "H-MAC",
+  "start": 2.935,
+  "end": 3.387
+ },
+ {
+  "text": "S.H.A.",
+  "start": 3.694,
+  "end": 4.117
+ },
+ {
+  "text": "two",
+  "start": 4.137,
+  "end": 4.242
+ },
+ {
+  "text": "fifty-six",
+  "start": 4.242,
+  "end": 4.752
+ },
+ {
+  "text": "digital",
+  "start": 4.781,
+  "end": 5.127
+ },
+ {
+  "text": "seal",
+  "start": 5.127,
+  "end": 5.415
+ },
+ {
+  "text": "covering",
+  "start": 5.656,
+  "end": 5.925
+ },
+ {
+  "text": "the",
+  "start": 5.925,
+  "end": 6.012
+ },
+ {
+  "text": "verdict",
+  "start": 6.012,
+  "end": 6.396
+ },
+ {
+  "text": "and",
+  "start": 6.483,
+  "end": 6.694
+ },
+ {
+  "text": "every",
+  "start": 6.752,
+  "end": 7.031
+ },
+ {
+  "text": "single",
+  "start": 7.031,
+  "end": 7.338
+ },
+ {
+  "text": "reading",
+  "start": 7.338,
+  "end": 7.713
+ },
+ {
+  "text": "From",
+  "start": 8.365,
+  "end": 8.596
+ },
+ {
+  "text": "this",
+  "start": 8.596,
+  "end": 8.788
+ },
+ {
+  "text": "moment",
+  "start": 8.788,
+  "end": 9.125
+ },
+ {
+  "text": "the",
+  "start": 9.269,
+  "end": 9.356
+ },
+ {
+  "text": "readings",
+  "start": 9.356,
+  "end": 9.731
+ },
+ {
+  "text": "are",
+  "start": 9.779,
+  "end": 9.942
+ },
+ {
+  "text": "locked",
+  "start": 9.942,
+  "end": 10.26
+ }
+]

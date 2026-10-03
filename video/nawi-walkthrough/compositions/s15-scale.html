@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Scale to the nation</title></head>
+  <body>
+    <template>
+      <style>
+#root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; color: #f3efe6; font-family: Montserrat, sans-serif; }
+.wrap { position: absolute; inset: 0; }
+.bg { position: absolute; inset: 0; background: #0b1a33; }
+.glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(245,158,11,0.07) 38%, rgba(11,26,51,0) 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(243,239,230,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(243,239,230,0.05) 2px, transparent 2px); background-size: 96px 96px; }
+.ghost { position: absolute; font-family: Montserrat, sans-serif; font-weight: 900; font-size: 300px; letter-spacing: -0.04em; color: rgba(243,239,230,0.06); white-space: nowrap; line-height: 1; }
+.chapter { position: absolute; left: 40px; top: 22px; display: flex; align-items: center; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: #f59e0b; }
+.chapter .num { color: #0b1a33; background: #f59e0b; padding: 3px 10px; border-radius: 4px; }
+.chapter .rule { width: 120px; height: 3px; background: rgba(245,158,11,0.6); display: block; }
+.win { position: absolute; left: 40px; top: 72px; width: 1440px; height: 846px; border-radius: 14px; overflow: hidden; background: #0e1f3d; box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 3px rgba(243,239,230,0.12); }
+.win .bar { position: absolute; left: 0; top: 0; width: 1440px; height: 36px; background: #1b2c4a; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.win .dot { width: 13px; height: 13px; border-radius: 50%; background: #56627a; display: block; }
+.win .url { margin-left: 18px; height: 24px; width: 560px; border-radius: 12px; background: #0e1f3d; color: #a9b4c7; font-family: 'IBM Plex Mono', monospace; font-size: 15px; display: flex; align-items: center; padding: 0 14px; }
+.win .screen { position: absolute; left: 0; top: 36px; width: 1440px; height: 810px; overflow: hidden; }
+.win .screen img, .win .screen video { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; object-fit: cover; }
+.cam { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; }
+.rail { position: absolute; left: 1510px; top: 72px; width: 372px; height: 846px; display: flex; flex-direction: column; gap: 18px; }
+.rail h2 { font-weight: 900; font-size: 42px; line-height: 1.05; letter-spacing: -0.02em; color: #f3efe6; }
+.rail .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: #f59e0b; text-transform: uppercase; }
+.card { background: rgba(18,38,74,0.92); border: 3px solid rgba(243,239,230,0.14); border-radius: 12px; padding: 16px 20px; }
+.card .k { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; color: #a9b4c7; text-transform: uppercase; }
+.card .v { font-size: 28px; font-weight: 700; line-height: 1.2; color: #f3efe6; margin-top: 4px; }
+.card.hot { border-color: #f59e0b; }
+.card.pass { border-color: #2fb56a; }
+.card.fail { border-color: #e04848; }
+.tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.08em; }
+.tag.pass { background: #2fb56a; color: #06210f; }
+.tag.fail { background: #e04848; color: #2a0505; }
+.tag.prog { background: #f59e0b; color: #2a1a02; }
+.tag.built { background: #2fb56a; color: #06210f; }
+.tag.prop { background: #3d5a8c; color: #f3efe6; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.lcd { background: #050b16; border-radius: 18px; border: 4px solid #22324f; box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+.lcd .num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; letter-spacing: -0.02em; text-shadow: 0 0 24px rgba(255,176,32,0.45); line-height: 1; }
+.lcd .unit { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #ffb020; opacity: 0.8; }
+.lcd .flags { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #3a4a66; }
+.lcd .flags .on { color: #2fe07a; }
+.photo { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+.shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(8,18,38,0.55) 0%, rgba(8,18,38,0.88) 75%); }
+.big { font-weight: 900; letter-spacing: -0.035em; line-height: 0.98; }
+.strike { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: #e04848; transform-origin: left center; display: block; }
+</style>
+      <div id="root" data-composition-id="s15-scale" data-width="1920" data-height="1080" data-duration="53.633">
+        <div class="wrap" id="s15-scale-wrap">
+          <div class="bg"></div>
+          <div class="glow" id="s15-scale-glow" style="left:1000px; top:-300px;"></div>
+          <div class="grid"></div>
+          <div class="ghost" data-layout-ignore aria-hidden="true" id="s15-scale-ghost" style="left:300px; top:800px;">ONE NATION</div>
+          <div class="chapter" id="s15-scale-chap"><span class="num">08</span><span>Scaling to the nation</span><span class="rule"></span></div>
+          <div id="s15-scale-p1" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; inset:0;">
+            <div id="s15-scale-dots" style="position:absolute; left:760px; top:150px; width:1080px; height:540px;">
+            </div>
+            <div id="s15-scale-t1" style="position:absolute; left:110px; top:190px; width:600px;">
+              <div class="big" style="font-size:150px; color:#f59e0b;">11</div>
+              <div class="big" style="font-size:52px;">districts of Punjab — today.</div>
+            </div>
+            <div id="s15-scale-t2" style="position:absolute; left:110px; top:560px; width:600px;">
+              <div class="big" style="font-size:52px;">Nothing in it is Punjab-specific.</div>
+            </div>
+            <div id="s15-scale-t3" style="position:absolute; left:110px; top:190px; width:620px;">
+              <div class="mono" style="font-size:22px; font-weight:700; letter-spacing:0.14em; color:#f59e0b;">EVERY STATE · EVERY DISTRICT</div>
+              <div class="big" style="font-size:96px; margin-top:14px;">One platform.</div>
+            </div>
+          </div>
+          <div id="s15-scale-tiles" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:640px; width:1700px; display:flex; gap:24px;">
+            <div id="s15-scale-ti0" style="flex:1; height:280px; border-radius:14px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+              <img src="assets/photos/weighbridge.jpg" alt="" style="position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover;" />
+              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:rgba(8,18,38,0.86); font-size:30px; font-weight:900;">Mandi weighbridges</div>
+            </div>
+            <div id="s15-scale-ti1" style="flex:1; height:280px; border-radius:14px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+              <img src="assets/photos/counter-scale.jpg" alt="" style="position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover;" />
+              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:rgba(8,18,38,0.86); font-size:30px; font-weight:900;">Ration-shop scales</div>
+            </div>
+            <div id="s15-scale-ti2" style="flex:1; height:280px; border-radius:14px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+              <img src="assets/photos/bench-scale.jpg" alt="" style="position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover;" />
+              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:rgba(8,18,38,0.86); font-size:30px; font-weight:900;">Milk-collection centres</div>
+            </div>
+            <div id="s15-scale-ti3" style="flex:1; height:280px; border-radius:14px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+              <img src="assets/photos/lab-balance.jpg" alt="" style="position:absolute; left:0; top:0; width:100%; height:100%; object-fit:cover;" />
+              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:rgba(8,18,38,0.86); font-size:30px; font-weight:900;">Jewellers’ balances</div>
+            </div>
+          </div>
+          <div id="s15-scale-hub" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:120px; top:110px; width:1680px; height:780px;">
+            <svg width="1680" height="780" style="position:absolute; left:0; top:0;">
+              <line id="s15-scale-ln0" x1="840" y1="380" x2="520" y2="150" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 10"/>
+              <line id="s15-scale-ln1" x1="840" y1="380" x2="1160" y2="150" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 10"/>
+              <line id="s15-scale-ln2" x1="840" y1="380" x2="520" y2="530" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 10"/>
+              <line id="s15-scale-ln3" x1="840" y1="380" x2="1160" y2="530" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 10"/>
+            </svg>
+            <div id="s15-scale-core" style="position:absolute; left:640px; top:290px; width:400px; height:180px; border-radius:20px; background:#f59e0b; color:#0b1a33; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <div class="big" style="font-size:44px;">NAWI-ReportPro</div>
+              <div class="mono" style="font-size:20px; font-weight:700; margin-top:6px;">NATIONAL PLATFORM</div>
+            </div>
+            <div class="card" id="s15-scale-hb0" style="position:absolute; left:60px; top:40px; width:440px; padding:22px 26px;">
+              <span class="tag built">BUILT</span>
+              <div class="v" style="font-size:36px; font-weight:900; margin-top:12px;">Weighing indicators</div>
+              <div style="font-size:24px; color:#a9b4c7; margin-top:6px;">RS-232 · Web Serial</div>
+            </div>
+            <div class="card" id="s15-scale-hb1" style="position:absolute; left:1180px; top:40px; width:440px; padding:22px 26px;">
+              <span class="tag prop">PROPOSED</span>
+              <div class="v" style="font-size:36px; font-weight:900; margin-top:12px;">DigiLocker</div>
+              <div style="font-size:24px; color:#a9b4c7; margin-top:6px;">certificates in citizens’ wallets</div>
+            </div>
+            <div class="card" id="s15-scale-hb2" style="position:absolute; left:60px; top:420px; width:440px; padding:22px 26px;">
+              <span class="tag prop">PROPOSED</span>
+              <div class="v" style="font-size:36px; font-weight:900; margin-top:12px;">e-NAM mandis</div>
+              <div style="font-size:24px; color:#a9b4c7; margin-top:6px;">stamping status at the point of sale</div>
+            </div>
+            <div class="card" id="s15-scale-hb3" style="position:absolute; left:1180px; top:420px; width:440px; padding:22px 26px;">
+              <span class="tag built">BUILT</span>
+              <div class="v" style="font-size:36px; font-weight:900; margin-top:12px;">District dashboards</div>
+              <div style="font-size:24px; color:#a9b4c7; margin-top:6px;">live compliance, nationwide</div>
+            </div>
+          </div>
+          <div id="s15-scale-arch" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:150px; width:1700px;">
+            <div class="mono" style="font-size:22px; font-weight:700; letter-spacing:0.14em; color:#f59e0b;">THE FOUNDATION IS ALREADY BUILT</div>
+            <div style="display:flex; flex-direction:column; gap:20px; margin-top:28px;">
+              <div class="card" id="s15-scale-ar0" style="display:flex; align-items:center; gap:30px; padding:24px 32px; width:1100px;">
+                <div class="mono" style="font-size:34px; font-weight:700; color:#f59e0b;">01</div>
+                <div class="v" style="font-size:44px; font-weight:900; margin-top:0;">Stateless REST API</div>
+                <div style="font-size:26px; color:#a9b4c7;">JWT · horizontal scaling</div>
+              </div>
+              <div class="card" id="s15-scale-ar1" style="display:flex; align-items:center; gap:30px; padding:24px 32px; width:1250px;">
+                <div class="mono" style="font-size:34px; font-weight:700; color:#f59e0b;">02</div>
+                <div class="v" style="font-size:44px; font-weight:900; margin-top:0;">PostgreSQL · Prisma</div>
+                <div style="font-size:26px; color:#a9b4c7;">one schema, every state</div>
+              </div>
+              <div class="card" id="s15-scale-ar2" style="display:flex; align-items:center; gap:30px; padding:24px 32px; width:1400px;">
+                <div class="mono" style="font-size:34px; font-weight:700; color:#f59e0b;">03</div>
+                <div class="v" style="font-size:44px; font-weight:900; margin-top:0;">Deployed on Vercel</div>
+                <div style="font-size:26px; color:#a9b4c7;">live at nawi-reportpro.vercel.app</div>
+              </div>
+              <div class="card" id="s15-scale-ar3" style="display:flex; align-items:center; gap:30px; padding:24px 32px; width:1550px;">
+                <div class="mono" style="font-size:34px; font-weight:700; color:#f59e0b;">04</div>
+                <div class="v" style="font-size:44px; font-weight:900; margin-top:0;">HMAC-SHA256 seals</div>
+                <div style="font-size:26px; color:#a9b4c7;">verifiable anywhere, by anyone</div>
+              </div>
+            </div>
+          </div>
+          <div id="s15-scale-out" data-layout-allow-overlap data-layout-allow-occlusion style="position:absolute; left:110px; top:170px; width:1700px; display:flex; flex-direction:column; gap:40px;">
+            <div id="s15-scale-o0" class="big" style="font-size:80px;">Officers in the field, <span style="color:#f59e0b;">not on paperwork.</span></div>
+            <div id="s15-scale-o1" class="big" style="font-size:80px;">Forged certificates <span style="color:#f59e0b;">stop working.</span></div>
+            <div id="s15-scale-o2" class="big" style="font-size:80px;">Every citizen can check <span style="color:#f59e0b;">in seconds.</span></div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const D = 53.633;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s15-scale-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+          const dotsEl = document.getElementById("s15-scale-dots");
+          const PJ = [168,169,170,208,209,210,211,249,250,251,130];
+          for (let r = 0; r < 20; r++) for (let c = 0; c < 40; c++) {
+            const i = r * 40 + c;
+            const d = document.createElement("span");
+            d.id = "s15-scale-d" + i;
+            d.style.cssText = "position:absolute; left:" + (c * 27) + "px; top:" + (r * 27) + "px; width:14px; height:14px; border-radius:50%; display:block; background:" + (PJ.includes(i) ? "#f59e0b" : "#2a3f66") + ";";
+            dotsEl.appendChild(d);
+          }
+          tl.fromTo("#s15-scale-chap", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+          tl.fromTo("#s15-scale-glow", { scale: 0.9, opacity: 0.7 }, { scale: 1.12, opacity: 1, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+          tl.fromTo("#s15-scale-ghost", { x: 0 }, { x: -260, duration: D, ease: "none" }, 0);
+          tl.set(["#s15-scale-t2", "#s15-scale-t3", "#s15-scale-tiles", "#s15-scale-hub", "#s15-scale-arch", "#s15-scale-out"], { opacity: 0 }, 0);
+          tl.fromTo("#s15-scale-dots", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.3);
+          tl.fromTo("#s15-scale-t1", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 2.0309999999999997);
+          tl.fromTo("#s15-scale-t2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.456);
+          tl.to(["#s15-scale-t1", "#s15-scale-t2"], { opacity: 0, duration: 0.5 }, 6.7059999999999995);
+          tl.fromTo("#s15-scale-t3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 7.005999999999999);
+          const wave = [[0,8.25],[1,8.17],[2,8.1],[3,8.03],[4,7.96],[5,7.9],[6,7.85],[7,7.81],[8,7.78],[9,7.76],[10,7.76],[11,7.78],[12,7.81],[13,7.85],[14,7.9],[15,7.96],[16,8.03],[17,8.1],[18,8.17],[19,8.25],[20,8.33],[21,8.42],[22,8.5],[23,8.59],[24,8.67],[25,8.76],[26,8.85],[27,8.94],[28,9.03],[29,9.12],[30,9.21],[31,9.3],[32,9.39],[33,9.48],[34,9.57],[35,9.66],[36,9.76],[37,9.85],[38,9.94],[39,10.03],[40,8.2],[41,8.11],[42,8.03],[43,7.96],[44,7.88],[45,7.81],[46,7.75],[47,7.7],[48,7.67],[49,7.65],[50,7.65],[51,7.67],[52,7.7],[53,7.75],[54,7.81],[55,7.88],[56,7.96],[57,8.03],[58,8.11],[59,8.2],[60,8.28],[61,8.37],[62,8.46],[63,8.54],[64,8.63],[65,8.72],[66,8.81],[67,8.9],[68,9],[69,9.09],[70,9.18],[71,9.27],[72,9.36],[73,9.45],[74,9.55],[75,9.64],[76,9.73],[77,9.83],[78,9.92],[79,10.01],[80,8.15],[81,8.06],[82,7.98],[83,7.89],[84,7.81],[85,7.74],[86,7.67],[87,7.61],[88,7.56],[89,7.54],[90,7.54],[91,7.56],[92,7.61],[93,7.67],[94,7.74],[95,7.81],[96,7.89],[97,7.98],[98,8.06],[99,8.15],[100,8.24],[101,8.33],[102,8.42],[103,8.51],[104,8.6],[105,8.69],[106,8.79],[107,8.88],[108,8.97],[109,9.06],[110,9.16],[111,9.25],[112,9.34],[113,9.43],[114,9.53],[115,9.62],[116,9.71],[117,9.81],[118,9.9],[119,10],[120,8.12],[121,8.03],[122,7.94],[123,7.85],[124,7.76],[125,7.67],[126,7.59],[127,7.52],[128,7.46],[129,7.43],[131,7.46],[132,7.52],[133,7.59],[134,7.67],[135,7.76],[136,7.85],[137,7.94],[138,8.03],[139,8.12],[140,8.21],[141,8.3],[142,8.39],[143,8.49],[144,8.58],[145,8.67],[146,8.77],[147,8.86],[148,8.95],[149,9.05],[150,9.14],[151,9.23],[152,9.33],[153,9.42],[154,9.51],[155,9.61],[156,9.7],[157,9.8],[158,9.89],[159,9.98],[160,8.1],[161,8],[162,7.91],[163,7.82],[164,7.72],[165,7.63],[166,7.54],[167,7.46],[171,7.38],[172,7.46],[173,7.54],[174,7.63],[175,7.72],[176,7.82],[177,7.91],[178,8],[179,8.1],[180,8.19],[181,8.28],[182,8.38],[183,8.47],[184,8.57],[185,8.66],[186,8.75],[187,8.85],[188,8.94],[189,9.04],[190,9.13],[191,9.22],[192,9.32],[193,9.41],[194,9.51],[195,9.6],[196,9.69],[197,9.79],[198,9.88],[199,9.98],[200,8.09],[201,8],[202,7.9],[203,7.81],[204,7.71],[205,7.62],[206,7.52],[207,7.43],[212,7.43],[213,7.52],[214,7.62],[215,7.71],[216,7.81],[217,7.9],[218,8],[219,8.09],[220,8.18],[221,8.28],[222,8.37],[223,8.47],[224,8.56],[225,8.66],[226,8.75],[227,8.84],[228,8.94],[229,9.03],[230,9.13],[231,9.22],[232,9.31],[233,9.41],[234,9.5],[235,9.6],[236,9.69],[237,9.79],[238,9.88],[239,9.97],[240,8.1],[241,8],[242,7.91],[243,7.82],[244,7.72],[245,7.63],[246,7.54],[247,7.46],[248,7.38],[252,7.46],[253,7.54],[254,7.63],[255,7.72],[256,7.82],[257,7.91],[258,8],[259,8.1],[260,8.19],[261,8.28],[262,8.38],[263,8.47],[264,8.57],[265,8.66],[266,8.75],[267,8.85],[268,8.94],[269,9.04],[270,9.13],[271,9.22],[272,9.32],[273,9.41],[274,9.51],[275,9.6],[276,9.69],[277,9.79],[278,9.88],[279,9.98],[280,8.12],[281,8.03],[282,7.94],[283,7.85],[284,7.76],[285,7.67],[286,7.59],[287,7.52],[288,7.46],[289,7.43],[290,7.43],[291,7.46],[292,7.52],[293,7.59],[294,7.67],[295,7.76],[296,7.85],[297,7.94],[298,8.03],[299,8.12],[300,8.21],[301,8.3],[302,8.39],[303,8.49],[304,8.58],[305,8.67],[306,8.77],[307,8.86],[308,8.95],[309,9.05],[310,9.14],[311,9.23],[312,9.33],[313,9.42],[314,9.51],[315,9.61],[316,9.7],[317,9.8],[318,9.89],[319,9.98],[320,8.15],[321,8.06],[322,7.98],[323,7.89],[324,7.81],[325,7.74],[326,7.67],[327,7.61],[328,7.56],[329,7.54],[330,7.54],[331,7.56],[332,7.61],[333,7.67],[334,7.74],[335,7.81],[336,7.89],[337,7.98],[338,8.06],[339,8.15],[340,8.24],[341,8.33],[342,8.42],[343,8.51],[344,8.6],[345,8.69],[346,8.79],[347,8.88],[348,8.97],[349,9.06],[350,9.16],[351,9.25],[352,9.34],[353,9.43],[354,9.53],[355,9.62],[356,9.71],[357,9.81],[358,9.9],[359,10],[360,8.2],[361,8.11],[362,8.03],[363,7.96],[364,7.88],[365,7.81],[366,7.75],[367,7.7],[368,7.67],[369,7.65],[370,7.65],[371,7.67],[372,7.7],[373,7.75],[374,7.81],[375,7.88],[376,7.96],[377,8.03],[378,8.11],[379,8.2],[380,8.28],[381,8.37],[382,8.46],[383,8.54],[384,8.63],[385,8.72],[386,8.81],[387,8.9],[388,9],[389,9.09],[390,9.18],[391,9.27],[392,9.36],[393,9.45],[394,9.55],[395,9.64],[396,9.73],[397,9.83],[398,9.92],[399,10.01],[400,8.25],[401,8.17],[402,8.1],[403,8.03],[404,7.96],[405,7.9],[406,7.85],[407,7.81],[408,7.78],[409,7.76],[410,7.76],[411,7.78],[412,7.81],[413,7.85],[414,7.9],[415,7.96],[416,8.03],[417,8.1],[418,8.17],[419,8.25],[420,8.33],[421,8.42],[422,8.5],[423,8.59],[424,8.67],[425,8.76],[426,8.85],[427,8.94],[428,9.03],[429,9.12],[430,9.21],[431,9.3],[432,9.39],[433,9.48],[434,9.57],[435,9.66],[436,9.76],[437,9.85],[438,9.94],[439,10.03],[440,8.32],[441,8.24],[442,8.17],[443,8.11],[444,8.05],[445,7.99],[446,7.95],[447,7.91],[448,7.89],[449,7.87],[450,7.87],[451,7.89],[452,7.91],[453,7.95],[454,7.99],[455,8.05],[456,8.11],[457,8.17],[458,8.24],[459,8.32],[460,8.39],[461,8.47],[462,8.55],[463,8.64],[464,8.72],[465,8.8],[466,8.89],[467,8.98],[468,9.07],[469,9.15],[470,9.24],[471,9.33],[472,9.42],[473,9.51],[474,9.6],[475,9.69],[476,9.78],[477,9.87],[478,9.96],[479,10.06],[480,8.39],[481,8.32],[482,8.26],[483,8.2],[484,8.14],[485,8.09],[486,8.05],[487,8.02],[488,8],[489,7.99],[490,7.99],[491,8],[492,8.02],[493,8.05],[494,8.09],[495,8.14],[496,8.2],[497,8.26],[498,8.32],[499,8.39],[500,8.46],[501,8.54],[502,8.61],[503,8.69],[504,8.77],[505,8.86],[506,8.94],[507,9.02],[508,9.11],[509,9.2],[510,9.28],[511,9.37],[512,9.46],[513,9.55],[514,9.64],[515,9.72],[516,9.81],[517,9.9],[518,9.99],[519,10.09],[520,8.47],[521,8.4],[522,8.34],[523,8.29],[524,8.24],[525,8.19],[526,8.16],[527,8.13],[528,8.11],[529,8.1],[530,8.1],[531,8.11],[532,8.13],[533,8.16],[534,8.19],[535,8.24],[536,8.29],[537,8.34],[538,8.4],[539,8.47],[540,8.54],[541,8.61],[542,8.68],[543,8.76],[544,8.83],[545,8.91],[546,8.99],[547,9.08],[548,9.16],[549,9.24],[550,9.33],[551,9.41],[552,9.5],[553,9.59],[554,9.67],[555,9.76],[556,9.85],[557,9.94],[558,10.03],[559,10.12],[560,8.55],[561,8.49],[562,8.43],[563,8.38],[564,8.34],[565,8.3],[566,8.26],[567,8.24],[568,8.22],[569,8.21],[570,8.21],[571,8.22],[572,8.24],[573,8.26],[574,8.3],[575,8.34],[576,8.38],[577,8.43],[578,8.49],[579,8.55],[580,8.61],[581,8.68],[582,8.75],[583,8.82],[584,8.9],[585,8.97],[586,9.05],[587,9.13],[588,9.21],[589,9.3],[590,9.38],[591,9.46],[592,9.55],[593,9.63],[594,9.72],[595,9.8],[596,9.89],[597,9.98],[598,10.07],[599,10.16],[600,8.64],[601,8.58],[602,8.53],[603,8.48],[604,8.44],[605,8.4],[606,8.37],[607,8.35],[608,8.33],[609,8.33],[610,8.33],[611,8.33],[612,8.35],[613,8.37],[614,8.4],[615,8.44],[616,8.48],[617,8.53],[618,8.58],[619,8.64],[620,8.7],[621,8.76],[622,8.83],[623,8.9],[624,8.97],[625,9.04],[626,9.12],[627,9.19],[628,9.27],[629,9.35],[630,9.43],[631,9.51],[632,9.6],[633,9.68],[634,9.77],[635,9.85],[636,9.94],[637,10.02],[638,10.11],[639,10.2],[640,8.73],[641,8.67],[642,8.63],[643,8.58],[644,8.54],[645,8.51],[646,8.48],[647,8.46],[648,8.45],[649,8.44],[650,8.44],[651,8.45],[652,8.46],[653,8.48],[654,8.51],[655,8.54],[656,8.58],[657,8.63],[658,8.67],[659,8.73],[660,8.78],[661,8.84],[662,8.91],[663,8.97],[664,9.04],[665,9.11],[666,9.19],[667,9.26],[668,9.34],[669,9.41],[670,9.49],[671,9.57],[672,9.65],[673,9.73],[674,9.82],[675,9.9],[676,9.98],[677,10.07],[678,10.15],[679,10.24],[680,8.82],[681,8.77],[682,8.72],[683,8.68],[684,8.65],[685,8.62],[686,8.59],[687,8.57],[688,8.56],[689,8.55],[690,8.55],[691,8.56],[692,8.57],[693,8.59],[694,8.62],[695,8.65],[696,8.68],[697,8.72],[698,8.77],[699,8.82],[700,8.87],[701,8.93],[702,8.99],[703,9.05],[704,9.12],[705,9.19],[706,9.26],[707,9.33],[708,9.4],[709,9.48],[710,9.56],[711,9.63],[712,9.71],[713,9.79],[714,9.87],[715,9.95],[716,10.04],[717,10.12],[718,10.2],[719,10.29],[720,8.92],[721,8.87],[722,8.83],[723,8.79],[724,8.75],[725,8.72],[726,8.7],[727,8.68],[728,8.67],[729,8.67],[730,8.67],[731,8.67],[732,8.68],[733,8.7],[734,8.72],[735,8.75],[736,8.79],[737,8.83],[738,8.87],[739,8.92],[740,8.97],[741,9.02],[742,9.08],[743,9.14],[744,9.2],[745,9.27],[746,9.33],[747,9.4],[748,9.48],[749,9.55],[750,9.62],[751,9.7],[752,9.77],[753,9.85],[754,9.93],[755,10.01],[756,10.09],[757,10.17],[758,10.26],[759,10.34],[760,9.01],[761,8.97],[762,8.93],[763,8.89],[764,8.86],[765,8.83],[766,8.81],[767,8.8],[768,8.78],[769,8.78],[770,8.78],[771,8.78],[772,8.8],[773,8.81],[774,8.83],[775,8.86],[776,8.89],[777,8.93],[778,8.97],[779,9.01],[780,9.06],[781,9.11],[782,9.17],[783,9.23],[784,9.29],[785,9.35],[786,9.41],[787,9.48],[788,9.55],[789,9.62],[790,9.69],[791,9.77],[792,9.84],[793,9.92],[794,9.99],[795,10.07],[796,10.15],[797,10.23],[798,10.31],[799,10.39]];
+          wave.forEach(([i, t]) => { tl.to("#s15-scale-d" + i, { backgroundColor: "#f59e0b", duration: 0.35, ease: "power1.out" }, t); });
+          tl.to("#s15-scale-dots", { scale: 0.72, x: 60, y: -120, opacity: 0.5, duration: 0.8, ease: "power2.inOut" }, 10.804);
+          tl.fromTo("#s15-scale-ti0", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, 11.602);
+          tl.fromTo("#s15-scale-ti1", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, 13.016);
+          tl.fromTo("#s15-scale-ti2", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, 14.9);
+          tl.fromTo("#s15-scale-ti3", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, 16.929000000000002);
+          tl.set("#s15-scale-tiles", { opacity: 1 }, 11.452);
+          tl.set(["#s15-scale-ti0","#s15-scale-ti1","#s15-scale-ti2","#s15-scale-ti3"], { opacity: 0 }, 0);
+          tl.to(["#s15-scale-p1", "#s15-scale-tiles"], { opacity: 0, duration: 0.5 }, 18.335);
+          tl.to("#s15-scale-hub", { opacity: 1, duration: 0.3 }, 18.535);
+          tl.fromTo("#s15-scale-core", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.8)" }, 18.535);
+          tl.fromTo("#s15-scale-ln0", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 18.919999999999998);
+          tl.fromTo("#s15-scale-hb0", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 19.07);
+          tl.fromTo("#s15-scale-ln1", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 22.822);
+          tl.fromTo("#s15-scale-hb1", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 22.972);
+          tl.fromTo("#s15-scale-ln2", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 24.552);
+          tl.fromTo("#s15-scale-hb2", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 24.702);
+          tl.fromTo("#s15-scale-ln3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 29.157999999999998);
+          tl.fromTo("#s15-scale-hb3", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 29.308);
+          tl.to("#s15-scale-hub", { opacity: 0, duration: 0.5 }, 32.066);
+          tl.to("#s15-scale-arch", { opacity: 1, duration: 0.3 }, 32.366);
+          tl.fromTo("#s15-scale-ar0", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, 34.878);
+          tl.fromTo("#s15-scale-ar1", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, 36.108);
+          tl.fromTo("#s15-scale-ar2", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, 37.175999999999995);
+          tl.fromTo("#s15-scale-ar3", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, 38.579);
+          tl.to("#s15-scale-arch", { opacity: 0, duration: 0.5 }, 41.291000000000004);
+          tl.to("#s15-scale-out", { opacity: 1, duration: 0.3 }, 41.591);
+          tl.fromTo("#s15-scale-o0", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out" }, 41.529);
+          tl.fromTo("#s15-scale-o1", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out" }, 45.249);
+          tl.fromTo("#s15-scale-o2", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out" }, 48.028);
+          window.__timelines["s15-scale"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

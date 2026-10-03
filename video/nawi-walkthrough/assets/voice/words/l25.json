@@ -1,0 +1,37 @@
+[
+ {
+  "text": "The",
+  "start": 0.088,
+  "end": 0.194
+ },
+ {
+  "text": "official",
+  "start": 0.262,
+  "end": 0.675
+ },
+ {
+  "text": "certificate",
+  "start": 0.675,
+  "end": 1.262
+ },
+ {
+  "text": "is",
+  "start": 1.329,
+  "end": 1.473
+ },
+ {
+  "text": "generated",
+  "start": 1.473,
+  "end": 1.954
+ },
+ {
+  "text": "in",
+  "start": 2.031,
+  "end": 2.165
+ },
+ {
+  "text": "seconds",
+  "start": 2.165,
+  "end": 2.598
+ }
+]

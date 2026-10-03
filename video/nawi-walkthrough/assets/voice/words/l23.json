@@ -1,0 +1,77 @@
+[
+ {
+  "text": "The",
+  "start": 0.088,
+  "end": 0.156
+ },
+ {
+  "text": "verdict",
+  "start": 0.156,
+  "end": 0.531
+ },
+ {
+  "text": "is",
+  "start": 0.588,
+  "end": 0.723
+ },
+ {
+  "text": "computed",
+  "start": 0.733,
+  "end": 1.175
+ },
+ {
+  "text": "by",
+  "start": 1.175,
+  "end": 1.348
+ },
+ {
+  "text": "the",
+  "start": 1.348,
+  "end": 1.492
+ },
+ {
+  "text": "engine",
+  "start": 1.492,
+  "end": 1.858
+ },
+ {
+  "text": "from",
+  "start": 2.002,
+  "end": 2.194
+ },
+ {
+  "text": "the",
+  "start": 2.194,
+  "end": 2.271
+ },
+ {
+  "text": "readings",
+  "start": 2.271,
+  "end": 2.617
+ },
+ {
+  "text": "themselves",
+  "start": 2.617,
+  "end": 3.137
+ },
+ {
+  "text": "Nobody",
+  "start": 3.808,
+  "end": 4.163
+ },
+ {
+  "text": "can",
+  "start": 4.163,
+  "end": 4.404
+ },
+ {
+  "text": "override",
+  "start": 4.462,
+  "end": 4.894
+ },
+ {
+  "text": "it",
+  "start": 4.904,
+  "end": 5.096
+ }
+]
