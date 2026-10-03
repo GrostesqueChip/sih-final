@@ -6,7 +6,9 @@
 
 **विधिक माप विज्ञान विभाग · Department of Legal Metrology**
 
-Digital verification and certification of **non-automatic weighing instruments** under **OIML R 76-1:2006** and the **Legal Metrology Act, 2009**. It covers every step from the officer's field readings to a sealed, QR-verifiable certificate a citizen can check on their phone.
+Generates **OIML R 76 test reports** for **non-automatic weighing instruments**: the Type Evaluation Test Report a laboratory prepares for model approval, and the verification certificate a Legal Metrology officer issues, from one calculation engine. It covers every step from the readings on the test bench to a sealed, QR-verifiable report, in PDF and editable Word.
+
+Built for problem statement **SIH26035** (Department of Consumer Affairs). Working prototype: tested with a built-in simulator and a USB serial emulator, not yet on physical indicators or in a laboratory pilot.
 
 *Smart India Hackathon 2026*
 
@@ -41,7 +43,7 @@ The demo data covers 18 instruments across 11 districts, including:
 - a jeweller's balance and State Metrology Laboratory balances
 - two **type evaluation test samples** (a counter scale and a precision balance) submitted for model approval
 
-There are 39 sessions over 12 months — verification sessions and type evaluation sessions — 7 officers and more than 300 audit entries. Every verdict is computed by the same OIML engine the live API uses.
+There are 39 sessions over 12 months — verification sessions and type evaluation sessions — 7 officers and about 250 audit entries. Every verdict is computed by the same OIML engine the live API uses.
 
 ## A 3-minute walkthrough for judges
 
