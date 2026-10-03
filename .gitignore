@@ -9,3 +9,18 @@ client/.env
 Thumbs.db
 .vscode/
 .idea/
+
+# Local-only working material (deck sources, audits, recordings): not part of the product
+__pycache__/
+.arena/
+.claude/
+.vercel/
+audit/
+slide-kit/
+new-slides/
+video/
+skills-lock.json
+NAWI-new-chat-prompt.md
+*.zip
+*.pptx
+/*.pdf

@@ -147,6 +147,15 @@ Notes:
 - `api/index.js` forces `NAWI_DB_MODE=memory`, so no database is needed. For persistent storage, remove that line and set `DATABASE_URL` to a hosted PostgreSQL instance (for example Neon); run `npx prisma migrate deploy` and `node prisma/seed.js --if-empty` in `server/` once. In production the API then refuses to fall back to demo data if the database is unreachable.
 - Serverless functions are time-limited (30 s here), so long-lived connections such as the live telemetry stream (SSE) may be cut off on Vercel. They run without that limit with `npm run demo` locally.
 
+### USB scale emulator
+
+`tools/scale-emulator/` holds a weighing-indicator emulator and the reference protocol library used to check the app's USB capture without lab hardware. It sends the frames of eight indicator formats over a serial port (or an Arduino-type board acting as a USB device), so the capture path can be shown end to end: USB serial → browser → MPE verdict → report. It is an emulator built from the makers' published formats, not a test on physical indicators. See [tools/scale-emulator/README.md](tools/scale-emulator/README.md).
+
+```bash
+python tools/scale-emulator/test_protocols.py
+python tools/scale-emulator/emulator.py --dry --brand cas --auto
+```
+
 ### Tests
 
 ```bash
